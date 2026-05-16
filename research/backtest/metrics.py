@@ -170,7 +170,7 @@ def compute_metrics(
 
 def format_metrics_report(metrics: dict) -> str:
     """
-    Format the metrics dict as a clean text report.
+    Format the metrics dict as a clean professional report.
 
     Parameters
     ----------
@@ -183,37 +183,44 @@ def format_metrics_report(metrics: dict) -> str:
         Formatted report.
     """
     lines = []
-    lines.append("=" * 60)
-    lines.append("QUANTUMEDGE — BACKTEST REPORT")
-    lines.append("=" * 60)
+    lines.append("╔" + "═" * 60 + "╗")
+    lines.append("║  " + f"{'QUANTUMEDGE — BACKTEST REPORT':^56}" + "  ║")
+    lines.append("╠" + "═" * 60 + "╣")
 
-    lines.append(f"\n{'Capital & Returns':-^60}")
-    lines.append(f"  Initial capital:    ${metrics.get('initial_capital', 0):,.2f}")
-    lines.append(f"  Final equity:       ${metrics.get('final_equity', 0):,.2f}")
-    lines.append(f"  Total return:       {metrics.get('total_return_pct', 0):+.2f}%")
-    lines.append(f"  CAGR:               {metrics.get('cagr_pct', 0):+.2f}%")
-    lines.append(f"  Period:             {metrics.get('total_years', 0):.2f} years")
+    capital = metrics.get("initial_capital", 0)
+    final = metrics.get("final_equity", 0)
+    total_ret = metrics.get("total_return_pct", 0)
+    cagr = metrics.get("cagr_pct", 0)
 
-    lines.append(f"\n{'Risk Metrics':-^60}")
-    lines.append(f"  Sharpe ratio:       {metrics.get('sharpe_ratio', 0):.2f}")
-    lines.append(f"  Sortino ratio:      {metrics.get('sortino_ratio', 0):.2f}")
-    lines.append(f"  Calmar ratio:       {metrics.get('calmar_ratio', 0):.2f}")
-    lines.append(f"  Max drawdown:       {metrics.get('max_drawdown_pct', 0):.2f}%")
+    lines.append(f"║  {'Capital & Returns':-^56}║")
+    lines.append(f"║    Initial equity:  ${capital:>10,.2f}{'':>28}║")
+    lines.append(f"║    Final equity:    ${final:>10,.2f}{'':>28}║")
+    lines.append(f"║    Total return:    {total_ret:>+10.2f}%{'':>28}║")
+    lines.append(f"║    CAGR:            {cagr:>+10.2f}%{'':>28}║")
+    lines.append(f"║    Period:          {metrics.get('total_years', 0):>8.2f} years{'':>23}║")
+
+    lines.append(f"╠{'':-^60}╣")
+    lines.append(f"║  {'Risk Metrics':-^56}║")
+    lines.append(f"║    Sharpe ratio:    {metrics.get('sharpe_ratio', 0):>10.2f}{'':>28}║")
+    lines.append(f"║    Sortino ratio:   {metrics.get('sortino_ratio', 0):>10.2f}{'':>28}║")
+    lines.append(f"║    Calmar ratio:    {metrics.get('calmar_ratio', 0):>10.2f}{'':>28}║")
+    lines.append(f"║    Max drawdown:    {metrics.get('max_drawdown_pct', 0):>9.2f}%{'':>29}║")
     dd_days = metrics.get('longest_dd_days', 0)
-    lines.append(f"  Longest DD:         {metrics.get('longest_dd_periods', 0):,} periods ({dd_days:.1f} days)")
+    lines.append(f"║    Longest DD:      {metrics.get('longest_dd_periods', 0):>7,} periods ({dd_days:.1f} days){'':>11}║")
 
-    lines.append(f"\n{'Trade Statistics':-^60}")
-    lines.append(f"  Total trades:       {metrics.get('total_trades', 0):,}")
-    lines.append(f"  Win rate:           {metrics.get('win_rate_pct', 0):.1f}%")
-    lines.append(f"  Profit factor:      {metrics.get('profit_factor', 0):.2f}")
-    lines.append(f"  Avg RR:             {metrics.get('avg_rr', 0):.2f}:1")
-    lines.append(f"  Expectancy:         ${metrics.get('expectancy', 0):+.2f}")
-    lines.append(f"  Avg win:            ${metrics.get('avg_win', 0):+.2f} ({metrics.get('avg_win_pct', 0):+.2f}%)")
-    lines.append(f"  Avg loss:           ${metrics.get('avg_loss', 0):+.2f} ({metrics.get('avg_loss_pct', 0):+.2f}%)")
-    lines.append(f"  Best trade:         ${metrics.get('best_trade_pnl', 0):+.2f}")
-    lines.append(f"  Worst trade:        ${metrics.get('worst_trade_pnl', 0):+.2f}")
-    lines.append(f"  Avg duration:       {metrics.get('avg_trade_duration_min', 0):.1f} min")
-    lines.append(f"  Total fees:         ${metrics.get('total_fees', 0):,.2f}")
+    lines.append(f"╠{'':-^60}╣")
+    lines.append(f"║  {'Trade Statistics':-^56}║")
+    lines.append(f"║    Total trades:    {metrics.get('total_trades', 0):>10,}{'':>28}║")
+    lines.append(f"║    Win rate:        {metrics.get('win_rate_pct', 0):>9.1f}%{'':>29}║")
+    lines.append(f"║    Profit factor:   {metrics.get('profit_factor', 0):>10.2f}{'':>28}║")
+    lines.append(f"║    Avg RR:          {metrics.get('avg_rr', 0):>9.2f}:1{'':>27}║")
+    lines.append(f"║    Expectancy:      ${metrics.get('expectancy', 0):>+9.2f}{'':>28}║")
+    lines.append(f"║    Avg win:         ${metrics.get('avg_win', 0):>+9.2f} ({metrics.get('avg_win_pct', 0):>+.2f}%){'':>14}║")
+    lines.append(f"║    Avg loss:        ${metrics.get('avg_loss', 0):>+9.2f} ({metrics.get('avg_loss_pct', 0):>+.2f}%){'':>14}║")
+    lines.append(f"║    Best trade:      ${metrics.get('best_trade_pnl', 0):>+9.2f}{'':>28}║")
+    lines.append(f"║    Worst trade:     ${metrics.get('worst_trade_pnl', 0):>+9.2f}{'':>28}║")
+    lines.append(f"║    Avg duration:    {metrics.get('avg_trade_duration_min', 0):>8.1f} min{'':>24}║")
+    lines.append(f"║    Total fees:      ${metrics.get('total_fees', 0):>9,.2f}{'':>28}║")
 
-    lines.append("\n" + "=" * 60)
+    lines.append("╚" + "═" * 60 + "╝")
     return "\n".join(lines)

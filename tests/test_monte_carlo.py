@@ -116,5 +116,6 @@ class TestMonteCarloRSI:
         path = save_mc_report(result, output_dir=tmp_path)
         assert path.exists()
         content = path.read_text()
-        assert "Best Parameters" in content
-        assert "Sharpe" in content
+        assert "BEST PARAMETERS" in content
+        assert "Initial Equity" in content
+        assert "REPRODUCIBILITY" in content
