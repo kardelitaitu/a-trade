@@ -52,7 +52,7 @@ class MCResult:
     command: str = ""
     asset: str = "BTCUSDT"
     data_range: str = ""
-    fee_rate: float = 0.00085
+    fee_rate: float = 0.0001
 
     def best_metrics(self) -> MCMetrics:
         return MCMetrics(*self.metrics[self.best_idx])
@@ -73,7 +73,7 @@ def monte_carlo_ma(
     fast_range: tuple[int, int],
     slow_range: tuple[int, int],
     capital: float = 10_000.0,
-    fee_rate: float = 0.00085,
+    fee_rate: float = 0.0001,
     step: int = 1,
 ) -> MCResult:
     """
@@ -160,7 +160,7 @@ def monte_carlo_rsi(
     oversold_values: list[int],
     overbought_values: list[int],
     capital: float = 10_000.0,
-    fee_rate: float = 0.00085,
+    fee_rate: float = 0.0001,
 ) -> MCResult:
     """
     Monte Carlo optimization for RSI Mean Reversion.
@@ -357,7 +357,7 @@ def monte_carlo_ma_sltp(
     sl_values: list[float],
     tp_values: list[float],
     capital: float = 10_000.0,
-    fee_rate: float = 0.00085,
+    fee_rate: float = 0.0001,
     step: int = 1,
 ) -> MCResult:
     """Monte Carlo for MA Crossover with SL/TP."""
