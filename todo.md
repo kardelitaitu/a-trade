@@ -26,9 +26,10 @@
 
 ## Phase 3: Advanced Models
 
-- [ ] Machine Learning models
-- [ ] Feature importance analysis
-- [ ] Ensemble system
+- [ ] **P3-1:** ML Feature Engineering — feature matrix from OHLCV (price, tech, time features)
+- [ ] **P3-2:** ML Signal Model — LightGBM binary classifier, chrono split train/val/test
+- [ ] **P3-3:** Feature Importance Analysis — SHAP, ablation, report to results/reports/
+- [ ] **P3-4:** Ensemble System — rolling Sharpe-weighted combiner of P2 + P3 signals
 
 ## Phase 4: Validation & Deployment
 
