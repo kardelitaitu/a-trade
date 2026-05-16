@@ -14,73 +14,72 @@ from typing import Any
 import numpy as np
 
 
-def analyze_sensitivity(results: list[dict]) -> dict[str, Any]:
+def _analyze_metric(
+    results: list[dict],
+    param_names: list[str],
+    metric_key: str,
+    higher_is_better: bool,
+) -> list[dict]:
     """
-    Analyze how each parameter affects Sharpe ratio.
+    Analyze how each parameter affects a specific metric.
 
     Parameters
     ----------
     results : list of dict
-        Output from parallel_monte_carlo().
+    param_names : list of str
+    metric_key : str ('sharpe', 'max_dd', 'profit_factor', 'total_return')
+    higher_is_better : bool — True for Sharpe, False for drawdown
 
     Returns
     -------
-    dict with keys:
-        param_summaries : list of {param, correlation, best_value, importance, details}
-        top_params      : list sorted by importance (highest first)
-        recommendations : str — human-readable summary
+    list of dict, one per parameter.
     """
-    if not results:
-        return {"param_summaries": [], "top_params": [], "recommendations": "No results to analyze."}
-
-    # Collect all parameter names from the first result
-    param_names = list(results[0]["params"].keys())
-
     summaries = []
     for param in param_names:
         values = []
-        sharpes = []
-        # Group by parameter value
+        metric_vals = []
         groups: dict[Any, list[float]] = {}
+
         for r in results:
             v = r["params"][param]
-            sh = r["sharpe"]
+            mv = r[metric_key]
             if v not in groups:
                 groups[v] = []
-            groups[v].append(sh)
+            groups[v].append(mv)
             values.append(v)
-            sharpes.append(sh)
+            metric_vals.append(mv)
 
-        # Compute mean Sharpe per value
+        # Mean metric per value
         value_stats = []
-        for v, sh_list in sorted(groups.items(), key=lambda x: str(x[0])):
+        for v, mv_list in sorted(groups.items(), key=lambda x: str(x[0])):
             value_stats.append({
                 "value": v,
-                "mean_sharpe": np.mean(sh_list),
-                "std_sharpe": np.std(sh_list),
-                "count": len(sh_list),
-                "sharpe_list": sh_list,
+                "mean": np.mean(mv_list),
+                "std": np.std(mv_list),
+                "count": len(mv_list),
+                "values": mv_list,
             })
 
-        # Find best value
-        best = max(value_stats, key=lambda x: x["mean_sharpe"])
+        # Best value (highest or lowest mean depending on metric)
+        if higher_is_better:
+            best = max(value_stats, key=lambda x: x["mean"])
+        else:
+            best = min(value_stats, key=lambda x: x["mean"])
 
-        # Compute correlation and slope (only if numeric)
+        # Correlation and slope
         corr = None
         slope = None
         if all(isinstance(v, (int, float)) for v in values):
             try:
-                corr = float(np.corrcoef(values, sharpes)[0, 1])
-                # Slope = correlation * (std_sharpe / std_param)
+                corr = float(np.corrcoef(values, metric_vals)[0, 1])
                 if np.std(values) > 0:
-                    slope = float(corr * np.std(sharpes) / np.std(values))
+                    slope = float(corr * np.std(metric_vals) / np.std(values))
             except Exception:
                 corr = 0.0
                 slope = 0.0
 
-        # Importance = max mean Sharpe - min mean Sharpe (spread)
-        mean_sharpes = [s["mean_sharpe"] for s in value_stats]
-        importance = max(mean_sharpes) - min(mean_sharpes) if mean_sharpes else 0.0
+        means = [s["mean"] for s in value_stats]
+        importance = max(means) - min(means) if means else 0.0
 
         summaries.append({
             "param": param,
@@ -88,56 +87,94 @@ def analyze_sensitivity(results: list[dict]) -> dict[str, Any]:
             "slope": slope,
             "importance": importance,
             "best_value": best["value"],
-            "best_mean_sharpe": best["mean_sharpe"],
-            "best_std_sharpe": best["std_sharpe"],
+            "best_mean": best["mean"],
+            "best_std": best["std"],
             "best_count": best["count"],
             "value_stats": value_stats,
         })
 
-    # Sort by importance descending
     summaries.sort(key=lambda s: abs(s["importance"]), reverse=True)
-    top_params = [s["param"] for s in summaries]
+    return summaries
 
-    recommendations = _build_recommendations(summaries, results)
+
+def analyze_sensitivity(results: list[dict]) -> dict[str, Any]:
+    """
+    Analyze how each parameter affects Sharpe AND Drawdown.
+
+    Returns
+    -------
+    dict with keys:
+        sharpe : list of param summaries vs Sharpe
+        drawdown : list of param summaries vs Max DD
+        recommendations : str
+    """
+    if not results:
+        return {"sharpe": [], "drawdown": [], "recommendations": "No results."}
+
+    param_names = list(results[0]["params"].keys())
+
+    sharpe_analysis = _analyze_metric(results, param_names, "sharpe", higher_is_better=True)
+    dd_analysis = _analyze_metric(results, param_names, "max_dd", higher_is_better=False)
+
+    recommendations = _build_recommendations(results, sharpe_analysis, dd_analysis)
 
     return {
-        "param_summaries": summaries,
-        "top_params": top_params,
+        "sharpe": sharpe_analysis,
+        "drawdown": dd_analysis,
         "recommendations": recommendations,
     }
 
 
-def _build_recommendations(summaries: list[dict], results: list[dict]) -> str:
-    """Generate human-readable analysis text."""
+def _build_recommendations(
+    results: list[dict],
+    sharpe_analysis: list[dict],
+    dd_analysis: list[dict],
+) -> str:
+    """Generate human-readable report with Sharpe and DD analysis side by side."""
     lines = []
     lines.append("Parameter Sensitivity Analysis")
     lines.append("=" * 60)
     lines.append(f"Total combos tested: {len(results)}")
     lines.append("")
 
-    for s in summaries:
+    # Build a dict for quick DD lookup by param name
+    dd_by_param = {s["param"]: s for s in dd_analysis}
+
+    for s in sharpe_analysis:
         p = s["param"]
-        corr = s["correlation"]
-        slope = s["slope"]
-        imp = s["importance"]
-        best_v = s["best_value"]
-        best_sh = s["best_mean_sharpe"]
+        d = dd_by_param.get(p, {})
 
-        corr_str = f"{corr:+.3f}" if corr is not None else "N/A (non-numeric)"
-        slope_str = f"{slope:+.4f}" if slope is not None else "N/A"
+        def fmt_corr(c):
+            return f"{c:+.3f}" if c is not None else "N/A"
+
+        def fmt_slope(sl):
+            return f"{sl:+.4f}" if sl is not None else "N/A"
+
         lines.append(f"{p}:")
-        lines.append(f"  Per 1 unit:    Sharpe {slope_str}  (avg change per unit)")
-        lines.append(f"  Best value:    {best_v}  (avg Sharpe {best_sh:+.3f})")
-        lines.append(f"  Importance:    {imp:.3f}  (spread between best/worst value)")
-        lines.append(f"  Correlation:   {corr_str}")
+        lines.append(f"  vs Sharpe:")
+        lines.append(f"    Per 1 unit:  Sharpe {fmt_slope(s['slope'])}")
+        lines.append(f"    Best value:  {s['best_value']}  (avg Sharpe {s['best_mean']:+.3f})")
+        lines.append(f"    Importance:  {s['importance']:.3f}  (spread)")
+        lines.append(f"    Correlation: {fmt_corr(s['correlation'])}")
+        top3_sh = sorted(s["value_stats"], key=lambda x: x["mean"], reverse=True)[:3]
+        _vals = ", ".join(f'{v["value"]} (Sharpe {v["mean"]:+.2f})' for v in top3_sh)
+        lines.append(f"    Top values:  {_vals}")
+        lines.append("")
+        lines.append(f"  vs Drawdown:")
+        if d:
+            lines.append(f"    Per 1 unit:  DD {fmt_slope(d['slope'])}")
+            lines.append(f"    Best value:  {d['best_value']}  (avg DD {d['best_mean']:.2f}%)")
+            lines.append(f"    Importance:  {d['importance']:.3f}  (spread)")
+            lines.append(f"    Correlation: {fmt_corr(d['correlation'])}")
+            top3_dd = sorted(d["value_stats"], key=lambda x: x["mean"])[:3]
+            _vals_dd = ", ".join(f'{v["value"]} (DD {v["mean"]:.1f}%)' for v in top3_dd)
+            lines.append(f"    Top values:  {_vals_dd}")
+        else:
+            lines.append("    (no data)")
 
-        # Show top 3 values
-        top3 = sorted(s["value_stats"], key=lambda x: x["mean_sharpe"], reverse=True)[:3]
-        values_str = ", ".join(f"{v['value']} (Sharpe {v['mean_sharpe']:+.2f})" for v in top3)
-        lines.append(f"  Top values:    {values_str}")
         lines.append("")
 
-    # Overall recommendation
+    # Best combo
     best = results[0]
     lines.append("BEST COMBO FOUND")
     lines.append("-" * 40)

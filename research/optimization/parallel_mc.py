@@ -198,18 +198,18 @@ def format_parallel_results(
     # Top N
     lines.append(f"TOP {top_n} BY SHARPE")
     lines.append(sep)
-    header = f"  {'#':>3}  {'Parameters':<48}  {'Sharpe':>7}  {'PF':>5}  {'DD%':>6}  {'Trades':>6}  {'Return':>7}"
+    header = f"  {'#':>3}  {'Sharpe':>7}  {'PF':>5}  {'DD%':>6}  {'Trades':>6}  {'Return':>7}  {'Parameters':<46}"
     lines.append(header)
     lines.append("  " + "-" * (len(header) - 2))
 
     for i, r in enumerate(results[:top_n]):
         p = r["params"]
         pstr = ", ".join(f"{k}={v}" for k, v in p.items())
-        if len(pstr) > 46:
-            pstr = pstr[:43] + "..."
+        if len(pstr) > 44:
+            pstr = pstr[:41] + "..."
         lines.append(
-            f"  {i+1:>3}  {pstr:<48}  {r['sharpe']:>7.2f}  {r['profit_factor']:>5.2f}  "
-            f"{r['max_dd']:>6.2f}%  {r['trades']:>6}  {r['total_return']:>+6.2f}%"
+            f"  {i+1:>3}  {r['sharpe']:>7.2f}  {r['profit_factor']:>5.2f}  "
+            f"{r['max_dd']:>6.2f}%  {r['trades']:>6}  {r['total_return']:>+6.2f}%  {pstr:<46}"
         )
     lines.append("")
 
@@ -223,11 +223,11 @@ def format_parallel_results(
     for i, r in enumerate(by_dd[:top_n]):
         p = r["params"]
         pstr = ", ".join(f"{k}={v}" for k, v in p.items())
-        if len(pstr) > 46:
-            pstr = pstr[:43] + "..."
+        if len(pstr) > 44:
+            pstr = pstr[:41] + "..."
         lines.append(
-            f"  {i+1:>3}  {pstr:<48}  {r['sharpe']:>7.2f}  {r['profit_factor']:>5.2f}  "
-            f"{r['max_dd']:>6.2f}%  {r['trades']:>6}  {r['total_return']:>+6.2f}%"
+            f"  {i+1:>3}  {r['sharpe']:>7.2f}  {r['profit_factor']:>5.2f}  "
+            f"{r['max_dd']:>6.2f}%  {r['trades']:>6}  {r['total_return']:>+6.2f}%  {pstr:<46}"
         )
     lines.append("")
 

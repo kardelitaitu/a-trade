@@ -1,0 +1,98 @@
+
+MONTE CARLO OPTIMIZATION
+--------------------------------------------------------------------------------
+  Generated:    2026-05-16 09:13:13 UTC
+  Command:      parallel_monte_carlo(...) v2 sweep
+  Strategy:     volatility_squeeze_v2
+  Asset:        BTCUSDT
+  Data range:   2024-01-01 -> 2025-12-31
+  Initial capt: $ 10,000.00
+  Fee rate:     0.010%
+  Hardware:     32 threads · 96 GB RAM · NVMe SSD
+  Combinations:    378
+
+TOP 20 BY SHARPE
+--------------------------------------------------------------------------------
+    #  Parameters                                         Sharpe     PF     DD%  Trades   Return
+  ----------------------------------------------------------------------------------------------
+    1  bb_period=30, bb_std=2.3, keltner_period=20...       1.25   2.16  -44.74%      16  +168.53%
+    2  bb_period=20, bb_std=2.8, keltner_period=20...       1.13   1.81  -38.54%      50  +118.44%
+    3  bb_period=20, bb_std=2.2, keltner_period=20...       1.08   1.63  -35.19%      71  +128.76%
+    4  bb_period=20, bb_std=2.7, keltner_period=20...       1.08   1.88  -28.46%      71  +109.32%
+    5  bb_period=30, bb_std=2.2, keltner_period=20...       1.01   1.47  -44.82%      29  +108.46%
+    6  bb_period=20, bb_std=2.4, keltner_period=15...       0.85    inf  -31.54%       1  +73.93%
+    7  bb_period=20, bb_std=2.7, keltner_period=15...       0.85    inf  -31.54%       1  +73.93%
+    8  bb_period=20, bb_std=2.6, keltner_period=15...       0.82   1.51  -40.02%      67  +72.90%
+    9  bb_period=25, bb_std=2.2, keltner_period=15...       0.82   1.17  -60.18%      72  +74.10%
+   10  bb_period=20, bb_std=2.2, keltner_period=15...       0.81   1.60  -41.76%      37  +74.52%
+   11  bb_period=20, bb_std=2.5, keltner_period=15...       0.80    inf  -31.54%       1  +63.78%
+   12  bb_period=20, bb_std=2.6, keltner_period=15...       0.80    inf  -31.54%       1  +63.78%
+   13  bb_period=20, bb_std=2.8, keltner_period=15...       0.80    inf  -31.54%       1  +63.78%
+   14  bb_period=20, bb_std=2.4, keltner_period=25...       0.78   1.57  -36.28%      40  +67.06%
+   15  bb_period=20, bb_std=2.3, keltner_period=20...       0.78   1.41  -44.59%      52  +68.81%
+   16  bb_period=20, bb_std=2.3, keltner_period=25...       0.77   1.50  -36.31%      55  +67.85%
+   17  bb_period=25, bb_std=2.7, keltner_period=15...       0.73    inf  -35.76%       1  +50.38%
+   18  bb_period=20, bb_std=2.5, keltner_period=25...       0.71   1.50  -44.39%      28  +56.21%
+   19  bb_period=25, bb_std=2.4, keltner_period=20...       0.64   1.23  -53.24%      47  +47.04%
+   20  bb_period=20, bb_std=2.5, keltner_period=15...       0.63   1.26  -40.39%      99  +44.50%
+
+BEST PARAMETERS
+----------------------------------------
+  bb_period: 30
+  bb_std: 2.3
+  keltner_period: 20
+  keltner_atr_mult: 1.0
+  Sharpe:        1.2499
+  Profit Factor: 2.1591
+  Max DD:        -44.74%
+  Total Return:  +168.53%
+  Trades:        16
+
+REPRODUCIBILITY
+--------------------------------------------------------------------------------
+  parallel_monte_carlo(...) v2 sweep
+
+
+Parameter Sensitivity Analysis
+============================================================
+Total combos tested: 378
+
+keltner_period:
+  Per 1 unit:    Sharpe -0.0168  (avg change per unit)
+  Best value:    15  (avg Sharpe +0.039)
+  Importance:    0.168  (spread between best/worst value)
+  Correlation:   -0.178
+  Top values:    15 (Sharpe +0.04), 20 (Sharpe +0.02), 25 (Sharpe -0.13)
+
+bb_std:
+  Per 1 unit:    Sharpe +0.1963  (avg change per unit)
+  Best value:    2.4  (avg Sharpe +0.029)
+  Importance:    0.139  (spread between best/worst value)
+  Correlation:   +0.102
+  Top values:    2.4 (Sharpe +0.03), 2.6 (Sharpe +0.02), 2.8 (Sharpe +0.01)
+
+keltner_atr_mult:
+  Per 1 unit:    Sharpe +0.0167  (avg change per unit)
+  Best value:    0.8  (avg Sharpe +0.020)
+  Importance:    0.133  (spread between best/worst value)
+  Correlation:   +0.009
+  Top values:    0.8 (Sharpe +0.02), 0.7 (Sharpe +0.01), 0.4 (Sharpe +0.00)
+
+bb_period:
+  Per 1 unit:    Sharpe -0.0044  (avg change per unit)
+  Best value:    20  (avg Sharpe +0.000)
+  Importance:    0.044  (spread between best/worst value)
+  Correlation:   -0.047
+  Top values:    20 (Sharpe +0.00), 25 (Sharpe -0.03), 30 (Sharpe -0.04)
+
+BEST COMBO FOUND
+----------------------------------------
+  bb_period: 30
+  bb_std: 2.3
+  keltner_period: 20
+  keltner_atr_mult: 1.0
+  Sharpe:        1.2499
+  Profit Factor: 2.1591
+  Max DD:        -44.74%
+  Total Return:  +168.53%
+  Trades:        16
