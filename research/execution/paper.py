@@ -25,8 +25,8 @@ from research.backtest.metrics import compute_metrics, format_metrics_report
 
 logger = logging.getLogger(__name__)
 
-# Total cost rate matching VectorizedBacktest engine: fee 0.00001 + slippage 0.000001
-DEFAULT_FEE_RATE = 0.000011
+# Total cost rate matching VectorizedBacktest engine: fee 0.0001 + slippage 0.00001
+DEFAULT_FEE_RATE = 0.00011
 
 # Best parameters discovered during optimization
 OPTIMIZED_STRATEGIES = {
@@ -86,7 +86,7 @@ class PaperTrader:
     initial_capital : float
         Total initial capital split evenly across strategies.
     fee_rate : float
-        Total cost rate (fee + slippage). Defaults to engine's 0.000011.
+        Total cost rate (fee + slippage). Defaults to engine's 0.00011.
     strategies : dict, optional
         Strategy configurations. Defaults to OPTIMIZED_STRATEGIES.
     """

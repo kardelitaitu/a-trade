@@ -152,6 +152,9 @@ def monte_carlo_ma(
         sorted_indices=sorted_idx,
         initial_capital=capital,
         fee_rate=fee_rate,
+        command=f"monte_carlo_ma(close, {fast_range}, {slow_range}, step={step})",
+        asset="BTCUSDT",
+        data_range=f"periods {fast_range[0]}-{fast_range[1]} x {slow_range[0]}-{slow_range[1]}",
     )
 
 
@@ -221,6 +224,9 @@ def monte_carlo_rsi(
         sorted_indices=sorted_idx,
         initial_capital=capital,
         fee_rate=fee_rate,
+        command=f"monte_carlo_rsi(close, period_range={period_range}, oversold={oversold_values}, overbought={overbought_values})",
+        asset="BTCUSDT",
+        data_range=f"period {period_range[0]}-{period_range[1]}, os={oversold_values}, ob={overbought_values}",
     )
 
 
@@ -362,7 +368,6 @@ def save_mc_report(
     lines.append(f"  Win Rate              {best.win_rate:>14.1f}%")
     lines.append("")
 
-    lines.append("")
     lines.append("REPRODUCIBILITY")
     lines.append(SEP)
     cmd = result.command or "python -c \"from research.data.loader import load_parquet; ...\""
@@ -460,4 +465,7 @@ def monte_carlo_ma_sltp(
         sorted_indices=sorted_idx,
         initial_capital=capital,
         fee_rate=fee_rate,
+        command=f"monte_carlo_ma_sltp(close, fast={fast_range}, slow={slow_range}, sl={sl_values}, tp={tp_values})",
+        asset="BTCUSDT",
+        data_range=f"fast {fast_range[0]}-{fast_range[1]}, slow {slow_range[0]}-{slow_range[1]}, sl/tp sweep",
     )
