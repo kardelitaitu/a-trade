@@ -120,6 +120,8 @@ def parallel_monte_carlo(
     """
     t0 = time.perf_counter()
     n_combos = len(param_grid)
+    if n_combos == 0:
+        return []
     logger.info(f"Parallel MC: {strategy_name}, {n_combos} combos, {n_jobs} workers")
 
     # Serialize data once for all workers
