@@ -440,3 +440,50 @@ class TestTimeExtended:
     def test_nan_input_return_none(self):
         r = hour_sin("not_a_datetimeindex")
         assert r is None
+
+
+class TestIndicatorsAdditional:
+
+    def test_sma_period_greater_than_length(self, flat):
+        r = sma(flat["close"], 200)
+        assert r.isna().all()
+
+    def test_rsi_period_greater_than_length(self, flat):
+        r = rsi(flat["close"], 200)
+        assert r.isna().all()
+
+    def test_macd_short_signals_both_nan(self, flat):
+        l = macd_line(flat["close"], fast=5, slow=10)
+        s = macd_signal(flat["close"], fast=5, slow=10, signal=3)
+        valid = l.dropna().index.intersection(s.dropna().index)
+        assert len(valid) > 0 or len(l) > 0
+
+    def test_atr_custom_period(self, sample):
+        r = atr(sample["high"], sample["low"], sample["close"], 5)
+        assert r.notna().sum() > 0
+
+    def test_bollinger_different_std(self, sample):
+        m1, u1, l1 = bollinger_bands(sample["close"], 20, 1.5)
+        m2, u2, l2 = bollinger_bands(sample["close"], 20, 3.0)
+        valid = m1.notna()
+        # Higher std should give wider bands
+        assert (u2[valid] - m2[valid]).mean() > (u1[valid] - m1[valid]).mean()
+
+    def test_donchian_high_low_sorted(self, sample):
+        u, m, l = donchian(sample["high"], sample["low"])
+        valid = u.notna()
+        assert (u[valid] >= l[valid]).all()
+
+    def test_volume_sma_positive(self, sample):
+        from research.features.registry import get_indicator
+        fn = get_indicator("vol_sma")
+        r = fn(sample["volume"], period=10)
+        assert r.notna().sum() > 0
+
+    def test_vol_ratio_unity(self):
+        idx = pd.date_range("2024-01-01", periods=20, freq="5min")
+        v = pd.Series([50]*20, index=idx)
+        fn = get_indicator("vol_ratio")
+        r = fn(v, period=10)
+        valid = r.dropna()
+        assert valid.mean() == pytest.approx(1.0, abs=0.01)

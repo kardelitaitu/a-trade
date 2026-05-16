@@ -134,8 +134,9 @@ def single_backtest_sltp(
         price_ret = close[i] / close[i - 1] - 1.0
         pos_change = abs(pos - last_valid_pos) if pos_changed else 0.0
 
-        cost = pos_change * fee_rate
-        period_return = pos * price_ret - cost
+        # Fee as fraction of equity: |pos_change| * equity * fee_rate / equity = |pos_change| * fee_rate
+        fee_pct = pos_change * fee_rate
+        period_return = pos * price_ret - fee_pct
         equity *= (1.0 + period_return)
 
         total_ret_sum += period_return
@@ -153,8 +154,9 @@ def single_backtest_sltp(
             if in_position:
                 ep = exit_price if exit_forced else close[i]
                 pnl = (ep - entry_price) * entry_side
-                fees_cost = (entry_price + ep) * fee_rate
-                net_pnl = pnl - fees_cost
+                # Round-trip fee per unit: (entry_price + exit_price) * fee_rate (notional on 1 unit)
+                roundtrip_fee = (entry_price + ep) * fee_rate
+                net_pnl = pnl - roundtrip_fee
                 n_trades += 1
                 if net_pnl > 0:
                     n_wins += 1
