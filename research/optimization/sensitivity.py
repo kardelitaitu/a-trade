@@ -113,14 +113,20 @@ def analyze_sensitivity(results: list[dict]) -> dict[str, Any]:
 
     param_names = list(results[0]["params"].keys())
 
+    # Compute composite Calmar-like score for each result
+    for r in results:
+        r["calmar"] = r["sharpe"] / max(abs(r["max_dd"]), 0.01)
+
     sharpe_analysis = _analyze_metric(results, param_names, "sharpe", higher_is_better=True)
     dd_analysis = _analyze_metric(results, param_names, "max_dd", higher_is_better=False)
+    calmar_analysis = _analyze_metric(results, param_names, "calmar", higher_is_better=True)
 
-    recommendations = _build_recommendations(results, sharpe_analysis, dd_analysis)
+    recommendations = _build_recommendations(results, sharpe_analysis, dd_analysis, calmar_analysis)
 
     return {
         "sharpe": sharpe_analysis,
         "drawdown": dd_analysis,
+        "calmar": calmar_analysis,
         "recommendations": recommendations,
     }
 
@@ -129,26 +135,28 @@ def _build_recommendations(
     results: list[dict],
     sharpe_analysis: list[dict],
     dd_analysis: list[dict],
+    calmar_analysis: list[dict],
 ) -> str:
-    """Generate human-readable report with Sharpe and DD analysis side by side."""
+    """Generate human-readable report with Sharpe, DD, and Calmar analysis."""
     lines = []
     lines.append("Parameter Sensitivity Analysis")
     lines.append("=" * 60)
     lines.append(f"Total combos tested: {len(results)}")
     lines.append("")
 
-    # Build a dict for quick DD lookup by param name
     dd_by_param = {s["param"]: s for s in dd_analysis}
+    cal_by_param = {s["param"]: s for s in calmar_analysis}
+
+    def fmt_corr(c):
+        return f"{c:+.3f}" if c is not None else "N/A"
+
+    def fmt_slope(sl):
+        return f"{sl:+.4f}" if sl is not None else "N/A"
 
     for s in sharpe_analysis:
         p = s["param"]
         d = dd_by_param.get(p, {})
-
-        def fmt_corr(c):
-            return f"{c:+.3f}" if c is not None else "N/A"
-
-        def fmt_slope(sl):
-            return f"{sl:+.4f}" if sl is not None else "N/A"
+        c = cal_by_param.get(p, {})
 
         lines.append(f"{p}:")
         lines.append(f"  vs Sharpe:")
@@ -159,7 +167,7 @@ def _build_recommendations(
         top3_sh = sorted(s["value_stats"], key=lambda x: x["mean"], reverse=True)[:3]
         _vals = ", ".join(f'{v["value"]} (Sharpe {v["mean"]:+.2f})' for v in top3_sh)
         lines.append(f"    Top values:  {_vals}")
-        lines.append("")
+
         lines.append(f"  vs Drawdown:")
         if d:
             lines.append(f"    Per 1 unit:  DD {fmt_slope(d['slope'])}")
@@ -169,6 +177,16 @@ def _build_recommendations(
             top3_dd = sorted(d["value_stats"], key=lambda x: x["mean"])[:3]
             _vals_dd = ", ".join(f'{v["value"]} (DD {v["mean"]:.1f}%)' for v in top3_dd)
             lines.append(f"    Top values:  {_vals_dd}")
+        else:
+            lines.append("    (no data)")
+
+        lines.append(f"  vs Composite (Sharpe/|DD|):")
+        if c:
+            lines.append(f"    Per 1 unit:  Score {fmt_slope(c['slope'])}")
+            lines.append(f"    Best value:  {c['best_value']}  (avg score {c['best_mean']:.4f})")
+            top3_c = sorted(c["value_stats"], key=lambda x: x["mean"], reverse=True)[:3]
+            _vals_c = ", ".join(f'{v["value"]} (score {v["mean"]:.3f})' for v in top3_c)
+            lines.append(f"    Top values:  {_vals_c}")
         else:
             lines.append("    (no data)")
 
