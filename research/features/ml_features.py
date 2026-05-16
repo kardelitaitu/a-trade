@@ -53,7 +53,7 @@ def compute_features(
     # ------------------------------------------------------------------
     if add_returns:
         for period in [1, 3, 5, 10, 20, 48]:  # 5min, 15min, 25min, 50min, 100min, 4h
-            ret = close.pct_change(period)
+            ret = close.pct_change(period, fill_method=None)
             features[f"ret_{period}"] = ret
             # Log returns for better normality
             log_ret = np.log(close / close.shift(period))
