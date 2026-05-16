@@ -1,0 +1,49 @@
+======================================================================
+QUANTUMEDGE — PARAMETER OPTIMIZATION: Mean Reversion
+======================================================================
+
+Total combinations tested: 50
+
+--- Top 10 Results ---
+ Rank    Score  Params                                            
+----------------------------------------------------------------------
+    1     0.71  mode=rsi, rsi_period=25, rsi_oversold=30, rsi_overbought=80, bb_period=20, bb_std=1.5
+    2     0.04  mode=rsi, rsi_period=22, rsi_oversold=30, rsi_overbought=75, bb_period=10, bb_std=2.5
+    3     0.00  mode=bollinger, rsi_period=25, rsi_oversold=20, rsi_overbought=65, bb_period=10, bb_std=3.0
+    4     0.00  mode=rsi, rsi_period=25, rsi_oversold=20, rsi_overbought=80, bb_period=30, bb_std=1.5
+    5    -0.29  mode=rsi, rsi_period=22, rsi_oversold=35, rsi_overbought=75, bb_period=25, bb_std=3.0
+    6    -0.44  mode=rsi, rsi_period=22, rsi_oversold=30, rsi_overbought=80, bb_period=30, bb_std=3.0
+    7    -0.44  mode=rsi, rsi_period=22, rsi_oversold=30, rsi_overbought=80, bb_period=20, bb_std=1.5
+    8    -0.62  mode=rsi, rsi_period=16, rsi_oversold=20, rsi_overbought=80, bb_period=20, bb_std=3.0
+    9    -1.07  mode=rsi, rsi_period=16, rsi_oversold=30, rsi_overbought=80, bb_period=35, bb_std=2.5
+   10    -1.12  mode=rsi, rsi_period=19, rsi_oversold=20, rsi_overbought=75, bb_period=35, bb_std=2.0
+
+--- Best Parameters ---
+  mode: rsi
+  rsi_period: 25
+  rsi_oversold: 30
+  rsi_overbought: 80
+  bb_period: 20
+  bb_std: 1.5
+
+--- Walk-Forward Metrics (Best) ---
+
+  [test]
+    sharpe_ratio: -0.0774
+    profit_factor: 0.8262
+    max_drawdown_pct: -11.2389
+    total_trades: 47.0000
+
+  [train]
+    sharpe_ratio: -0.4712
+    profit_factor: 0.6069
+    max_drawdown_pct: -61.1544
+    total_trades: 132.0000
+
+  [val]
+    sharpe_ratio: 0.7093
+    profit_factor: 1.4604
+    max_drawdown_pct: -7.1264
+    total_trades: 21.0000
+
+======================================================================

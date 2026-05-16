@@ -33,10 +33,11 @@
 
 ## Phase 4: Validation & Deployment
 
-- [ ] Rigorous statistical validation
-- [ ] Paper trading
-- [ ] Live trading (Python)
-- [ ] Optional: Rust/Go migration
+- [ ] **P4-1:** Systematic parameter optimization — random search + walk-forward validation
+- [ ] **P4-2:** Multi-asset validation on ETHUSDT
+- [ ] **P4-3:** Statistical robustness suite (Monte Carlo, regime breakdown, stability)
+- [ ] **P4-4:** Paper trading pipeline (live signals, no real money)
+- [ ] **P4-5:** Live execution engine (Binance API, optional)
 
 ## Optimization: Hardware Utilization
 
