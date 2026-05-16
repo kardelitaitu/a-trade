@@ -22,26 +22,59 @@ logger = logging.getLogger(__name__)
 def _worker_combo(
     strategy_name: str,
     params: dict,
-    data_json: str,  # serialized to avoid pickling issues
+    data_json: str,
     capital: float,
     fee_rate: float,
 ) -> dict:
-    """Run a single combo in a worker process."""
-    import json
+    """Run a single combo in a worker process.
+
+    Supports optional SL/TP via params dict:
+      sl_pct (float, optional): stop loss as decimal (0.02 = 2%)
+      tp_pct (float, optional): take profit as decimal (0.04 = 4%)
+    """
+    from io import StringIO
+    import numpy as np
 
     from research.strategies.factory import create_strategy
     from research.backtest.engine import VectorizedBacktest
     from research.backtest.metrics import compute_metrics
 
-    # Deserialize data
-    from io import StringIO
     data = pd.read_json(StringIO(data_json), orient="split")
 
     strat = create_strategy(strategy_name, params)
     signals = strat.generate_signals(data)
-    bt = VectorizedBacktest(data, {"initial_capital": capital, "fee": fee_rate, "slippage": 0.0})
-    result = bt.run(signals)
-    metrics = compute_metrics(result.equity_curve, result.trades)
+
+    # Check if SL/TP is requested
+    sl_pct = params.pop("sl_pct", None) if "sl_pct" in params else None
+    tp_pct = params.pop("tp_pct", None) if "tp_pct" in params else None
+
+    if sl_pct is not None and tp_pct is not None and sl_pct > 0 and tp_pct > 0:
+        # Use SL/TP-aware backtest via numba
+        from research.backtest._batch import single_backtest_sltp
+        close = data["close"].values.astype(np.float64)
+        high = data["high"].values.astype(np.float64)
+        low = data["low"].values.astype(np.float64)
+        sig_arr = signals.values.astype(np.float64)
+        eq, dd, sh, tr, wr, pf = single_backtest_sltp(
+            close, sig_arr, capital, fee_rate,
+            float(sl_pct), float(tp_pct), 0.0,
+            high, low,
+        )
+        total_return = (eq / capital - 1) * 100
+        metrics = {
+            "sharpe_ratio": float(sh),
+            "profit_factor": float(pf),
+            "max_drawdown_pct": float(dd),
+            "total_trades": int(tr),
+            "final_equity": float(eq),
+            "total_return_pct": float(total_return),
+        }
+        params["sl_pct"] = sl_pct * 100  # store as % for display
+        params["tp_pct"] = tp_pct * 100
+    else:
+        bt = VectorizedBacktest(data, {"initial_capital": capital, "fee": fee_rate, "slippage": 0.0})
+        result = bt.run(signals)
+        metrics = compute_metrics(result.equity_curve, result.trades)
 
     return {
         "params": params,
