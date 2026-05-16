@@ -143,6 +143,13 @@ def _build_recommendations(
     lines.append("=" * 60)
     lines.append(f"Total combos tested: {len(results)}")
     lines.append("")
+    lines.append("How to read:")
+    lines.append("  vs Sharpe:    Higher = better. Best value gives highest avg Sharpe.")
+    lines.append("  vs Drawdown:  Lower (less negative) = better. Best value gives smallest loss.")
+    lines.append("  vs Composite: Higher = better. Score = Sharpe / |DD|. Best balance between")
+    lines.append("                maximizing return and minimizing drawdown.")
+    lines.append("                Example: 0.020 > 0.009 means 2.2x better risk-adjusted return.")
+    lines.append("")
 
     dd_by_param = {s["param"]: s for s in dd_analysis}
     cal_by_param = {s["param"]: s for s in calmar_analysis}
