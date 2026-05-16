@@ -236,13 +236,11 @@ def save_mc_report(
     now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
     capital = result.initial_capital
     fee_pct = result.fee_rate * 100
-    sep = "-" * 76
     sub = "-" * 40
 
     lines = []
     lines.append("")
     lines.append("MONTE CARLO OPTIMIZATION")
-    lines.append(sep)
     lines.append(f"  Generated:    {now}")
     lines.append(f"  Command:      {result.command}")
     lines.append(f"  Strategy:     {result.strategy}")
@@ -256,9 +254,15 @@ def save_mc_report(
                  f"({result.combos_per_second:.0f} \u00b1 combo/s)")
     lines.append("")
 
+    # ── Helper: fixed-width separator ──
+    SEP = "-" * 80
+
+    # Insert separators after header sections
+    lines.insert(2, SEP)
+
     # ── Parameter Sweep Analysis ──
     lines.append("PARAMETER SWEEP ANALYSIS")
-    lines.append(sep)
+    lines.append(SEP)
     param_keys = list(result.params_list[0].keys()) if result.params_list else []
     for pk in param_keys:
         values = [p[pk] for p in result.params_list]
@@ -299,7 +303,7 @@ def save_mc_report(
 
     # ── Top N Table ──
     lines.append(f"TOP {top_n} BY SHARPE")
-    lines.append(sep)
+    lines.append(SEP)
     header = f"  {'#':>3}  {'Parameters':<38}  {'Init $':>8}  {'Final $':>9}  {'Sharpe':>7}  {'PF':>5}  {'DD%':>6}  {'Trades':>7}"
     lines.append(header)
     lines.append("  " + "-" * (len(header) - 2))
@@ -318,7 +322,7 @@ def save_mc_report(
     # ── Best Parameters ──
     best = result.best_metrics()
     lines.append("BEST PARAMETERS (Rank 1)")
-    lines.append(sep)
+    lines.append(SEP)
     for k, v in result.params_list[result.best_idx].items():
         lines.append(f"  {k:<20}  {v}")
     lines.append(f"  {sub}")
@@ -334,7 +338,7 @@ def save_mc_report(
 
     # ── Reproducibility ──
     lines.append("REPRODUCIBILITY")
-    lines.append(sep)
+    lines.append(SEP)
     cmd = result.command or "python -c \"from research.data.loader import load_parquet; ...\""
     lines.append(f"  {cmd}")
     lines.append("")
