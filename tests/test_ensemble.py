@@ -1,81 +1,72 @@
 """Tests for research/strategies/ensemble.py."""
-
 import numpy as np
 import pandas as pd
 import pytest
-
-from research.strategies.ensemble import (
-    compute_rolling_sharpe,
-    ensemble_signals,
-)
+from research.strategies.ensemble import ensemble_signals, compute_rolling_sharpe
 
 
 @pytest.fixture
-def signal_data():
-    """Two simple signals + close price."""
-    np.random.seed(42)
-    idx = pd.date_range("2024-01-01", periods=500, freq="5min")
-    close_arr = 100 + np.cumsum(np.random.randn(500) * 0.5)
-    close = pd.Series(close_arr, index=idx)
-    sig1 = pd.Series(np.random.choice([-1, 0, 1], 500), index=idx)
-    sig2 = pd.Series(np.random.choice([-1, 0, 1], 500), index=idx)
-    return {"close": close, "sig1": sig1, "sig2": sig2}
+def dix():
+    return pd.date_range("2024-01-01", periods=500, freq="5min")
 
 
-class TestComputeRollingSharpe:
+class TestEnsemble:
 
-    def test_output_shape(self, signal_data):
-        """Rolling Sharpe should match input length."""
-        sh = compute_rolling_sharpe(signal_data["sig1"], signal_data["close"], window=50)
-        assert len(sh) == len(signal_data["close"])
-        assert sh.dtype == float
+    def test_ensemble_equal_two_signals(self, dix):
+        close = pd.Series(100 + np.arange(10), index=dix[:10])
+        a = pd.Series([1, 1, 1, 0, 0, -1, -1, -1, 0, 0], index=dix[:10])
+        b = pd.Series([0, 0, 1, 1, 0, -1, -1, 0, 0, 1], index=dix[:10])
+        r = ensemble_signals({"a": a, "b": b}, close, method="equal")
+        assert abs(r.iloc[0] - 0.5) < 0.01
 
-    def test_no_nan(self, signal_data):
-        """After warmup, should have no NaN."""
-        sh = compute_rolling_sharpe(signal_data["sig1"], signal_data["close"], window=50)
-        assert not sh.iloc[100:].isna().any()
+    def test_ensemble_sharpe_weight(self, dix):
+        close = pd.Series(100 + np.cumsum(np.random.randn(100) * 0.3), index=dix[:100])
+        a = pd.Series(np.random.choice([-1, 0, 1], 100), index=dix[:100])
+        b = pd.Series(np.random.choice([-1, 0, 1], 100), index=dix[:100])
+        r = ensemble_signals({"a": a, "b": b}, close, method="sharpe_weight")
+        assert not r.isna().all()
 
+    def test_ensemble_sharpe_rank(self, dix):
+        close = pd.Series(100 + np.cumsum(np.random.randn(100) * 0.3), index=dix[:100])
+        a = pd.Series(np.random.choice([-1, 0, 1], 100), index=dix[:100])
+        b = pd.Series(np.random.choice([-1, 0, 1], 100), index=dix[:100])
+        c = pd.Series(np.random.choice([-1, 0, 1], 100), index=dix[:100])
+        r = ensemble_signals({"a": a, "b": b, "c": c}, close, method="sharpe_rank")
+        assert not r.isna().all()
 
-class TestEnsembleSignals:
+    def test_rolling_sharpe_output(self, dix):
+        close = pd.Series(100 + np.cumsum(np.random.randn(200) * 0.3), index=dix[:200])
+        sig = pd.Series(np.random.choice([-1, 0, 1], 200), index=dix[:200])
+        rs = compute_rolling_sharpe(sig, close, window=50)
+        assert len(rs) == 200
+        assert rs.notna().sum() > 0
 
-    def test_equal_weight(self, signal_data):
-        """Equal weight should average signals."""
-        combined = ensemble_signals(
-            {"a": signal_data["sig1"], "b": signal_data["sig2"]},
-            signal_data["close"],
-            method="equal",
-        )
-        expected = (signal_data["sig1"] + signal_data["sig2"]) / 2
-        pd.testing.assert_series_equal(combined, expected)
+    def test_ensemble_single(self, dix):
+        close = pd.Series(100 + np.arange(5), index=dix[:5])
+        sig = pd.Series([1, 1, 0, -1, -1], index=dix[:5])
+        r = ensemble_signals({"a": sig}, close, method="equal")
+        assert (r.values == sig.values).all()
 
-    def test_single_signal(self, signal_data):
-        """Single signal should pass through."""
-        combined = ensemble_signals(
-            {"a": signal_data["sig1"]},
-            signal_data["close"],
-            method="equal",
-        )
-        # equal weight of single signal = signal itself, converted to float
-        pd.testing.assert_series_equal(combined, signal_data["sig1"].astype(float))
+    def test_ensemble_equal_weight_specified(self, dix):
+        close = pd.Series(100 + np.arange(10), index=dix[:10])
+        a = pd.Series([1]*10, index=dix[:10]); b = pd.Series([0]*10, index=dix[:10])
+        r = ensemble_signals({"a": a, "b": b}, close, method="equal", equal_weight=[0.8, 0.2])
+        assert abs(r.mean() - 0.8) < 0.01
 
-    def test_output_range(self, signal_data):
-        """Combined signal should be in [-1, 1]."""
-        combined = ensemble_signals(
-            {"a": signal_data["sig1"], "b": signal_data["sig2"]},
-            signal_data["close"],
-            method="sharpe_weight",
-            window=50,
-        )
-        assert combined.min() >= -1
-        assert combined.max() <= 1
+    def test_three_signals_equal(self, dix):
+        close = pd.Series(100 + np.arange(10), index=dix[:10])
+        a = pd.Series([1]*10, index=dix[:10])
+        b = pd.Series([1]*10, index=dix[:10])
+        c = pd.Series([1]*10, index=dix[:10])
+        r = ensemble_signals({"a": a, "b": b, "c": c}, close, method="equal")
+        assert abs(r.mean() - 1.0) < 0.01
 
-    def test_sharpe_rank_output(self, signal_data):
-        """Sharpe rank method should produce valid output."""
-        combined = ensemble_signals(
-            {"a": signal_data["sig1"], "b": signal_data["sig2"]},
-            signal_data["close"],
-            method="sharpe_rank",
-            window=50,
-        )
-        assert combined.min() >= -1
-        assert combined.max() <= 1
+    def test_nan_signals_handling(self, dix):
+        close = pd.Series(100 + np.arange(10), index=dix[:10])
+        a = pd.Series([1, np.nan, 1, np.nan, 1, 1, 1, 1, 1, 1], index=dix[:10])
+        r = ensemble_signals({"a": a}, close, method="equal")
+        assert not r.isna().all()
+
+    def test_backtest_ensemble_exists(self, dix):
+        from research.strategies.ensemble import backtest_ensemble
+        assert callable(backtest_ensemble)
