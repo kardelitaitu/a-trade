@@ -70,3 +70,17 @@ class TestVolatilityBreakout:
         s = VolatilityBreakout({"atr_period": 14, "atr_multiplier": 2.0})
         desc = s.description
         assert "ATR" in desc or "Volatility" in desc
+
+    def test_various_atr_periods(self, vol_data):
+        for p in [7, 10, 14, 20, 30]:
+            s = VolatilityBreakout({"atr_period": p})
+            assert not s.generate_signals(vol_data).isna().any()
+
+    def test_various_multipliers(self, vol_data):
+        for m in [0.5, 1.0, 2.0, 5.0]:
+            s = VolatilityBreakout({"atr_multiplier": m})
+            assert not s.generate_signals(vol_data).isna().any()
+
+    def test_config_persists(self):
+        s = VolatilityBreakout({"atr_period": 7, "atr_multiplier": 1.5, "atr_lookback": 30})
+        assert s.config["atr_period"] == 7 and s.config["atr_lookback"] == 30

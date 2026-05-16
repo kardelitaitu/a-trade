@@ -176,5 +176,19 @@ class TestMetricsExtended:
         idx = pd.date_range("2024-01-01", periods=6, freq="5min")
         eq = pd.Series([10000, 11000, 9000, 9500, 8000, 8500], index=idx)
         m = compute_metrics(eq)
-        # Peak was 11000, trough 8000, DD% = (11000-8000)/11000 * 100 = 27.27%
         assert m["max_drawdown_pct"] == pytest.approx(-27.27, abs=0.5)
+
+    def test_return_pct_calculation(self):
+        idx = pd.date_range("2024-01-01", periods=2, freq="5min")
+        m = compute_metrics(pd.Series([10000, 20000], index=idx))
+        assert abs(m["total_return_pct"] - 100.0) < 1.0
+
+    def test_cagr_positive(self):
+        idx = pd.date_range("2024-01-01", periods=2, freq="5min")
+        m = compute_metrics(pd.Series([10000, 12000], index=idx))
+        assert m["cagr_pct"] > 0
+
+    def test_profit_factor_on_gain(self):
+        idx = pd.date_range("2024-01-01", periods=2, freq="5min")
+        m = compute_metrics(pd.Series([10000, 11000], index=idx))
+        assert m["profit_factor"] >= 0

@@ -61,6 +61,14 @@ class TestEnsemble:
         r = ensemble_signals({"a": a, "b": b, "c": c}, close, method="equal")
         assert abs(r.mean() - 1.0) < 0.01
 
+    def test_equal_w_uneven(self, dix):
+        close = pd.Series(100 + np.arange(10), index=dix[:10])
+        a = pd.Series([1]*10, index=dix[:10])
+        b = pd.Series([0]*10, index=dix[:10])
+        c = pd.Series([1]*10, index=dix[:10])
+        r = ensemble_signals({"a": a, "b": b, "c": c}, close, method="equal")
+        assert abs(r.mean() - 2/3) < 0.01
+
     def test_nan_signals_handling(self, dix):
         close = pd.Series(100 + np.arange(10), index=dix[:10])
         a = pd.Series([1, np.nan, 1, np.nan, 1, 1, 1, 1, 1, 1], index=dix[:10])

@@ -113,3 +113,41 @@ class TestBaseStrategy:
         data = pd.DataFrame({"close": [100]*10}, index=idx)
         sig = s.generate_signals(data)
         assert set(sig.unique()).issubset({-1, 0, 1})
+
+    def test_index_aligned(self):
+        s = DummyStrategy()
+        idx = pd.date_range("2024-01-01", periods=10, freq="5min")
+        data = pd.DataFrame({"close": [100]*10}, index=idx)
+        sig = s.generate_signals(data)
+        assert (sig.index == idx).all()
+
+    def test_reproducible(self):
+        s = DummyStrategy()
+        idx = pd.date_range("2024-01-01", periods=10, freq="5min")
+        data = pd.DataFrame({"close": [100]*10}, index=idx)
+        r1 = s.generate_signals(data)
+        r2 = s.generate_signals(data)
+        assert (r1 == r2).all()
+
+    def test_empty_data(self):
+        s = DummyStrategy()
+        sig = s.generate_signals(pd.DataFrame())
+        assert len(sig) == 0 or (sig == 0).all()
+
+    def test_len_matches(self):
+        s = DummyStrategy()
+        idx = pd.date_range("2024-01-01", periods=5, freq="5min")
+        data = pd.DataFrame({"close": [100]*5}, index=idx)
+        assert len(s.generate_signals(data)) == 5
+
+    def test_all_different_lengths(self):
+        s = DummyStrategy()
+        for n in [1, 3, 10, 50]:
+            idx = pd.date_range("2024-01-01", periods=n, freq="5min")
+            data = pd.DataFrame({"close": [100]*n}, index=idx)
+            assert len(s.generate_signals(data)) == n
+
+    def test_name_and_description(self):
+        s = DummyStrategy()
+        assert s.name == "Dummy"
+        assert s.description == "Dummy strategy for testing"

@@ -70,3 +70,32 @@ class TestListStrategies:
         assert "mean_reversion" in result
         assert "volatility_breakout" in result
         assert "fast_period" in result
+
+    def test_list_has_vol_squeeze(self):
+        result = list_strategies()
+        assert "volatility_squeeze" in result
+
+    def test_list_has_bb_std(self):
+        result = list_strategies()
+        assert "bb_std" in result
+
+    def test_list_output_length(self):
+        result = list_strategies()
+        assert len(result) > 200
+
+    def test_all_strategies_generatable(self):
+        for name in ["ma_crossover", "donchian_breakout", "mean_reversion", "volatility_breakout", "volatility_squeeze"]:
+            from research.strategies.factory import create_strategy
+            s = create_strategy(name)
+            assert s is not None
+
+    def test_create_with_indicator(self):
+        from research.strategies.factory import create_strategy
+        s = create_strategy("ma_crossover", {"fast_indicator":"ema","slow_indicator":"sma"})
+        assert s.config["fast_indicator"] == "ema"
+
+    def test_create_all_indicator_names(self):
+        from research.strategies.factory import create_strategy
+        for n in ["ma_crossover","donchian_breakout","mean_reversion","volatility_breakout","volatility_squeeze"]:
+            s = create_strategy(n, {"fast_period": 5})
+            assert s.config is not None

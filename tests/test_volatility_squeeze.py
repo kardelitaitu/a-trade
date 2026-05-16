@@ -74,3 +74,23 @@ class TestVolatilitySqueeze:
         s = VolatilitySqueeze({"bb_period": 25, "bb_std": 2.5, "keltner_period": 15, "keltner_atr_mult": 1.2})
         assert s.config["bb_period"] == 25
         assert s.config["keltner_period"] == 15
+
+    def test_various_bb_stds(self, squeeze_data):
+        for s in [1.5, 2.0, 2.5, 3.0]:
+            strat = VolatilitySqueeze({"bb_std": s})
+            assert not strat.generate_signals(squeeze_data).isna().any()
+
+    def test_various_keltner_mults(self, squeeze_data):
+        for m in [0.5, 1.0, 1.5, 2.0]:
+            strat = VolatilitySqueeze({"keltner_atr_mult": m})
+            assert not strat.generate_signals(squeeze_data).isna().any()
+
+    def test_various_bb_periods(self, squeeze_data):
+        for p in [15, 20, 25, 30]:
+            strat = VolatilitySqueeze({"bb_period": p})
+            assert not strat.generate_signals(squeeze_data).isna().any()
+
+    def test_various_keltner_periods(self, squeeze_data):
+        for p in [10, 15, 20, 25]:
+            strat = VolatilitySqueeze({"keltner_period": p})
+            assert not strat.generate_signals(squeeze_data).isna().any()

@@ -61,3 +61,20 @@ class TestBollinger:
         valid_mask = mid.notna()
         assert (upper[valid_mask] >= mid[valid_mask]).all()
         assert (lower[valid_mask] <= mid[valid_mask]).all()
+
+
+class TestTrueRange:
+    def test_tr_basic(self):
+        high = pd.Series([102, 104, 103], dtype=float)
+        low = pd.Series([98, 99, 98], dtype=float)
+        close = pd.Series([101, 103, 102], dtype=float)
+        tr = true_range(high, low, close)
+        assert tr.notna().all()
+        assert (tr.dropna() > 0).all()
+
+    def test_tr_calculation(self):
+        high = pd.Series([105.0])
+        low = pd.Series([95.0])
+        close = pd.Series([100.0])
+        tr = true_range(high, low, close)
+        assert tr.iloc[0] == 10.0

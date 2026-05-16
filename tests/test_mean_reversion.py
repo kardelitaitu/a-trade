@@ -85,3 +85,18 @@ class TestMeanReversion:
         s = MeanReversion({"mode": "bollinger", "bb_period": 15, "bb_std": 2.5})
         sig = s.generate_signals(meanrev_data)
         assert not sig.isna().any()
+
+    def test_rsi_various_oversold(self, meanrev_data):
+        for os in [20, 25, 30, 35]:
+            sig = MeanReversion({"mode": "rsi", "rsi_oversold": os}).generate_signals(meanrev_data)
+            assert not sig.isna().any()
+
+    def test_bb_various_stds(self, meanrev_data):
+        for std in [1.5, 2.0, 2.5, 3.0]:
+            sig = MeanReversion({"mode": "bollinger", "bb_std": std}).generate_signals(meanrev_data)
+            assert not sig.isna().any()
+
+    def test_bb_various_periods(self, meanrev_data):
+        for p in [10, 20, 30]:
+            sig = MeanReversion({"mode": "bollinger", "bb_period": p}).generate_signals(meanrev_data)
+            assert not sig.isna().any()

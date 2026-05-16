@@ -76,3 +76,19 @@ class TestDonchianBreakout:
         s = DonchianBreakout({"entry_period": 10, "exit_period": 5})
         assert s.config["entry_period"] == 10
         assert s.config["exit_period"] == 5
+
+    def test_entry_gt_exit(self, breakout_data):
+        sig = DonchianBreakout({"entry_period": 30, "exit_period": 10}).generate_signals(breakout_data)
+        assert not sig.isna().any()
+
+    def test_exit_gt_entry(self, breakout_data):
+        sig = DonchianBreakout({"entry_period": 10, "exit_period": 30}).generate_signals(breakout_data)
+        assert not sig.isna().any()
+
+    def test_very_large_periods(self, breakout_data):
+        sig = DonchianBreakout({"entry_period": 150, "exit_period": 100}).generate_signals(breakout_data)
+        assert not sig.isna().any()
+
+    def test_very_small_periods(self, breakout_data):
+        sig = DonchianBreakout({"entry_period": 3, "exit_period": 2}).generate_signals(breakout_data)
+        assert not sig.isna().any()

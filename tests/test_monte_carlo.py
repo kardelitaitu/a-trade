@@ -119,3 +119,33 @@ class TestMonteCarloRSI:
         assert "BEST PARAMETERS" in content
         assert "Initial Equity" in content
         assert "REPRODUCIBILITY" in content
+
+
+class TestMCResultProperties:
+
+    def test_mc_result_shape(self, sample_data):
+        close = sample_data["close"].values.astype(np.float64)
+        r = monte_carlo_ma(close, (5, 15), (20, 40))
+        assert r.metrics.shape[1] == 6
+
+    def test_mc_sorted_indices(self, sample_data):
+        close = sample_data["close"].values.astype(np.float64)
+        r = monte_carlo_ma(close, (5, 15), (20, 40))
+        assert r.sorted_indices[0] == r.best_idx
+
+    def test_mc_best_metrics(self, sample_data):
+        close = sample_data["close"].values.astype(np.float64)
+        r = monte_carlo_ma(close, (5, 15), (20, 40))
+        b = r.best_metrics()
+        assert b.sharpe is not None and b.final_equity > 0
+
+    def test_mc_n_combos(self, sample_data):
+        close = sample_data["close"].values.astype(np.float64)
+        r = monte_carlo_ma(close, (5, 10), (20, 30), step=5)
+        assert r.n_combos == 6
+
+    def test_mc_summary_str(self, sample_data):
+        close = sample_data["close"].values.astype(np.float64)
+        r = monte_carlo_ma(close, (5, 15), (20, 40))
+        s = r.summary()
+        assert isinstance(s, str) and len(s) > 20

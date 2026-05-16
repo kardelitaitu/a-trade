@@ -92,3 +92,37 @@ class TestMACrossover:
         s = MACrossover({"filter_atr_mult": 2.0})
         sig = s.generate_signals(trend_data)
         assert not sig.isna().any()
+
+    def test_sma_ema_different(self, trend_data):
+        sma = MACrossover({"ma_type": "sma", "fast_period": 10, "slow_period": 30}).generate_signals(trend_data)
+        ema = MACrossover({"ma_type": "ema", "fast_period": 10, "slow_period": 30}).generate_signals(trend_data)
+        assert not (sma == ema).all()
+
+    def test_all_ma_types(self, trend_data):
+        for t in ["sma", "ema", "wma", "hma"]:
+            sig = MACrossover({"ma_type": t, "fast_period": 10, "slow_period": 30}).generate_signals(trend_data)
+            assert set(sig.unique()).issubset({-1, 0, 1})
+
+    def test_config_override_all(self, trend_data):
+        s = MACrossover({"fast_period": 5, "slow_period": 15, "ma_type": "sma"})
+        assert s.config["fast_period"] == 5 and s.config["slow_period"] == 15
+
+    def test_ema_alternate(self, trend_data):
+        for f, s_ in [(5, 20), (8, 24), (12, 26), (15, 30)]:
+            sig = MACrossover({"fast_period": f, "slow_period": s_}).generate_signals(trend_data)
+            assert not sig.isna().any()
+
+    def test_sma_alternate(self, trend_data):
+        for f, s_ in [(5, 20), (8, 24), (12, 26), (15, 30)]:
+            sig = MACrossover({"ma_type": "sma", "fast_period": f, "slow_period": s_}).generate_signals(trend_data)
+            assert not sig.isna().any()
+
+    def test_wma_alternate(self, trend_data):
+        for f, s_ in [(5, 20), (12, 26)]:
+            sig = MACrossover({"ma_type": "wma", "fast_period": f, "slow_period": s_}).generate_signals(trend_data)
+            assert not sig.isna().any()
+
+    def test_hma_alternate(self, trend_data):
+        for f, s_ in [(5, 20), (12, 26)]:
+            sig = MACrossover({"ma_type": "hma", "fast_period": f, "slow_period": s_}).generate_signals(trend_data)
+            assert not sig.isna().any()
