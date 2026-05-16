@@ -1,0 +1,440 @@
+
+PARALLEL MONTE CARLO RESULTS
+--------------------------------------------------------------------------------
+  #  Parameters                                           Sharpe     PF     DD%  Trades   Return
+--------------------------------------------------------------------------------
+  1  bb_period=30, bb_std=2.3, keltner_period=20, ...       1.25   2.16  -44.74%      16  +168.53%
+  2  bb_period=20, bb_std=2.8, keltner_period=20, ...       1.13   1.81  -38.54%      50  +118.44%
+  3  bb_period=20, bb_std=2.2, keltner_period=20, ...       1.08   1.63  -35.19%      71  +128.76%
+  4  bb_period=20, bb_std=2.7, keltner_period=20, ...       1.08   1.88  -28.46%      71  +109.32%
+  5  bb_period=30, bb_std=2.2, keltner_period=20, ...       1.01   1.47  -44.82%      29  +108.46%
+  6  bb_period=20, bb_std=2.4, keltner_period=15, ...       0.85    inf  -31.54%       1  +73.93%
+  7  bb_period=20, bb_std=2.7, keltner_period=15, ...       0.85    inf  -31.54%       1  +73.93%
+  8  bb_period=20, bb_std=2.6, keltner_period=15, ...       0.82   1.51  -40.02%      67  +72.90%
+  9  bb_period=25, bb_std=2.2, keltner_period=15, ...       0.82   1.17  -60.18%      72  +74.10%
+ 10  bb_period=20, bb_std=2.2, keltner_period=15, ...       0.81   1.60  -41.76%      37  +74.52%
+ 11  bb_period=20, bb_std=2.5, keltner_period=15, ...       0.80    inf  -31.54%       1  +63.78%
+ 12  bb_period=20, bb_std=2.6, keltner_period=15, ...       0.80    inf  -31.54%       1  +63.78%
+ 13  bb_period=20, bb_std=2.8, keltner_period=15, ...       0.80    inf  -31.54%       1  +63.78%
+ 14  bb_period=20, bb_std=2.4, keltner_period=25, ...       0.78   1.57  -36.28%      40  +67.06%
+ 15  bb_period=20, bb_std=2.3, keltner_period=20, ...       0.78   1.41  -44.59%      52  +68.81%
+ 16  bb_period=20, bb_std=2.3, keltner_period=25, ...       0.77   1.50  -36.31%      55  +67.85%
+ 17  bb_period=25, bb_std=2.7, keltner_period=15, ...       0.73    inf  -35.76%       1  +50.38%
+ 18  bb_period=20, bb_std=2.5, keltner_period=25, ...       0.71   1.50  -44.39%      28  +56.21%
+ 19  bb_period=25, bb_std=2.4, keltner_period=20, ...       0.64   1.23  -53.24%      47  +47.04%
+ 20  bb_period=20, bb_std=2.5, keltner_period=15, ...       0.63   1.26  -40.39%      99  +44.50%
+ 21  bb_period=20, bb_std=2.2, keltner_period=25, ...       0.58   1.30  -49.86%      24  +38.69%
+ 22  bb_period=20, bb_std=2.4, keltner_period=15, ...       0.56   1.14  -49.85%     145  +36.06%
+ 23  bb_period=20, bb_std=2.6, keltner_period=20, ...       0.54   1.24  -43.08%      98  +32.66%
+ 24  bb_period=30, bb_std=2.2, keltner_period=25, ...       0.53   1.09  -62.83%      40  +31.73%
+ 25  bb_period=25, bb_std=2.2, keltner_period=25, ...       0.52   1.48  -59.56%      15  +31.51%
+ 26  bb_period=25, bb_std=2.4, keltner_period=20, ...       0.48    inf  -35.76%       1  +26.25%
+ 27  bb_period=20, bb_std=2.3, keltner_period=25, ...       0.48   1.07  -50.55%      17  +25.80%
+ 28  bb_period=20, bb_std=2.8, keltner_period=25, ...       0.46   1.28  -30.32%      54  +23.46%
+ 29  bb_period=20, bb_std=2.7, keltner_period=15, ...       0.45   1.21  -45.07%      46  +22.87%
+ 30  bb_period=20, bb_std=2.6, keltner_period=15, ...       0.32   0.85  -62.60%       3   +8.37%
+ 31  bb_period=20, bb_std=2.6, keltner_period=25, ...       0.32   0.90  -59.39%       8   +7.85%
+ 32  bb_period=20, bb_std=2.8, keltner_period=15, ...       0.32   0.90  -53.00%      28   +9.26%
+ 33  bb_period=20, bb_std=2.3, keltner_period=25, ...       0.32   0.92  -53.15%       4   +7.12%
+ 34  bb_period=20, bb_std=2.5, keltner_period=15, ...       0.31   0.85  -62.60%       6   +6.96%
+ 35  bb_period=30, bb_std=2.5, keltner_period=25, ...       0.30   1.08  -57.26%      10   +5.56%
+ 36  bb_period=30, bb_std=2.2, keltner_period=15, ...       0.30   0.81  -57.36%       8   +5.28%
+ 37  bb_period=20, bb_std=2.2, keltner_period=25, ...       0.29   0.90  -53.28%       8   +4.36%
+ 38  bb_period=20, bb_std=2.4, keltner_period=25, ...       0.28   0.91  -59.75%      14   +3.79%
+ 39  bb_period=30, bb_std=2.5, keltner_period=20, ...       0.28   0.64  -57.15%       4   +3.54%
+ 40  bb_period=30, bb_std=2.4, keltner_period=20, ...       0.27   0.80  -57.25%       7   +2.68%
+ 41  bb_period=20, bb_std=2.7, keltner_period=25, ...       0.27   0.90  -59.75%      14   +2.53%
+ 42  bb_period=20, bb_std=2.4, keltner_period=20, ...       0.26   0.83  -62.60%       2   +2.28%
+ 43  bb_period=20, bb_std=2.5, keltner_period=20, ...       0.26   0.83  -62.60%       2   +2.28%
+ 44  bb_period=20, bb_std=2.6, keltner_period=20, ...       0.26   0.83  -62.60%       2   +2.28%
+ 45  bb_period=20, bb_std=2.7, keltner_period=20, ...       0.25   0.84  -62.60%       2   +2.05%
+ 46  bb_period=20, bb_std=2.8, keltner_period=20, ...       0.25   0.84  -62.60%       2   +2.05%
+ 47  bb_period=25, bb_std=2.8, keltner_period=25, ...       0.25   1.01  -57.22%      12   +1.60%
+ 48  bb_period=25, bb_std=2.5, keltner_period=20, ...       0.24   0.84  -62.23%      30   +0.11%
+ 49  bb_period=20, bb_std=2.3, keltner_period=15, ...       0.24   0.80  -62.78%      25   -0.78%
+ 50  bb_period=25, bb_std=2.6, keltner_period=15, ...       0.22   1.66  -42.84%       4   -0.43%
+ 51  bb_period=30, bb_std=2.6, keltner_period=25, ...       0.19   0.65  -57.15%       5   -5.36%
+ 52  bb_period=20, bb_std=2.4, keltner_period=15, ...       0.18   0.71  -59.27%      12   -5.31%
+ 53  bb_period=20, bb_std=2.6, keltner_period=25, ...       0.18   0.80  -59.82%      17   -5.38%
+ 54  bb_period=20, bb_std=2.6, keltner_period=20, ...       0.16   0.74  -59.43%      13   -7.65%
+ 55  bb_period=20, bb_std=2.4, keltner_period=25, ...       0.15   0.63  -62.73%       4   -9.20%
+ 56  bb_period=30, bb_std=2.6, keltner_period=20, ...       0.14   0.20  -57.15%       2   -9.48%
+ 57  bb_period=30, bb_std=2.4, keltner_period=25, ...       0.14   0.84  -59.75%      15   -9.48%
+ 58  bb_period=20, bb_std=2.7, keltner_period=25, ...       0.14   0.63  -62.74%       4  -10.01%
+ 59  bb_period=20, bb_std=2.8, keltner_period=25, ...       0.14   0.63  -62.73%       4  -10.28%
+ 60  bb_period=20, bb_std=2.5, keltner_period=20, ...       0.13   1.00  -45.91%     132   -8.42%
+ 61  bb_period=25, bb_std=2.4, keltner_period=15, ...       0.13   0.74  -72.22%      21  -10.88%
+ 62  bb_period=25, bb_std=2.7, keltner_period=20, ...       0.12   0.74  -62.66%       7  -11.21%
+ 63  bb_period=20, bb_std=2.3, keltner_period=15, ...       0.11   0.97  -45.87%     228  -11.86%
+ 64  bb_period=20, bb_std=2.4, keltner_period=20, ...       0.11   0.74  -59.23%       7  -10.93%
+ 65  bb_period=20, bb_std=2.7, keltner_period=20, ...       0.10   0.73  -59.23%       7  -11.86%
+ 66  bb_period=30, bb_std=2.3, keltner_period=15, ...       0.07   0.40  -55.60%       2  -15.58%
+ 67  bb_period=20, bb_std=2.5, keltner_period=25, ...       0.06   0.74  -59.39%      11  -15.37%
+ 68  bb_period=25, bb_std=2.4, keltner_period=25, ...       0.04   0.76  -66.35%      57  -15.55%
+ 69  bb_period=25, bb_std=2.3, keltner_period=15, ...       0.04   0.84  -65.27%      38  -17.97%
+ 70  bb_period=20, bb_std=2.8, keltner_period=25, ...       0.02   0.72  -59.39%      10  -17.91%
+ 71  bb_period=20, bb_std=2.4, keltner_period=20, ...       0.00   0.82  -54.78%      25  -19.20%
+ 72  bb_period=20, bb_std=2.2, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+ 73  bb_period=20, bb_std=2.2, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+ 74  bb_period=20, bb_std=2.2, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+ 75  bb_period=20, bb_std=2.3, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+ 76  bb_period=20, bb_std=2.2, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+ 77  bb_period=20, bb_std=2.2, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+ 78  bb_period=20, bb_std=2.3, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+ 79  bb_period=20, bb_std=2.3, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+ 80  bb_period=20, bb_std=2.3, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+ 81  bb_period=20, bb_std=2.3, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+ 82  bb_period=20, bb_std=2.4, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+ 83  bb_period=20, bb_std=2.4, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+ 84  bb_period=20, bb_std=2.4, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+ 85  bb_period=20, bb_std=2.4, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+ 86  bb_period=20, bb_std=2.4, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+ 87  bb_period=20, bb_std=2.4, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+ 88  bb_period=20, bb_std=2.4, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+ 89  bb_period=20, bb_std=2.5, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+ 90  bb_period=20, bb_std=2.5, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+ 91  bb_period=20, bb_std=2.5, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+ 92  bb_period=20, bb_std=2.5, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+ 93  bb_period=20, bb_std=2.5, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+ 94  bb_period=20, bb_std=2.5, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+ 95  bb_period=20, bb_std=2.5, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+ 96  bb_period=20, bb_std=2.5, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+ 97  bb_period=20, bb_std=2.6, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+ 98  bb_period=20, bb_std=2.6, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+ 99  bb_period=20, bb_std=2.6, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+100  bb_period=20, bb_std=2.6, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+101  bb_period=20, bb_std=2.6, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+102  bb_period=20, bb_std=2.6, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+103  bb_period=20, bb_std=2.6, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+104  bb_period=20, bb_std=2.6, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+105  bb_period=20, bb_std=2.7, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+106  bb_period=20, bb_std=2.7, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+107  bb_period=20, bb_std=2.7, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+108  bb_period=20, bb_std=2.7, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+109  bb_period=20, bb_std=2.7, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+110  bb_period=20, bb_std=2.7, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+111  bb_period=20, bb_std=2.7, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+112  bb_period=20, bb_std=2.7, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+113  bb_period=20, bb_std=2.7, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+114  bb_period=20, bb_std=2.8, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+115  bb_period=20, bb_std=2.8, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+116  bb_period=20, bb_std=2.8, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+117  bb_period=20, bb_std=2.8, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+118  bb_period=20, bb_std=2.8, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+119  bb_period=20, bb_std=2.8, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+120  bb_period=20, bb_std=2.8, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+121  bb_period=20, bb_std=2.8, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+122  bb_period=20, bb_std=2.8, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+123  bb_period=25, bb_std=2.2, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+124  bb_period=25, bb_std=2.2, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+125  bb_period=25, bb_std=2.2, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+126  bb_period=25, bb_std=2.2, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+127  bb_period=25, bb_std=2.2, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+128  bb_period=25, bb_std=2.2, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+129  bb_period=25, bb_std=2.2, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+130  bb_period=25, bb_std=2.2, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+131  bb_period=25, bb_std=2.2, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+132  bb_period=25, bb_std=2.2, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+133  bb_period=25, bb_std=2.2, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+134  bb_period=25, bb_std=2.3, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+135  bb_period=25, bb_std=2.3, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+136  bb_period=25, bb_std=2.3, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+137  bb_period=25, bb_std=2.3, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+138  bb_period=25, bb_std=2.3, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+139  bb_period=25, bb_std=2.3, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+140  bb_period=25, bb_std=2.3, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+141  bb_period=25, bb_std=2.3, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+142  bb_period=25, bb_std=2.3, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+143  bb_period=25, bb_std=2.3, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+144  bb_period=25, bb_std=2.3, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+145  bb_period=25, bb_std=2.4, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+146  bb_period=25, bb_std=2.4, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+147  bb_period=25, bb_std=2.4, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+148  bb_period=25, bb_std=2.4, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+149  bb_period=25, bb_std=2.4, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+150  bb_period=25, bb_std=2.4, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+151  bb_period=25, bb_std=2.4, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+152  bb_period=25, bb_std=2.4, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+153  bb_period=25, bb_std=2.4, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+154  bb_period=25, bb_std=2.4, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+155  bb_period=25, bb_std=2.4, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+156  bb_period=25, bb_std=2.4, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+157  bb_period=25, bb_std=2.5, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+158  bb_period=25, bb_std=2.5, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+159  bb_period=25, bb_std=2.5, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+160  bb_period=25, bb_std=2.5, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+161  bb_period=25, bb_std=2.5, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+162  bb_period=25, bb_std=2.5, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+163  bb_period=25, bb_std=2.5, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+164  bb_period=25, bb_std=2.5, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+165  bb_period=25, bb_std=2.5, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+166  bb_period=25, bb_std=2.5, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+167  bb_period=25, bb_std=2.5, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+168  bb_period=25, bb_std=2.5, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+169  bb_period=25, bb_std=2.6, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+170  bb_period=25, bb_std=2.6, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+171  bb_period=25, bb_std=2.6, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+172  bb_period=25, bb_std=2.6, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+173  bb_period=25, bb_std=2.6, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+174  bb_period=25, bb_std=2.6, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+175  bb_period=25, bb_std=2.6, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+176  bb_period=25, bb_std=2.6, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+177  bb_period=25, bb_std=2.6, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+178  bb_period=25, bb_std=2.6, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+179  bb_period=25, bb_std=2.6, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+180  bb_period=25, bb_std=2.6, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+181  bb_period=25, bb_std=2.6, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+182  bb_period=25, bb_std=2.6, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+183  bb_period=25, bb_std=2.7, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+184  bb_period=25, bb_std=2.7, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+185  bb_period=25, bb_std=2.7, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+186  bb_period=25, bb_std=2.7, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+187  bb_period=25, bb_std=2.7, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+188  bb_period=25, bb_std=2.7, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+189  bb_period=25, bb_std=2.7, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+190  bb_period=25, bb_std=2.7, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+191  bb_period=25, bb_std=2.7, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+192  bb_period=25, bb_std=2.7, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+193  bb_period=25, bb_std=2.7, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+194  bb_period=25, bb_std=2.7, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+195  bb_period=25, bb_std=2.7, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+196  bb_period=25, bb_std=2.7, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+197  bb_period=25, bb_std=2.8, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+198  bb_period=25, bb_std=2.8, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+199  bb_period=25, bb_std=2.8, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+200  bb_period=25, bb_std=2.8, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+201  bb_period=25, bb_std=2.8, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+202  bb_period=25, bb_std=2.8, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+203  bb_period=25, bb_std=2.8, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+204  bb_period=25, bb_std=2.8, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+205  bb_period=25, bb_std=2.8, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+206  bb_period=25, bb_std=2.8, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+207  bb_period=25, bb_std=2.8, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+208  bb_period=25, bb_std=2.8, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+209  bb_period=25, bb_std=2.8, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+210  bb_period=25, bb_std=2.8, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+211  bb_period=25, bb_std=2.8, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+212  bb_period=30, bb_std=2.2, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+213  bb_period=30, bb_std=2.2, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+214  bb_period=30, bb_std=2.2, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+215  bb_period=30, bb_std=2.2, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+216  bb_period=30, bb_std=2.2, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+217  bb_period=30, bb_std=2.2, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+218  bb_period=30, bb_std=2.2, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+219  bb_period=30, bb_std=2.2, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+220  bb_period=30, bb_std=2.2, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+221  bb_period=30, bb_std=2.2, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+222  bb_period=30, bb_std=2.2, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+223  bb_period=30, bb_std=2.2, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+224  bb_period=30, bb_std=2.3, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+225  bb_period=30, bb_std=2.3, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+226  bb_period=30, bb_std=2.3, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+227  bb_period=30, bb_std=2.3, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+228  bb_period=30, bb_std=2.3, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+229  bb_period=30, bb_std=2.3, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+230  bb_period=30, bb_std=2.3, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+231  bb_period=30, bb_std=2.3, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+232  bb_period=30, bb_std=2.3, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+233  bb_period=30, bb_std=2.3, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+234  bb_period=30, bb_std=2.3, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+235  bb_period=30, bb_std=2.3, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+236  bb_period=30, bb_std=2.3, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+237  bb_period=30, bb_std=2.3, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+238  bb_period=30, bb_std=2.4, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+239  bb_period=30, bb_std=2.4, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+240  bb_period=30, bb_std=2.4, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+241  bb_period=30, bb_std=2.4, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+242  bb_period=30, bb_std=2.4, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+243  bb_period=30, bb_std=2.4, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+244  bb_period=30, bb_std=2.4, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+245  bb_period=30, bb_std=2.4, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+246  bb_period=30, bb_std=2.4, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+247  bb_period=30, bb_std=2.4, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+248  bb_period=30, bb_std=2.4, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+249  bb_period=30, bb_std=2.4, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+250  bb_period=30, bb_std=2.4, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+251  bb_period=30, bb_std=2.4, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+252  bb_period=30, bb_std=2.5, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+253  bb_period=30, bb_std=2.5, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+254  bb_period=30, bb_std=2.5, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+255  bb_period=30, bb_std=2.5, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+256  bb_period=30, bb_std=2.5, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+257  bb_period=30, bb_std=2.5, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+258  bb_period=30, bb_std=2.5, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+259  bb_period=30, bb_std=2.5, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+260  bb_period=30, bb_std=2.5, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+261  bb_period=30, bb_std=2.5, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+262  bb_period=30, bb_std=2.5, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+263  bb_period=30, bb_std=2.5, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+264  bb_period=30, bb_std=2.5, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+265  bb_period=30, bb_std=2.5, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+266  bb_period=30, bb_std=2.5, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+267  bb_period=30, bb_std=2.6, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+268  bb_period=30, bb_std=2.6, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+269  bb_period=30, bb_std=2.6, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+270  bb_period=30, bb_std=2.6, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+271  bb_period=30, bb_std=2.6, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+272  bb_period=30, bb_std=2.6, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+273  bb_period=30, bb_std=2.6, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+274  bb_period=30, bb_std=2.6, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+275  bb_period=30, bb_std=2.6, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+276  bb_period=30, bb_std=2.6, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+277  bb_period=30, bb_std=2.6, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+278  bb_period=30, bb_std=2.6, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+279  bb_period=30, bb_std=2.6, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+280  bb_period=30, bb_std=2.6, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+281  bb_period=30, bb_std=2.6, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+282  bb_period=30, bb_std=2.6, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+283  bb_period=30, bb_std=2.7, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+284  bb_period=30, bb_std=2.7, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+285  bb_period=30, bb_std=2.7, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+286  bb_period=30, bb_std=2.7, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+287  bb_period=30, bb_std=2.7, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+288  bb_period=30, bb_std=2.7, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+289  bb_period=30, bb_std=2.7, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+290  bb_period=30, bb_std=2.7, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+291  bb_period=30, bb_std=2.7, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+292  bb_period=30, bb_std=2.7, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+293  bb_period=30, bb_std=2.7, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+294  bb_period=30, bb_std=2.7, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+295  bb_period=30, bb_std=2.7, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+296  bb_period=30, bb_std=2.7, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+297  bb_period=30, bb_std=2.7, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+298  bb_period=30, bb_std=2.7, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+299  bb_period=30, bb_std=2.8, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+300  bb_period=30, bb_std=2.8, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+301  bb_period=30, bb_std=2.8, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+302  bb_period=30, bb_std=2.8, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+303  bb_period=30, bb_std=2.8, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+304  bb_period=30, bb_std=2.8, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+305  bb_period=30, bb_std=2.8, keltner_period=15, ...       0.00   0.00    0.00%       0   +0.00%
+306  bb_period=30, bb_std=2.8, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+307  bb_period=30, bb_std=2.8, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+308  bb_period=30, bb_std=2.8, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+309  bb_period=30, bb_std=2.8, keltner_period=20, ...       0.00   0.00    0.00%       0   +0.00%
+310  bb_period=30, bb_std=2.8, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+311  bb_period=30, bb_std=2.8, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+312  bb_period=30, bb_std=2.8, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+313  bb_period=30, bb_std=2.8, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+314  bb_period=30, bb_std=2.8, keltner_period=25, ...       0.00   0.00    0.00%       0   +0.00%
+315  bb_period=25, bb_std=2.3, keltner_period=20, ...      -0.00   0.55  -62.66%       3  -21.59%
+316  bb_period=25, bb_std=2.2, keltner_period=20, ...      -0.00   0.46  -62.66%       5  -21.82%
+317  bb_period=25, bb_std=2.4, keltner_period=25, ...      -0.01   0.58  -62.79%       5  -22.40%
+318  bb_period=25, bb_std=2.8, keltner_period=20, ...      -0.01   0.47  -62.66%       5  -22.49%
+319  bb_period=30, bb_std=2.3, keltner_period=25, ...      -0.02   0.68  -61.09%      21  -22.54%
+320  bb_period=25, bb_std=2.3, keltner_period=25, ...      -0.02   0.50  -62.85%       8  -22.74%
+321  bb_period=20, bb_std=2.4, keltner_period=20, ...      -0.02   0.93  -49.29%     185  -21.09%
+322  bb_period=25, bb_std=2.2, keltner_period=15, ...      -0.09   0.00  -35.76%       0  -14.35%
+323  bb_period=25, bb_std=2.3, keltner_period=15, ...      -0.09   0.00  -35.76%       0  -14.35%
+324  bb_period=25, bb_std=2.4, keltner_period=15, ...      -0.09   0.00  -35.76%       0  -14.35%
+325  bb_period=25, bb_std=2.5, keltner_period=15, ...      -0.09   0.00  -35.76%       0  -14.35%
+326  bb_period=25, bb_std=2.5, keltner_period=20, ...      -0.09   0.00  -35.76%       0  -14.35%
+327  bb_period=25, bb_std=2.8, keltner_period=15, ...      -0.09   0.00  -35.76%       0  -14.35%
+328  bb_period=20, bb_std=2.7, keltner_period=25, ...      -0.09   0.87  -49.77%      77  -20.31%
+329  bb_period=20, bb_std=2.8, keltner_period=20, ...      -0.12   0.53  -62.60%       6  -28.20%
+330  bb_period=20, bb_std=2.5, keltner_period=20, ...      -0.14   0.64  -60.70%      19  -29.64%
+331  bb_period=20, bb_std=2.2, keltner_period=25, ...      -0.17   0.83  -49.05%      80  -33.73%
+332  bb_period=25, bb_std=2.3, keltner_period=25, ...      -0.18   0.75  -59.57%      86  -34.19%
+333  bb_period=20, bb_std=2.3, keltner_period=20, ...      -0.19   0.71  -56.73%       8  -35.04%
+334  bb_period=25, bb_std=2.5, keltner_period=15, ...      -0.22   0.45  -67.51%      11  -36.76%
+335  bb_period=20, bb_std=2.2, keltner_period=20, ...      -0.23   0.61  -58.93%      20  -37.67%
+336  bb_period=25, bb_std=2.6, keltner_period=20, ...      -0.27   0.50  -69.11%      16  -38.89%
+337  bb_period=25, bb_std=2.2, keltner_period=25, ...      -0.32   0.72  -63.71%     122  -42.98%
+338  bb_period=25, bb_std=2.7, keltner_period=25, ...      -0.32   0.52  -62.80%      19  -41.44%
+339  bb_period=25, bb_std=2.5, keltner_period=25, ...      -0.33   0.59  -68.06%      45  -39.81%
+340  bb_period=20, bb_std=2.6, keltner_period=25, ...      -0.40   0.79  -53.13%     106  -42.16%
+341  bb_period=25, bb_std=2.3, keltner_period=20, ...      -0.43   0.59  -66.48%      70  -48.30%
+342  bb_period=25, bb_std=2.6, keltner_period=25, ...      -0.47   0.50  -64.95%      31  -49.10%
+343  bb_period=25, bb_std=2.2, keltner_period=20, ...      -0.47   0.65  -61.19%     101  -50.40%
+344  bb_period=20, bb_std=2.2, keltner_period=20, ...      -0.59   0.83  -70.97%     358  -55.99%
+345  bb_period=20, bb_std=2.2, keltner_period=15, ...      -0.64   0.83  -65.30%     323  -57.36%
+346  bb_period=20, bb_std=2.3, keltner_period=15, ...      -0.76   0.00  -30.26%       0  -23.54%
+347  bb_period=20, bb_std=2.3, keltner_period=20, ...      -0.79   0.77  -67.32%     268  -63.49%
+348  bb_period=20, bb_std=2.2, keltner_period=15, ...      -0.87   0.06  -79.12%       6  -66.66%
+349  bb_period=20, bb_std=2.2, keltner_period=25, ...      -0.89   0.00  -79.71%       0  -67.33%
+350  bb_period=20, bb_std=2.3, keltner_period=25, ...      -0.89   0.00  -79.71%       0  -67.33%
+351  bb_period=20, bb_std=2.5, keltner_period=25, ...      -0.89   0.00  -79.71%       0  -67.33%
+352  bb_period=20, bb_std=2.6, keltner_period=25, ...      -0.89   0.00  -79.71%       0  -67.33%
+353  bb_period=30, bb_std=2.2, keltner_period=20, ...      -0.89   0.00  -79.71%       0  -67.33%
+354  bb_period=30, bb_std=2.2, keltner_period=25, ...      -0.89   0.00  -79.71%       0  -67.33%
+355  bb_period=30, bb_std=2.2, keltner_period=25, ...      -0.89   0.00  -79.71%       0  -67.33%
+356  bb_period=30, bb_std=2.3, keltner_period=25, ...      -0.89   0.00  -79.71%       0  -67.33%
+357  bb_period=30, bb_std=2.4, keltner_period=25, ...      -0.89   0.00  -79.71%       0  -67.33%
+358  bb_period=20, bb_std=2.7, keltner_period=25, ...      -0.89   0.00  -79.71%       0  -67.40%
+359  bb_period=20, bb_std=2.8, keltner_period=25, ...      -0.89   0.00  -79.71%       0  -67.40%
+360  bb_period=25, bb_std=2.3, keltner_period=25, ...      -0.89   0.00  -79.71%       0  -67.40%
+361  bb_period=25, bb_std=2.6, keltner_period=25, ...      -0.89   0.00  -79.71%       0  -67.40%
+362  bb_period=25, bb_std=2.7, keltner_period=25, ...      -0.89   0.00  -79.71%       0  -67.40%
+363  bb_period=30, bb_std=2.5, keltner_period=25, ...      -0.89   0.00  -79.71%       0  -67.40%
+364  bb_period=30, bb_std=2.7, keltner_period=20, ...      -0.89   0.00  -79.71%       0  -67.40%
+365  bb_period=30, bb_std=2.8, keltner_period=20, ...      -0.89   0.00  -79.71%       0  -67.40%
+366  bb_period=30, bb_std=2.8, keltner_period=25, ...      -0.89   0.00  -79.71%       0  -67.40%
+367  bb_period=25, bb_std=2.2, keltner_period=25, ...      -0.90    inf  -79.71%       1  -67.45%
+368  bb_period=30, bb_std=2.7, keltner_period=25, ...      -0.90    inf  -79.76%       1  -67.48%
+369  bb_period=25, bb_std=2.5, keltner_period=25, ...      -0.90    inf  -79.71%       2  -67.72%
+370  bb_period=20, bb_std=2.2, keltner_period=15, ...      -1.02   0.00  -76.49%       1  -67.37%
+371  bb_period=30, bb_std=2.4, keltner_period=15, ...      -1.05   0.00  -79.03%       0  -71.64%
+372  bb_period=20, bb_std=2.5, keltner_period=25, ...      -1.06   0.66  -73.88%     145  -69.94%
+373  bb_period=20, bb_std=2.3, keltner_period=15, ...      -1.22   0.00  -81.66%       3  -76.37%
+374  bb_period=20, bb_std=2.4, keltner_period=25, ...      -1.25   0.69  -79.23%     180  -75.20%
+375  bb_period=20, bb_std=2.2, keltner_period=20, ...      -1.37   0.00  -84.21%       2  -79.62%
+376  bb_period=20, bb_std=2.3, keltner_period=20, ...      -1.37   0.00  -84.25%       2  -79.67%
+377  bb_period=20, bb_std=2.2, keltner_period=25, ...      -1.62   0.67  -85.85%     350  -84.05%
+378  bb_period=20, bb_std=2.3, keltner_period=25, ...      -1.85   0.64  -87.27%     254  -86.93%
+
+BEST PARAMETERS
+----------------------------------------
+  bb_period: 30
+  bb_std: 2.3
+  keltner_period: 20
+  keltner_atr_mult: 1.0
+  Sharpe:        1.2499
+  Profit Factor: 2.1591
+  Max DD:        -44.74%
+  Total Return:  +168.53%
+  Trades:        16
+
+
+Parameter Sensitivity Analysis
+============================================================
+Total combos tested: 378
+
+keltner_period:
+  Per 1 unit:    Sharpe -0.0168  (avg change per unit)
+  Best value:    15  (avg Sharpe +0.039)
+  Importance:    0.168  (spread between best/worst value)
+  Correlation:   -0.178
+  Top values:    15 (Sharpe +0.04), 20 (Sharpe +0.02), 25 (Sharpe -0.13)
+
+bb_std:
+  Per 1 unit:    Sharpe +0.1963  (avg change per unit)
+  Best value:    2.4  (avg Sharpe +0.029)
+  Importance:    0.139  (spread between best/worst value)
+  Correlation:   +0.102
+  Top values:    2.4 (Sharpe +0.03), 2.6 (Sharpe +0.02), 2.8 (Sharpe +0.01)
+
+keltner_atr_mult:
+  Per 1 unit:    Sharpe +0.0167  (avg change per unit)
+  Best value:    0.8  (avg Sharpe +0.020)
+  Importance:    0.133  (spread between best/worst value)
+  Correlation:   +0.009
+  Top values:    0.8 (Sharpe +0.02), 0.7 (Sharpe +0.01), 0.4 (Sharpe +0.00)
+
+bb_period:
+  Per 1 unit:    Sharpe -0.0044  (avg change per unit)
+  Best value:    20  (avg Sharpe +0.000)
+  Importance:    0.044  (spread between best/worst value)
+  Correlation:   -0.047
+  Top values:    20 (Sharpe +0.00), 25 (Sharpe -0.03), 30 (Sharpe -0.04)
+
+BEST COMBO FOUND
+----------------------------------------
+  bb_period: 30
+  bb_std: 2.3
+  keltner_period: 20
+  keltner_atr_mult: 1.0
+  Sharpe:        1.2499
+  Profit Factor: 2.1591
+  Max DD:        -44.74%
+  Total Return:  +168.53%
+  Trades:        16

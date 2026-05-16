@@ -164,27 +164,76 @@ def parallel_monte_carlo(
 def format_parallel_results(
     results: list[dict],
     top_n: int = 10,
+    strategy_name: str = "",
+    capital: float = 10_000.0,
+    fee_rate: float = 0.0001,
+    command: str = "",
+    asset: str = "BTCUSDT",
+    data_range: str = "",
 ) -> str:
-    """Format parallel MC results as a human-readable summary."""
+    """Format parallel MC results as a professional report."""
+    import datetime
+
     lines = []
+    now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+    fee_pct = fee_rate * 100
+    sep = "-" * 80
+
+    # Header
     lines.append("")
-    lines.append("PARALLEL MONTE CARLO RESULTS")
-    lines.append("-" * 80)
-    lines.append(f"{'#':>3}  {'Parameters':<50}  {'Sharpe':>7}  {'PF':>5}  {'DD%':>6}  {'Trades':>6}  {'Return':>7}")
-    lines.append("-" * 80)
+    lines.append("MONTE CARLO OPTIMIZATION")
+    lines.append(sep)
+    lines.append(f"  Generated:    {now}")
+    lines.append(f"  Command:      {command}")
+    lines.append(f"  Strategy:     {strategy_name}")
+    lines.append(f"  Asset:        {asset}")
+    lines.append(f"  Data range:   {data_range}")
+    lines.append(f"  Initial capt: ${capital:>10,.2f}")
+    lines.append(f"  Fee rate:     {fee_pct:.3f}%")
+    hw = "32 threads \u00b7 96 GB RAM \u00b7 NVMe SSD"
+    lines.append(f"  Hardware:     {hw}")
+    lines.append(f"  Combinations: {len(results):>6,}")
+    lines.append("")
+
+    # Top N
+    lines.append(f"TOP {top_n} BY SHARPE")
+    lines.append(sep)
+    header = f"  {'#':>3}  {'Parameters':<48}  {'Sharpe':>7}  {'PF':>5}  {'DD%':>6}  {'Trades':>6}  {'Return':>7}"
+    lines.append(header)
+    lines.append("  " + "-" * (len(header) - 2))
 
     for i, r in enumerate(results[:top_n]):
-        params_str = ", ".join(f"{k}={v}" for k, v in r["params"].items())
-        if len(params_str) > 48:
-            params_str = params_str[:45] + "..."
+        p = r["params"]
+        pstr = ", ".join(f"{k}={v}" for k, v in p.items())
+        if len(pstr) > 46:
+            pstr = pstr[:43] + "..."
         lines.append(
-            f"{i+1:>3}  {params_str:<50}  {r['sharpe']:>7.2f}  {r['profit_factor']:>5.2f}  "
+            f"  {i+1:>3}  {pstr:<48}  {r['sharpe']:>7.2f}  {r['profit_factor']:>5.2f}  "
             f"{r['max_dd']:>6.2f}%  {r['trades']:>6}  {r['total_return']:>+6.2f}%"
         )
+    lines.append("")
 
+    # Top N by DD (lowest drawdown)
+    lines.append(f"TOP {top_n} BY DRAWDOWN")
+    lines.append(sep)
+    lines.append(header)
+    lines.append("  " + "-" * (len(header) - 2))
+
+    by_dd = sorted(results, key=lambda r: r["max_dd"])
+    for i, r in enumerate(by_dd[:top_n]):
+        p = r["params"]
+        pstr = ", ".join(f"{k}={v}" for k, v in p.items())
+        if len(pstr) > 46:
+            pstr = pstr[:43] + "..."
+        lines.append(
+            f"  {i+1:>3}  {pstr:<48}  {r['sharpe']:>7.2f}  {r['profit_factor']:>5.2f}  "
+            f"{r['max_dd']:>6.2f}%  {r['trades']:>6}  {r['total_return']:>+6.2f}%"
+        )
+    lines.append("")
+
+    # Best
     if results:
         best = results[0]
-        lines.append("")
         lines.append("BEST PARAMETERS")
         lines.append("-" * 40)
         for k, v in best["params"].items():
@@ -194,8 +243,14 @@ def format_parallel_results(
         lines.append(f"  Max DD:        {best['max_dd']:.2f}%")
         lines.append(f"  Total Return:  {best['total_return']:+.2f}%")
         lines.append(f"  Trades:        {best['trades']}")
-
     lines.append("")
+
+    # Reproducibility
+    lines.append("REPRODUCIBILITY")
+    lines.append(sep)
+    lines.append(f"  {command or 'parallel_monte_carlo(...)'}")
+    lines.append("")
+
     return "\n".join(lines)
 
 
@@ -203,6 +258,12 @@ def save_parallel_results(
     results: list[dict],
     strategy_name: str,
     output_dir: str | Path = "results/reports",
+    capital: float = 10_000.0,
+    fee_rate: float = 0.0001,
+    command: str = "",
+    asset: str = "BTCUSDT",
+    data_range: str = "",
+    top_n: int = 20,
 ) -> Path:
     """Save full parallel MC results to a report file with sensitivity analysis."""
     import datetime
@@ -214,7 +275,12 @@ def save_parallel_results(
     now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%d_%H%M%S")
     path = output_dir / f"mc_{safe}_{now}.txt"
 
-    content = format_parallel_results(results, top_n=len(results))
+    content = format_parallel_results(
+        results, top_n=top_n,
+        strategy_name=strategy_name,
+        capital=capital, fee_rate=fee_rate,
+        command=command, asset=asset, data_range=data_range,
+    )
 
     # Append sensitivity analysis
     from research.optimization.sensitivity import analyze_sensitivity
