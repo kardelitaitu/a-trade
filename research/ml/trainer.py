@@ -61,7 +61,7 @@ def train_model(
             "bagging_freq": 5,
             "verbosity": -1,
             "seed": 42,
-            "num_threads": 8,
+            "num_threads": 32,
         }
 
     train_data = lgb.Dataset(X_train, label=y_train)
