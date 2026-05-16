@@ -93,7 +93,7 @@ def parallel_monte_carlo(
     data: pd.DataFrame,
     capital: float = 10_000.0,
     fee_rate: float = 0.0001,
-    n_jobs: int = 32,
+    n_jobs: int = 24,
     metric_sort: str = "sharpe",
 ) -> list[dict]:
     """

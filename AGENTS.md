@@ -49,9 +49,19 @@ Every task follows this loop — no skipping steps:
 ## Hardware Optimization
 
 - **CPU:** 32 threads — numba `@jit` and `prange` use all cores. Monte Carlo batch: 758 combos/sec.
-- **RAM:** 96 GB DDR5 — LightGBM training uses 32 threads. Full indicator bank (35 features × 876K rows) fits.
+- **RAM:** 96 GB DDR5 — LightGBM training uses 32 threads. Full indicator bank fits.
 - **Storage:** 7000 MB/s NVMe SSD — Parquet I/O for 876K-row dataset takes <0.5s.
 - Backtest throughput: **~0.3s per run on 876K rows**, **26ms per run on 100K rows**.
+
+### Parallel Monte Carlo Workers
+
+For `parallel_monte_carlo()`, use **n_jobs=24** (not 32). Running 32 Python worker processes simultaneously causes system instability due to OS scheduler contention. n_jobs=24 provides optimal throughput without stability issues.
+
+| n_jobs | Stability | Speed | When to use |
+|---|---|---|---|
+| 8 | ✅ Stable | Moderate | Conservative, always works |
+| **24** | ✅ **Stable** | **Fast** | **Default — best balance** |
+| 32 | ❌ Unstable | Marginal gain | Avoid — scheduler thrashing |
 
 ## Project Architecture
 
