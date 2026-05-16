@@ -17,24 +17,6 @@ from research.features.registry import (
 )
 
 
-@pytest.fixture
-def sample():
-    """Standard test fixture — 200 rows of simulated BTC data."""
-    np.random.seed(42)
-    idx = pd.date_range("2024-01-01", periods=200, freq="5min")
-    close = 50000 + np.cumsum(np.random.randn(200) * 10)
-    high = close + np.abs(np.random.randn(200) * 5)
-    low = close - np.abs(np.random.randn(200) * 5)
-    volume = np.random.uniform(10, 100, 200)
-    return {
-        "close": pd.Series(close, index=idx),
-        "high": pd.Series(high, index=idx),
-        "low": pd.Series(low, index=idx),
-        "volume": pd.Series(volume, index=idx),
-        "open": pd.Series(close - np.random.randn(200) * 2, index=idx),
-    }
-
-
 # ═══════════════════════════════════════════════════════════════════════
 # Registry tests
 # ═══════════════════════════════════════════════════════════════════════

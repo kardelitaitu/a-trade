@@ -43,8 +43,12 @@ def rsi(series: pd.Series, period: int = 14) -> pd.Series:
 
     rs = avg_gain / avg_loss.replace(0, np.nan)
     rsi = 100 - (100 / (1 + rs))
-    # Handle edge case where avg_loss = 0 (constant prices)
-    rsi[avg_loss == 0] = 50.0
+    # Pure uptrend: avg_loss = 0 → RSI = 100
+    # Pure downtrend: avg_gain = 0 → RSI = 0  
+    # Flat: both = 0 → RSI = 50
+    rsi[(avg_loss == 0) & (avg_gain > 0)] = 100.0
+    rsi[(avg_gain == 0) & (avg_loss > 0)] = 0.0
+    rsi[(avg_gain == 0) & (avg_loss == 0)] = 50.0
     return rsi
 
 
