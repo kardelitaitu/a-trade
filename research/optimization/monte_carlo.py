@@ -19,6 +19,7 @@ from research.backtest._batch import (
     compute_sma_bank,
     _rsi_bank,
     batch_ma_crossover,
+    batch_ma_crossover_sltp,
     batch_mean_reversion_rsi,
 )
 
@@ -149,6 +150,7 @@ def monte_carlo_ma(
         metrics=metrics,
         best_idx=best_idx,
         sorted_indices=sorted_idx,
+        initial_capital=capital,
     )
 
 
@@ -228,7 +230,7 @@ def save_mc_report(
     import datetime
 
     output_dir.mkdir(parents=True, exist_ok=True)
-    safe_name = result.strategy.lower().replace(" ", "_")
+    safe_name = result.strategy.lower().replace(" ", "_").replace("/", "_").replace("+", "plus")
     path = output_dir / f"mc_{safe_name}.txt"
 
     now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
@@ -353,3 +355,72 @@ def save_mc_report(
 
     path.write_text("\n".join(lines))
     return path
+
+
+def monte_carlo_ma_sltp(
+    close: np.ndarray,
+    high: np.ndarray,
+    low: np.ndarray,
+    fast_range: tuple[int, int],
+    slow_range: tuple[int, int],
+    sl_values: list[float],
+    tp_values: list[float],
+    capital: float = 10_000.0,
+    fee_rate: float = 0.00085,
+    step: int = 1,
+) -> MCResult:
+    """Monte Carlo for MA Crossover with SL/TP."""
+    t0 = time.perf_counter()
+    fast_vals = list(range(fast_range[0], fast_range[1] + 1, step))
+    slow_vals = list(range(slow_range[0], slow_range[1] + 1, step))
+    all_periods = sorted(set(fast_vals + slow_vals))
+    periods_arr = np.array(all_periods, dtype=np.int32)
+    sma_bank = compute_sma_bank(close, periods_arr)
+    period_to_idx = {p: i for i, p in enumerate(all_periods)}
+    n_combos = len(fast_vals) * len(slow_vals) * len(sl_values) * len(tp_values)
+    fast_idxs = np.zeros(n_combos, dtype=np.int32)
+    slow_idxs = np.zeros(n_combos, dtype=np.int32)
+    sl_arr = np.zeros(n_combos, dtype=np.float64)
+    tp_arr = np.zeros(n_combos, dtype=np.float64)
+    params_list = []
+    idx = 0
+    for f in fast_vals:
+        for s in slow_vals:
+            if f >= s:
+                continue
+            for sl in sl_values:
+                for tp in tp_values:
+                    if sl >= tp:
+                        continue
+                    fast_idxs[idx] = period_to_idx[f]
+                    slow_idxs[idx] = period_to_idx[s]
+                    sl_arr[idx] = sl
+                    tp_arr[idx] = tp
+                    params_list.append({"fast": f, "slow": s, "sl_pct": sl * 100, "tp_pct": tp * 100})
+                    idx += 1
+    fast_idxs = fast_idxs[:idx]
+    slow_idxs = slow_idxs[:idx]
+    sl_arr = sl_arr[:idx]
+    tp_arr = tp_arr[:idx]
+    n_combos = idx
+    if n_combos == 0:
+        raise ValueError("No valid combos")
+    metrics = batch_ma_crossover_sltp(
+        close, high, low, sma_bank, fast_idxs, slow_idxs,
+        sl_arr, tp_arr, capital, fee_rate,
+    )
+    duration = time.perf_counter() - t0
+    sorted_idx = np.argsort(-metrics[:, 2])
+    best_idx = int(sorted_idx[0])
+    return MCResult(
+        strategy="MA Crossover + SL/TP",
+        n_combos=n_combos,
+        duration=duration,
+        combos_per_second=n_combos / duration,
+        params_list=params_list,
+        metrics=metrics,
+        best_idx=best_idx,
+        sorted_indices=sorted_idx,
+        initial_capital=capital,
+        fee_rate=fee_rate,
+    )

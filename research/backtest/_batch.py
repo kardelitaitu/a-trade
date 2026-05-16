@@ -19,22 +19,39 @@ def single_backtest(
     fee_rate: float,
     periods_per_year: int = 105120,
 ) -> tuple[float, float, float, int, float, float]:
+    """Backtest without SL/TP. Delegates to single_backtest_sltp with zeros."""
+    return single_backtest_sltp(close, signals, capital, fee_rate,
+                                0.0, 0.0, 0.0,
+                                np.empty(0), np.empty(0),
+                                periods_per_year)
+
+
+@jit(nopython=True)
+def single_backtest_sltp(
+    close: np.ndarray,
+    signals: np.ndarray,
+    capital: float,
+    fee_rate: float,
+    sl_pct: float,       # stop loss as decimal (0.02 = 2%)
+    tp_pct: float,       # take profit as decimal (0.04 = 4%)
+    trail_pct: float,    # trailing stop as decimal (0 = off)
+    high: np.ndarray,    # high prices, same length as close
+    low: np.ndarray,     # low prices, same length as close
+    periods_per_year: int = 105120,
+) -> tuple[float, float, float, int, float, float]:
     """
-    Single backtest: signal → equity → metrics in one numba pass.
+    Single backtest with SL/TP/trailing stop support.
 
-    Parameters
-    ----------
-    close : (n,) float64 — Close prices
-    signals : (n,) float64 — Trading signals (-1, 0, +1)
-    capital : float — Initial capital
-    fee_rate : float — Total cost per trade (fee + slippage)
-    periods_per_year : int — For Sharpe annualization
+    SL/TP logic:
+    - Long: SL if low <= entry * (1 - sl_pct), TP if high >= entry * (1 + tp_pct)
+    - Short: SL if high >= entry * (1 + sl_pct), TP if low <= entry * (1 - tp_pct)
+    - Whichever triggers first wins.
+    - Trailing: tracks extreme price since entry, exits on retracement.
 
-    Returns
-    -------
-    final_equity, max_dd_pct, sharpe, n_trades, win_rate, profit_factor
+    Returns: final_equity, max_dd_pct, sharpe, n_trades, win_rate, profit_factor
     """
     n = len(close)
+    use_sltp = (sl_pct > 0.0 or tp_pct > 0.0 or trail_pct > 0.0) and len(high) == n and len(low) == n
     if n < 2:
         return capital, 0.0, 0.0, 0, 0.0, 0.0
 
@@ -53,23 +70,65 @@ def single_backtest(
     in_position = False
     entry_price = 0.0
     entry_side = 0
-    entry_equity = capital
 
-    pos_prev = 0.0
+    # Trailing stop tracking
+    trail_extreme = 0.0   # highest high (long) or lowest low (short) since entry
+    trail_stop = 0.0      # current trailing stop level
+
     last_valid_pos = 0.0
-    period_return = 0.0
+    exit_forced = False
+    exit_price = 0.0
 
     for i in range(1, n):
-        # Skip if either price is NaN
         if np.isnan(close[i]) or np.isnan(close[i - 1]):
             continue
 
-        pos = signals[i - 1]  # shift by 1 (no look-ahead)
-
-        # Detect position change relative to last valid position
-        # (not relative to skipped NaN rows)
+        pos = signals[i - 1]
         if np.isnan(pos):
             pos = last_valid_pos
+
+        # ── SL/TP check BEFORE position logic ──
+        if in_position and use_sltp:
+            hit_sl = False
+            hit_tp = False
+            hit_trail = False
+            sl_price = 0.0
+            tp_price = 0.0
+
+            if entry_side > 0:  # LONG
+                if sl_pct > 0.0:
+                    sl_price = entry_price * (1.0 - sl_pct)
+                    hit_sl = low[i] <= sl_price
+                if tp_pct > 0.0:
+                    tp_price = entry_price * (1.0 + tp_pct)
+                    hit_tp = high[i] >= tp_price
+                if trail_pct > 0.0:
+                    if high[i] > trail_extreme:
+                        trail_extreme = high[i]
+                        trail_stop = trail_extreme * (1.0 - trail_pct)
+                    hit_trail = low[i] <= trail_stop
+            else:  # SHORT
+                if sl_pct > 0.0:
+                    sl_price = entry_price * (1.0 + sl_pct)
+                    hit_sl = high[i] >= sl_price
+                if tp_pct > 0.0:
+                    tp_price = entry_price * (1.0 - tp_pct)
+                    hit_tp = low[i] <= tp_price
+                if trail_pct > 0.0:
+                    if low[i] < trail_extreme:
+                        trail_extreme = low[i]
+                        trail_stop = trail_extreme * (1.0 + trail_pct)
+                    hit_trail = high[i] >= trail_stop
+
+            if hit_sl:
+                exit_forced = True
+                exit_price = sl_price
+            elif hit_tp:
+                exit_forced = True
+                exit_price = tp_price
+            elif hit_trail:
+                exit_forced = True
+                exit_price = trail_stop
 
         pos_changed = pos != last_valid_pos
         price_ret = close[i] / close[i - 1] - 1.0
@@ -79,25 +138,22 @@ def single_backtest(
         period_return = pos * price_ret - cost
         equity *= (1.0 + period_return)
 
-        # Track stats from period_return
         total_ret_sum += period_return
         total_ret_sq += period_return * period_return
         n_returns += 1
 
-        # Drawdown
         if equity > peak:
             peak = equity
         dd = (peak - equity) / peak
         if dd > max_dd:
             max_dd = dd
 
-        # Trade tracking
-        if pos_changed:
-            # Close previous position if any
+        # ── Close position (signal change or SL/TP) ──
+        if pos_changed or exit_forced:
             if in_position:
-                exit_price = close[i]
-                pnl = (exit_price - entry_price) * entry_side
-                fees_cost = (entry_price + exit_price) * fee_rate * 0.5
+                ep = exit_price if exit_forced else close[i]
+                pnl = (ep - entry_price) * entry_side
+                fees_cost = (entry_price + ep) * fee_rate * 0.5
                 net_pnl = pnl - fees_cost
                 n_trades += 1
                 if net_pnl > 0:
@@ -105,29 +161,23 @@ def single_backtest(
                     gross_profit += net_pnl
                 else:
                     gross_loss += abs(net_pnl)
+                in_position = False
 
-            # Open new position if non-zero
-            if pos != 0:
+            exit_forced = False
+            exit_price = 0.0
+
+            # Open new position if signal says so (and not exit-only from SL/TP)
+            if pos != 0 and not exit_forced:
                 in_position = True
                 entry_price = close[i]
                 entry_side = pos
-            else:
-                in_position = False
+                if trail_pct > 0.0:
+                    trail_extreme = close[i]
+                    trail_stop = close[i] * (1.0 - trail_pct) if pos > 0 else close[i] * (1.0 + trail_pct)
 
         last_valid_pos = pos
 
-    # Close any open position at last price
-    if in_position:
-        exit_price = close[-1]
-        pnl = (exit_price - entry_price) * entry_side
-        n_trades += 1
-        if pnl > 0:
-            n_wins += 1
-            gross_profit += pnl
-        else:
-            gross_loss += abs(pnl)
-
-    # Sharpe
+    # ── Final metrics ──
     if n_returns > 1:
         mean_ret = total_ret_sum / n_returns
         variance = (total_ret_sq / n_returns) - mean_ret * mean_ret
@@ -141,6 +191,50 @@ def single_backtest(
     profit_factor = (gross_profit / gross_loss) if gross_loss > 0 else (999.0 if gross_profit > 0 else 0.0)
 
     return equity, max_dd_pct, sharpe, n_trades, win_rate, profit_factor
+
+
+# ---------------------------------------------------------------------------
+# Batched: MA Crossover with SL/TP
+# ---------------------------------------------------------------------------
+
+@jit(nopython=True, parallel=True)
+def batch_ma_crossover_sltp(
+    close: np.ndarray,
+    high: np.ndarray,
+    low: np.ndarray,
+    sma_bank: np.ndarray,
+    fast_idxs: np.ndarray,
+    slow_idxs: np.ndarray,
+    sl_pcts: np.ndarray,
+    tp_pcts: np.ndarray,
+    capital: float,
+    fee_rate: float,
+) -> np.ndarray:
+    """
+    Batched MA Crossover with per-combo SL/TP.
+
+    sl_pcts, tp_pcts: (n_combos,) float64 — stop loss and take profit percentages.
+    """
+    n_combos = len(fast_idxs)
+    metrics = np.zeros((n_combos, 6), dtype=np.float64)
+
+    for c in prange(n_combos):
+        fast = sma_bank[fast_idxs[c]]
+        slow = sma_bank[slow_idxs[c]]
+        signals = np.where(fast > slow, 1.0, np.where(fast < slow, -1.0, 0.0))
+        eq, dd, sh, tr, wr, pf = single_backtest_sltp(
+            close, signals, capital, fee_rate,
+            sl_pcts[c], tp_pcts[c], 0.0,
+            high, low,
+        )
+        metrics[c, 0] = eq
+        metrics[c, 1] = dd
+        metrics[c, 2] = sh
+        metrics[c, 3] = tr
+        metrics[c, 4] = wr
+        metrics[c, 5] = pf
+
+    return metrics
 
 
 # ---------------------------------------------------------------------------
