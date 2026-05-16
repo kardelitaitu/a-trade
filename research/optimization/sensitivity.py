@@ -65,13 +65,18 @@ def analyze_sensitivity(results: list[dict]) -> dict[str, Any]:
         # Find best value
         best = max(value_stats, key=lambda x: x["mean_sharpe"])
 
-        # Compute correlation (only if numeric)
+        # Compute correlation and slope (only if numeric)
         corr = None
+        slope = None
         if all(isinstance(v, (int, float)) for v in values):
             try:
-                corr = np.corrcoef(values, sharpes)[0, 1]
+                corr = float(np.corrcoef(values, sharpes)[0, 1])
+                # Slope = correlation * (std_sharpe / std_param)
+                if np.std(values) > 0:
+                    slope = float(corr * np.std(sharpes) / np.std(values))
             except Exception:
                 corr = 0.0
+                slope = 0.0
 
         # Importance = max mean Sharpe - min mean Sharpe (spread)
         mean_sharpes = [s["mean_sharpe"] for s in value_stats]
@@ -80,6 +85,7 @@ def analyze_sensitivity(results: list[dict]) -> dict[str, Any]:
         summaries.append({
             "param": param,
             "correlation": corr,
+            "slope": slope,
             "importance": importance,
             "best_value": best["value"],
             "best_mean_sharpe": best["mean_sharpe"],
@@ -112,12 +118,15 @@ def _build_recommendations(summaries: list[dict], results: list[dict]) -> str:
     for s in summaries:
         p = s["param"]
         corr = s["correlation"]
+        slope = s["slope"]
         imp = s["importance"]
         best_v = s["best_value"]
         best_sh = s["best_mean_sharpe"]
 
         corr_str = f"{corr:+.3f}" if corr is not None else "N/A (non-numeric)"
+        slope_str = f"{slope:+.4f}" if slope is not None else "N/A"
         lines.append(f"{p}:")
+        lines.append(f"  Per 1 unit:    Sharpe {slope_str}  (avg change per unit)")
         lines.append(f"  Best value:    {best_v}  (avg Sharpe {best_sh:+.3f})")
         lines.append(f"  Importance:    {imp:.3f}  (spread between best/worst value)")
         lines.append(f"  Correlation:   {corr_str}")
