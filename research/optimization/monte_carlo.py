@@ -226,7 +226,7 @@ def save_mc_report(
     output_dir: Path = Path("results/reports"),
     top_n: int = 20,
 ) -> Path:
-    """Generate a professional Monte Carlo optimization report."""
+    """Generate a plain-text Monte Carlo optimization report."""
     import datetime
 
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -236,62 +236,51 @@ def save_mc_report(
     now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
     capital = result.initial_capital
     fee_pct = result.fee_rate * 100
+    sep = "-" * 76
+    sub = "-" * 40
 
     lines = []
-    _hline = lambda: lines.append("╠" + "═" * 76 + "╣")
+    lines.append("")
+    lines.append("MONTE CARLO OPTIMIZATION")
+    lines.append(sep)
+    lines.append(f"  Generated:    {now}")
+    lines.append(f"  Command:      {result.command}")
+    lines.append(f"  Strategy:     {result.strategy}")
+    lines.append(f"  Asset:        {result.asset}")
+    lines.append(f"  Data range:   {result.data_range}")
+    lines.append(f"  Initial capt: ${capital:>10,.2f}")
+    lines.append(f"  Fee rate:     {fee_pct:.3f}%")
+    hw = "32 threads \u00b7 96 GB RAM \u00b7 NVMe SSD"
+    lines.append(f"  Hardware:     {hw}")
+    lines.append(f"  Combinations: {result.n_combos:>6,} in {result.duration:.1f}s "
+                 f"({result.combos_per_second:.0f} \u00b1 combo/s)")
+    lines.append("")
 
-    # ── Header ──
-    lines.append("╔" + "═" * 76 + "╗")
-    lines.append(f"║  {'QUANTUMEDGE — MONTE CARLO OPTIMIZATION':^72}  ║")
-    lines.append("╠" + "═" * 76 + "╣")
-    lines.append(f"║  Generated:    {now:<59}║")
-    lines.append(f"║  Command:      {result.command:<59}║")
-    lines.append(f"║  Strategy:     {result.strategy:<59}║")
-    lines.append(f"║  Asset:        {result.asset:<59}║")
-    lines.append(f"║  Data range:   {result.data_range:<59}║")
-    lines.append(f"║  Initial capt: ${capital:>10,.2f}{'':>47}║")
-    lines.append(f"║  Fee rate:     {fee_pct:.3f}%{'':>57}║")
-    # Build hardware string
-    hw = "32 threads · 96 GB RAM · NVMe SSD"
-    lines.append(f"║  Hardware:     {hw:<59}║")
-    _hline()
-
-    # ── Sweep Summary ──
-    combo_rate = f"{result.combos_per_second:.0f} combo/s"
-    lines.append(f"║  COMBINATIONS: {result.n_combos:>6,} in {result.duration:.1f}s ({combo_rate:<14})║")
-    _hline()
-
-    # ── Parameter Analysis ──
-    lines.append(f"║  {'PARAMETER SWEEP ANALYSIS':^74}║")
-    _hline()
-
-    # Group by first param key for deviation stats
+    # ── Parameter Sweep Analysis ──
+    lines.append("PARAMETER SWEEP ANALYSIS")
+    lines.append(sep)
     param_keys = list(result.params_list[0].keys()) if result.params_list else []
     for pk in param_keys:
         values = [p[pk] for p in result.params_list]
         if len(values) == 0:
             continue
-
         unique_vals = sorted(set(values))
         val_min = min(unique_vals)
         val_max = max(unique_vals)
         mean_val = sum(values) / len(values)
-        # crude std
         std_val = (sum((v - mean_val) ** 2 for v in values) / len(values)) ** 0.5
         step = unique_vals[1] - unique_vals[0] if len(unique_vals) > 1 else 1
 
-        lines.append(f"║  {pk:<20}  {val_min} - {val_max}  (step {step}){'':>28}║")
-        lines.append(f"║  {'':>20}  Mean: {mean_val:<8.1f}  Std Dev: {std_val:<8.1f}{'':>12}║")
+        lines.append(f"  {pk:<20}  {val_min} - {val_max}  (step {step})")
+        lines.append(f"  {'':>20}  Mean: {mean_val:<8.1f}  Std Dev: {std_val:<8.1f}")
 
-        # Sharpe sensitivity per value (top 5 values shown)
         sharpe_by_val = {}
         for i, p in enumerate(result.params_list):
             v = p[pk]
             if v not in sharpe_by_val:
                 sharpe_by_val[v] = []
-            sharpe_by_val[v].append(result.metrics[i, 2])  # sharpe
+            sharpe_by_val[v].append(result.metrics[i, 2])
 
-        # Find best value range
         best_val = None
         best_sharpe = -999
         for v, sharps in sharpe_by_val.items():
@@ -305,15 +294,15 @@ def save_mc_report(
             / max(len(sharpe_by_val.get(best_val, [])), 1)
         ) ** 0.5 if sharpe_by_val.get(best_val) else 0
 
-        lines.append(f"║  {'':>20}  Best value: {best_val:<12}  Sharpe avg: {best_sharpe:+6.2f}  (±{std_sharpe:.2f}){'':>3}║")
-        _hline()
+        lines.append(f"  {'':>20}  Best value: {best_val:<12}  Sharpe avg: {best_sharpe:+6.2f}  (\u00b1{std_sharpe:.2f})")
+        lines.append("")
 
     # ── Top N Table ──
-    lines.append(f"║  {'TOP %d BY SHARPE' % top_n:^74}║")
-    _hline()
-    header = f"║  {'#':>3}  {'Parameters':<38}  {'Init $':>8}  {'Final $':>9}  {'Sharpe':>7}  {'PF':>5}  {'DD%':>6}  {'Trades':>7}  ║"
+    lines.append(f"TOP {top_n} BY SHARPE")
+    lines.append(sep)
+    header = f"  {'#':>3}  {'Parameters':<38}  {'Init $':>8}  {'Final $':>9}  {'Sharpe':>7}  {'PF':>5}  {'DD%':>6}  {'Trades':>7}"
     lines.append(header)
-    lines.append("║" + "  " + "-" * 72 + "  ║")
+    lines.append("  " + "-" * (len(header) - 2))
 
     for rank in range(min(top_n, result.n_combos)):
         ci = int(result.sorted_indices[rank])
@@ -321,37 +310,34 @@ def save_mc_report(
         m = result.metrics[ci]
         params_str = ", ".join(f"{k}={v}" for k, v in p.items())
         lines.append(
-            f"║  {rank+1:>3}  {params_str:<38}  ${capital:>7,.0f}  ${m[0]:>8,.0f}  "
-            f"{m[2]:>7.2f}  {m[5]:>5.2f}  {m[1]:>6.2f}%  {int(m[3]):>7,}  ║"
+            f"  {rank+1:>3}  {params_str:<38}  ${capital:>7,.0f}  ${m[0]:>8,.0f}  "
+            f"{m[2]:>7.2f}  {m[5]:>5.2f}  {m[1]:>6.2f}%  {int(m[3]):>7,}"
         )
-    _hline()
+    lines.append("")
 
     # ── Best Parameters ──
     best = result.best_metrics()
-    lines.append(f"║  {'BEST PARAMETERS (Rank 1)':^74}║")
-    _hline()
+    lines.append("BEST PARAMETERS (Rank 1)")
+    lines.append(sep)
     for k, v in result.params_list[result.best_idx].items():
-        lines.append(f"║    {k:<20}  {v:<20}{'':>30}║")
-    lines.append(f"║    {'':-<42}{'':>30}║")
-    lines.append(f"║    {'Initial Equity':<20}  ${capital:>12,.2f}{'':>24}║")
-    lines.append(f"║    {'Final Equity':<20}  ${best.final_equity:>12,.2f}{'':>24}║")
-    lines.append(f"║    {'Total Return':<20}  {((best.final_equity / capital) - 1) * 100:>+11.2f}%{'':>25}║")
-    lines.append(f"║    {'Sharpe Ratio':<20}  {best.sharpe:>15.4f}{'':>24}║")
-    lines.append(f"║    {'Profit Factor':<20}  {best.profit_factor:>15.4f}{'':>24}║")
-    lines.append(f"║    {'Max Drawdown':<20}  {best.max_dd_pct:>13.2f}%{'':>25}║")
-    lines.append(f"║    {'Total Trades':<20}  {best.n_trades:>15,}{'':>24}║")
-    lines.append(f"║    {'Win Rate':<20}  {best.win_rate:>14.1f}%{'':>25}║")
-    _hline()
+        lines.append(f"  {k:<20}  {v}")
+    lines.append(f"  {sub}")
+    lines.append(f"  Initial Equity        ${capital:>12,.2f}")
+    lines.append(f"  Final Equity          ${best.final_equity:>12,.2f}")
+    lines.append(f"  Total Return          {((best.final_equity / capital) - 1) * 100:>+11.2f}%")
+    lines.append(f"  Sharpe Ratio          {best.sharpe:>15.4f}")
+    lines.append(f"  Profit Factor         {best.profit_factor:>15.4f}")
+    lines.append(f"  Max Drawdown          {best.max_dd_pct:>13.2f}%")
+    lines.append(f"  Total Trades          {best.n_trades:>15,}")
+    lines.append(f"  Win Rate              {best.win_rate:>14.1f}%")
+    lines.append("")
 
     # ── Reproducibility ──
-    lines.append(f"║  {'REPRODUCIBILITY':^74}║")
-    _hline()
+    lines.append("REPRODUCIBILITY")
+    lines.append(sep)
     cmd = result.command or "python -c \"from research.data.loader import load_parquet; ...\""
-    # Wrap command across multiple lines if needed
-    cmd_wrapped = [cmd[i:i + 68] for i in range(0, len(cmd), 68)]
-    for line_part in cmd_wrapped:
-        lines.append(f"║  {line_part:<72}║")
-    lines.append("╚" + "═" * 76 + "╝")
+    lines.append(f"  {cmd}")
+    lines.append("")
 
     path.write_text("\n".join(lines))
     return path
