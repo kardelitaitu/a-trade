@@ -17,12 +17,12 @@
 
 ## Phase 2: Classical Strategies
 
-- [ ] **P2-1:** Base Strategy abstract class + `research/strategies/` module structure
-- [ ] **P2-2:** MA Crossover strategy (SMA/EMA, configurable periods, trend filter)
-- [ ] **P2-3:** Breakout system (Donchian channel, N-period high/low breakout)
-- [ ] **P2-4:** Mean Reversion (RSI extremes / Bollinger Band squeeze)
-- [ ] **P2-5:** Volatility-based strategy (ATR breakout or volatility-targeting wrapper)
-- [ ] **P2-6:** Regime detection module (SMA200 slope / ADX, acts as strategy filter)
+- [x] **P2-1:** Base Strategy abstract class + `research/strategies/` module structure
+- [x] **P2-2:** MA Crossover strategy (SMA/EMA, configurable periods, trend filter)
+- [x] **P2-3:** Breakout system (Donchian channel, N-period high/low breakout)
+- [x] **P2-4:** Mean Reversion (RSI extremes / Bollinger Band squeeze)
+- [x] **P2-5:** Volatility-based strategy (ATR breakout or volatility-targeting wrapper)
+- [x] **P2-6:** Regime detection module (SMA200 slope / ADX, acts as strategy filter)
 
 ## Phase 3: Advanced Models
 
