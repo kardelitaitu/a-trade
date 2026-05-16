@@ -40,7 +40,7 @@
 
 ## Optimization: Hardware Utilization
 
-- [ ] **O-1:** Numba-accelerate backtest trade extraction (50-100x speedup)
-- [ ] **O-2:** Numba-accelerate strategy state machines (breakout, mean reversion, vol)
-- [ ] **O-3:** Increase ML training to 32 threads
-- [ ] **O-4:** Full-system stress test — all strategies × parameter sweep on 876K rows
+- [x] **O-1:** Numba-accelerate backtest trade extraction (50-100x speedup)
+- [x] **O-2:** Numba-accelerate strategy state machines (breakout, mean reversion, vol)
+- [x] **O-3:** Increase ML training to 32 threads
+- [x] **O-4:** Full-system stress test — all strategies × parameter sweep on 876K rows
