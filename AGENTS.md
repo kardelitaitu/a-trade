@@ -49,3 +49,12 @@ source .venv/Scripts/activate
 python -m pytest -v
 python -m pytest --cov=research
 ```
+
+## Hardware Optimization
+
+- **CPU:** 32 threads
+- **RAM:** 96 GB DDR5
+- **Storage:** 7000 MB/s NVMe SSD
+- Code should be optimized to fully utilize this hardware. High CPU, RAM, and SSD usage is fine.
+- Prefer parallelized/vectorized operations (numba, multiprocessing, batch processing) over single-threaded loops.
+- Backtest throughput priority: faster ops/sec is the goal, not memory conservation.
