@@ -33,11 +33,11 @@
 
 ## Phase 4: Validation & Deployment
 
-- [ ] **P4-1:** Systematic parameter optimization — random search + walk-forward validation
-- [ ] **P4-2:** Multi-asset validation on ETHUSDT
-- [ ] **P4-3:** Statistical robustness suite (Monte Carlo, regime breakdown, stability)
-- [ ] **P4-4:** Paper trading pipeline (live signals, no real money)
-- [ ] **P4-5:** Live execution engine (Binance API, optional)
+- [x] **P4-1:** Systematic parameter optimization — random search + walk-forward validation
+- [x] **P4-2:** Multi-asset validation on ETHUSDT
+- [x] **P4-3:** Statistical robustness suite (Monte Carlo, regime breakdown, stability)
+- [x] **P4-4:** Paper trading pipeline (live signals, no real money)
+- [ ] **P4-5:** Live execution engine (Binance API, optional) — requires local Binance access
 
 ## Optimization: Hardware Utilization
 

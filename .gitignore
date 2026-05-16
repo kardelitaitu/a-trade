@@ -1,3 +1,14 @@
+proxies.txt
+
+
+
+
+
+
+
+
+
+
 # C dependencies
 node_modules/
 
@@ -53,3 +64,6 @@ config/credentials*.yaml
 config/credentials*.toml
 config/.env
 *.env
+
+# Proxy credentials
+proxies.txt
