@@ -123,6 +123,39 @@ def load_parquet(name: str = "btcusdt_5m.parquet") -> pd.DataFrame:
     return pd.read_parquet(path)
 
 
+def resample_ohlcv(data: pd.DataFrame, freq: str = "15min") -> pd.DataFrame:
+    """
+    Resample OHLCV data from 5min to a higher timeframe.
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        OHLCV DataFrame with DatetimeIndex.
+    freq : str
+        Target frequency (e.g., "15min", "30min", "1h", "4h").
+
+    Returns
+    -------
+    pd.DataFrame
+        Resampled OHLCV DataFrame.
+    """
+    if not isinstance(data.index, pd.DatetimeIndex):
+        raise ValueError("Data must have a DatetimeIndex")
+
+    resampled = data.resample(freq).agg({
+        "open": "first",
+        "high": "max",
+        "low": "min",
+        "close": "last",
+        "volume": "sum",
+    })
+
+    # Drop rows where open is NaN (incomplete candle at the end)
+    resampled = resampled.dropna(subset=["open"])
+
+    return resampled
+
+
 def fetch_binance_klines(
     symbol: str = "BTCUSDT",
     interval: str = "5m",
