@@ -1,0 +1,131 @@
+
+PARALLEL MONTE CARLO RESULTS
+--------------------------------------------------------------------------------
+  #  Parameters                                           Sharpe     PF     DD%  Trades   Return
+--------------------------------------------------------------------------------
+  1  bb_period=25, bb_std=2.5, keltner_period=20, ...       0.09   0.99   44.80%    1473  -11.40%
+  2  bb_period=25, bb_std=2.5, keltner_period=20, ...       0.09   1.02   44.80%     559  -11.40%
+  3  bb_period=25, bb_std=2.5, keltner_period=20, ...       0.09   1.01   44.80%     776  -11.40%
+  4  bb_period=25, bb_std=2.5, keltner_period=20, ...       0.09   1.01   44.80%     328  -11.40%
+  5  bb_period=25, bb_std=2.5, keltner_period=20, ...       0.09   0.99   44.80%     430  -11.40%
+  6  bb_period=25, bb_std=2.5, keltner_period=20, ...       0.09   1.02   44.80%     443  -11.40%
+  7  bb_period=25, bb_std=2.5, keltner_period=20, ...       0.09   1.01   44.80%    1020  -11.40%
+  8  bb_period=25, bb_std=2.5, keltner_period=15, ...       0.03   1.00   50.04%    1425  -16.24%
+  9  bb_period=25, bb_std=2.5, keltner_period=15, ...       0.03   1.00   50.04%     692  -16.24%
+ 10  bb_period=25, bb_std=2.5, keltner_period=15, ...       0.03   1.02   50.04%     971  -16.24%
+ 11  bb_period=25, bb_std=2.5, keltner_period=15, ...       0.03   1.00   50.04%     390  -16.24%
+ 12  bb_period=25, bb_std=2.5, keltner_period=15, ...       0.03   1.00   50.04%     375  -16.24%
+ 13  bb_period=25, bb_std=2.5, keltner_period=15, ...       0.03   1.00   50.04%     528  -16.24%
+ 14  bb_period=25, bb_std=2.5, keltner_period=15, ...       0.03   1.03   50.04%     266  -16.24%
+ 15  bb_period=20, bb_std=2.5, keltner_period=15, ...      -0.34   0.90   63.29%     786  -39.00%
+ 16  bb_period=20, bb_std=2.5, keltner_period=15, ...      -0.34   0.93   63.29%    1661  -39.00%
+ 17  bb_period=20, bb_std=2.5, keltner_period=15, ...      -0.34   0.93   63.29%    1132  -39.00%
+ 18  bb_period=20, bb_std=2.5, keltner_period=15, ...      -0.34   0.91   63.29%     570  -39.00%
+ 19  bb_period=20, bb_std=2.5, keltner_period=15, ...      -0.34   0.94   63.29%    1284  -39.00%
+ 20  bb_period=20, bb_std=2.5, keltner_period=15, ...      -0.34   0.90   63.29%     697  -39.00%
+ 21  bb_period=20, bb_std=2.5, keltner_period=15, ...      -0.34   0.91   63.29%     632  -39.00%
+ 22  bb_period=25, bb_std=2.0, keltner_period=15, ...      -0.38   0.97   49.17%    2198  -46.08%
+ 23  bb_period=25, bb_std=2.0, keltner_period=15, ...      -0.38   0.97   49.17%    1765  -46.08%
+ 24  bb_period=25, bb_std=2.0, keltner_period=15, ...      -0.38   0.96   49.17%    1127  -46.08%
+ 25  bb_period=25, bb_std=2.0, keltner_period=15, ...      -0.38   0.97   49.17%    1019  -46.08%
+ 26  bb_period=25, bb_std=2.0, keltner_period=15, ...      -0.38   0.97   49.17%    1575  -46.08%
+ 27  bb_period=25, bb_std=2.0, keltner_period=15, ...      -0.38   0.96   49.17%     927  -46.08%
+ 28  bb_period=25, bb_std=2.0, keltner_period=15, ...      -0.38   0.96   49.17%     846  -46.08%
+ 29  bb_period=25, bb_std=2.0, keltner_period=20, ...      -0.69   0.94   66.58%    1787  -60.33%
+ 30  bb_period=25, bb_std=2.0, keltner_period=20, ...      -0.69   0.93   66.58%    1202  -60.33%
+ 31  bb_period=25, bb_std=2.0, keltner_period=20, ...      -0.69   0.93   66.58%    1085  -60.33%
+ 32  bb_period=25, bb_std=2.0, keltner_period=20, ...      -0.69   0.94   66.58%    1297  -60.33%
+ 33  bb_period=25, bb_std=2.0, keltner_period=20, ...      -0.69   0.92   66.58%    1013  -60.33%
+ 34  bb_period=25, bb_std=2.0, keltner_period=20, ...      -0.69   0.95   66.58%    2403  -60.33%
+ 35  bb_period=25, bb_std=2.0, keltner_period=20, ...      -0.69   0.95   66.58%    1965  -60.33%
+ 36  bb_period=25, bb_std=2.5, keltner_period=20, ...      -0.72   0.96   69.97%    2074  -58.01%
+ 37  bb_period=25, bb_std=2.5, keltner_period=20, ...      -0.72   0.95   69.97%     861  -58.01%
+ 38  bb_period=25, bb_std=2.5, keltner_period=20, ...      -0.72   0.95   69.97%    1096  -58.01%
+ 39  bb_period=25, bb_std=2.5, keltner_period=20, ...      -0.72   0.95   69.97%    1558  -58.01%
+ 40  bb_period=25, bb_std=2.5, keltner_period=20, ...      -0.72   0.96   69.97%    1021  -58.01%
+ 41  bb_period=25, bb_std=2.5, keltner_period=20, ...      -0.72   0.96   69.97%    1698  -58.01%
+ 42  bb_period=25, bb_std=2.5, keltner_period=20, ...      -0.72   0.95   69.97%     923  -58.01%
+ 43  bb_period=20, bb_std=2.5, keltner_period=20, ...      -0.72   0.93   65.33%    1374  -56.88%
+ 44  bb_period=20, bb_std=2.5, keltner_period=20, ...      -0.72   0.89   65.33%     751  -56.88%
+ 45  bb_period=20, bb_std=2.5, keltner_period=20, ...      -0.72   0.88   65.33%     618  -56.88%
+ 46  bb_period=20, bb_std=2.5, keltner_period=20, ...      -0.72   0.92   65.33%    1739  -56.88%
+ 47  bb_period=20, bb_std=2.5, keltner_period=20, ...      -0.72   0.91   65.33%    1208  -56.88%
+ 48  bb_period=20, bb_std=2.5, keltner_period=20, ...      -0.72   0.90   65.33%     832  -56.88%
+ 49  bb_period=20, bb_std=2.5, keltner_period=20, ...      -0.72   0.90   65.33%     681  -56.88%
+ 50  bb_period=25, bb_std=2.0, keltner_period=15, ...      -1.02   0.95   78.23%    2228  -70.14%
+ 51  bb_period=25, bb_std=2.0, keltner_period=15, ...      -1.02   0.96   78.23%    3547  -70.14%
+ 52  bb_period=25, bb_std=2.0, keltner_period=15, ...      -1.02   0.96   78.23%    3283  -70.14%
+ 53  bb_period=25, bb_std=2.0, keltner_period=15, ...      -1.02   0.96   78.23%    3171  -70.14%
+ 54  bb_period=25, bb_std=2.0, keltner_period=15, ...      -1.02   0.95   78.23%    2486  -70.14%
+ 55  bb_period=25, bb_std=2.0, keltner_period=15, ...      -1.02   0.95   78.23%    2273  -70.14%
+ 56  bb_period=25, bb_std=2.0, keltner_period=15, ...      -1.02   0.95   78.23%    2429  -70.14%
+ 57  bb_period=25, bb_std=2.5, keltner_period=15, ...      -1.12   0.92   72.46%    1933  -70.91%
+ 58  bb_period=25, bb_std=2.5, keltner_period=15, ...      -1.12   0.91   72.46%    1573  -70.91%
+ 59  bb_period=25, bb_std=2.5, keltner_period=15, ...      -1.12   0.90   72.46%    1422  -70.91%
+ 60  bb_period=25, bb_std=2.5, keltner_period=15, ...      -1.12   0.88   72.46%     985  -70.91%
+ 61  bb_period=25, bb_std=2.5, keltner_period=15, ...      -1.12   0.88   72.46%     900  -70.91%
+ 62  bb_period=25, bb_std=2.5, keltner_period=15, ...      -1.12   0.88   72.46%     741  -70.91%
+ 63  bb_period=25, bb_std=2.5, keltner_period=15, ...      -1.12   0.87   72.46%     811  -70.91%
+ 64  bb_period=25, bb_std=2.0, keltner_period=20, ...      -1.51   0.93   82.86%    3639  -81.19%
+ 65  bb_period=25, bb_std=2.0, keltner_period=20, ...      -1.51   0.92   82.86%    3532  -81.19%
+ 66  bb_period=25, bb_std=2.0, keltner_period=20, ...      -1.51   0.92   82.86%    2622  -81.19%
+ 67  bb_period=25, bb_std=2.0, keltner_period=20, ...      -1.51   0.93   82.86%    3887  -81.19%
+ 68  bb_period=25, bb_std=2.0, keltner_period=20, ...      -1.51   0.92   82.86%    2838  -81.19%
+ 69  bb_period=25, bb_std=2.0, keltner_period=20, ...      -1.51   0.92   82.86%    2781  -81.19%
+ 70  bb_period=25, bb_std=2.0, keltner_period=20, ...      -1.51   0.91   82.86%    2577  -81.19%
+ 71  bb_period=20, bb_std=2.0, keltner_period=15, ...      -1.78   0.91   87.81%    4264  -84.81%
+ 72  bb_period=20, bb_std=2.0, keltner_period=15, ...      -1.78   0.91   87.81%    4090  -84.81%
+ 73  bb_period=20, bb_std=2.0, keltner_period=15, ...      -1.78   0.89   87.81%    4061  -84.81%
+ 74  bb_period=20, bb_std=2.0, keltner_period=15, ...      -1.78   0.90   87.81%    4227  -84.81%
+ 75  bb_period=20, bb_std=2.0, keltner_period=15, ...      -1.78   0.92   87.81%    5079  -84.81%
+ 76  bb_period=20, bb_std=2.0, keltner_period=15, ...      -1.78   0.92   87.81%    5292  -84.81%
+ 77  bb_period=20, bb_std=2.0, keltner_period=15, ...      -1.78   0.91   87.81%    5011  -84.81%
+ 78  bb_period=20, bb_std=2.0, keltner_period=20, ...      -1.88   0.84   90.47%    1934  -87.42%
+ 79  bb_period=20, bb_std=2.0, keltner_period=20, ...      -1.88   0.88   90.47%    2883  -87.42%
+ 80  bb_period=20, bb_std=2.0, keltner_period=20, ...      -1.88   0.89   90.47%    3339  -87.42%
+ 81  bb_period=20, bb_std=2.0, keltner_period=20, ...      -1.88   0.89   90.47%    3014  -87.42%
+ 82  bb_period=20, bb_std=2.0, keltner_period=20, ...      -1.88   0.87   90.47%    2205  -87.42%
+ 83  bb_period=20, bb_std=2.0, keltner_period=20, ...      -1.88   0.86   90.47%    1989  -87.42%
+ 84  bb_period=20, bb_std=2.0, keltner_period=20, ...      -1.88   0.85   90.47%    2134  -87.42%
+ 85  bb_period=20, bb_std=2.5, keltner_period=20, ...      -1.91   0.88   85.71%    2591  -84.50%
+ 86  bb_period=20, bb_std=2.5, keltner_period=20, ...      -1.91   0.88   85.71%    2339  -84.50%
+ 87  bb_period=20, bb_std=2.5, keltner_period=20, ...      -1.91   0.84   85.71%    1614  -84.50%
+ 88  bb_period=20, bb_std=2.5, keltner_period=20, ...      -1.91   0.86   85.71%    2226  -84.50%
+ 89  bb_period=20, bb_std=2.5, keltner_period=20, ...      -1.91   0.85   85.71%    1503  -84.50%
+ 90  bb_period=20, bb_std=2.5, keltner_period=20, ...      -1.91   0.83   85.71%    1452  -84.50%
+ 91  bb_period=20, bb_std=2.5, keltner_period=20, ...      -1.91   0.85   85.71%    1680  -84.50%
+ 92  bb_period=20, bb_std=2.0, keltner_period=15, ...      -2.12   0.82   92.83%    2227  -89.87%
+ 93  bb_period=20, bb_std=2.0, keltner_period=15, ...      -2.12   0.81   92.83%    1997  -89.87%
+ 94  bb_period=20, bb_std=2.0, keltner_period=15, ...      -2.12   0.85   92.83%    3041  -89.87%
+ 95  bb_period=20, bb_std=2.0, keltner_period=15, ...      -2.12   0.85   92.83%    3345  -89.87%
+ 96  bb_period=20, bb_std=2.0, keltner_period=15, ...      -2.12   0.81   92.83%    2161  -89.87%
+ 97  bb_period=20, bb_std=2.0, keltner_period=15, ...      -2.12   0.84   92.83%    2938  -89.87%
+ 98  bb_period=20, bb_std=2.0, keltner_period=15, ...      -2.12   0.80   92.83%    1948  -89.87%
+ 99  bb_period=20, bb_std=2.0, keltner_period=20, ...      -2.70   0.84   94.21%    4192  -93.69%
+100  bb_period=20, bb_std=2.0, keltner_period=20, ...      -2.70   0.84   94.21%    4017  -93.69%
+101  bb_period=20, bb_std=2.0, keltner_period=20, ...      -2.70   0.86   94.21%    4953  -93.69%
+102  bb_period=20, bb_std=2.0, keltner_period=20, ...      -2.70   0.85   94.21%    4053  -93.69%
+103  bb_period=20, bb_std=2.0, keltner_period=20, ...      -2.70   0.87   94.21%    5255  -93.69%
+104  bb_period=20, bb_std=2.0, keltner_period=20, ...      -2.70   0.87   94.21%    5032  -93.69%
+105  bb_period=20, bb_std=2.0, keltner_period=20, ...      -2.70   0.85   94.21%    4239  -93.69%
+106  bb_period=20, bb_std=2.5, keltner_period=15, ...      -2.84   0.80   93.72%    2590  -92.73%
+107  bb_period=20, bb_std=2.5, keltner_period=15, ...      -2.84   0.75   93.72%    1698  -92.73%
+108  bb_period=20, bb_std=2.5, keltner_period=15, ...      -2.84   0.78   93.72%    2295  -92.73%
+109  bb_period=20, bb_std=2.5, keltner_period=15, ...      -2.84   0.74   93.72%    1501  -92.73%
+110  bb_period=20, bb_std=2.5, keltner_period=15, ...      -2.84   0.75   93.72%    1647  -92.73%
+111  bb_period=20, bb_std=2.5, keltner_period=15, ...      -2.84   0.79   93.72%    2373  -92.73%
+112  bb_period=20, bb_std=2.5, keltner_period=15, ...      -2.84   0.73   93.72%    1463  -92.73%
+
+BEST PARAMETERS
+----------------------------------------
+  bb_period: 25
+  bb_std: 2.5
+  keltner_period: 20
+  keltner_atr_mult: 1.2
+  sl_pct: 1.0
+  tp_pct: 3.0
+  Sharpe:        0.0949
+  Profit Factor: 0.9891
+  Max DD:        44.80%
+  Total Return:  -11.40%
+  Trades:        1473

@@ -197,3 +197,23 @@ def format_parallel_results(
 
     lines.append("")
     return "\n".join(lines)
+
+
+def save_parallel_results(
+    results: list[dict],
+    strategy_name: str,
+    output_dir: str | Path = "results/reports",
+) -> Path:
+    """Save full parallel MC results to a report file."""
+    import datetime
+    from pathlib import Path
+
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    safe = strategy_name.lower().replace(" ", "_").replace("/", "_")
+    now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%d_%H%M%S")
+    path = output_dir / f"mc_{safe}_{now}.txt"
+
+    content = format_parallel_results(results, top_n=len(results))
+    path.write_text(content)
+    return path
