@@ -117,12 +117,8 @@ class VolatilitySqueeze(BaseStrategy):
 
             # Entry: squeeze was active recently + breakout
             if not (in_long or in_short):
-                # Check if there was a squeeze in recent lookback
-                recent_squeeze = False
-                if i >= lookback:
-                    recent_squeeze = squeeze.iloc[i - lookback // 2:i].any()
-                elif i > 0:
-                    recent_squeeze = squeeze.iloc[:i].any()
+                # Use vectorized squeeze_any instead of O(n) loop per candle
+                recent_squeeze = squeeze_any.iloc[i]
 
                 if recent_squeeze:
                     if close.iloc[i] > bb_upper.iloc[i] and not pd.isna(bb_upper.iloc[i]):

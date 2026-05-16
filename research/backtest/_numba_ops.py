@@ -41,20 +41,35 @@ def extract_trades_numba(
     for i in range(n):
         curr_pos = positions[i]
 
-        if curr_pos == prev_pos:
+        # Convert continuous float to direction: sign with zero threshold
+        if curr_pos > 0:
+            curr_dir = 1
+        elif curr_pos < 0:
+            curr_dir = -1
+        else:
+            curr_dir = 0
+
+        if prev_pos > 0:
+            prev_dir = 1
+        elif prev_pos < 0:
+            prev_dir = -1
+        else:
+            prev_dir = 0
+
+        if curr_dir == prev_dir:
             continue
 
-        # Position changed
-        went_to_zero = curr_pos == 0.0
-        came_from_zero = prev_pos == 0.0
+        # Direction changed
+        went_to_zero = curr_dir == 0
+        came_from_zero = prev_dir == 0
 
         if came_from_zero and not went_to_zero:
-            # Opening a NEW position (0 → 1 or 0 → -1)
+            # Opening a NEW position (0 → +1 or 0 → -1)
             entry_idx = i
-            entry_side = int(curr_pos)
+            entry_side = curr_dir
 
         elif went_to_zero and not came_from_zero:
-            # Closing an existing position (1 → 0 or -1 → 0)
+            # Closing an existing position (+1 → 0 or -1 → 0)
             if entry_idx >= 0:
                 entry_idxs[trade_count] = entry_idx
                 exit_idxs[trade_count] = i
@@ -64,7 +79,7 @@ def extract_trades_numba(
             entry_side = 0
 
         else:
-            # Position FLIP (1 → -1 or -1 → 1)
+            # Position FLIP (+1 → -1 or -1 → +1)
             if entry_idx >= 0:
                 entry_idxs[trade_count] = entry_idx
                 exit_idxs[trade_count] = i
@@ -72,7 +87,7 @@ def extract_trades_numba(
                 trade_count += 1
             # Open new flipped position
             entry_idx = i
-            entry_side = int(curr_pos)
+            entry_side = curr_dir
 
         prev_pos = curr_pos
 

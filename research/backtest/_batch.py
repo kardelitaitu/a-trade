@@ -153,7 +153,7 @@ def single_backtest_sltp(
             if in_position:
                 ep = exit_price if exit_forced else close[i]
                 pnl = (ep - entry_price) * entry_side
-                fees_cost = (entry_price + ep) * fee_rate * 0.5
+                fees_cost = (entry_price + ep) * fee_rate
                 net_pnl = pnl - fees_cost
                 n_trades += 1
                 if net_pnl > 0:

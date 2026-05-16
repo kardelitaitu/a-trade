@@ -31,7 +31,7 @@ class TestSingleBacktest:
         """All-flat signals should return initial capital."""
         close = np.array([100.0, 101.0, 102.0, 101.0, 100.0], dtype=np.float64)
         signals = np.array([0, 0, 0, 0, 0], dtype=np.float64)
-        eq, dd, sh, tr, wr, pf = single_backtest(close, signals, 10_000.0, 0.00085)
+        eq, dd, sh, tr, wr, pf = single_backtest(close, signals, 10_000.0, 0.000011)
         assert eq == pytest.approx(10_000.0, abs=0.01)
         assert tr == 0
         assert sh == 0.0
@@ -44,7 +44,7 @@ class TestSingleBacktest:
 
         # Numba result
         eq_nb, dd_nb, sh_nb, tr_nb, wr_nb, pf_nb = single_backtest(
-            close_arr, signals_pd.values.astype(np.float64), 10_000.0, 0.00085,
+            close_arr, signals_pd.values.astype(np.float64), 10_000.0, 0.000011,
         )
 
         # Pandas result

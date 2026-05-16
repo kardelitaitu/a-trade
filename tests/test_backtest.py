@@ -6,6 +6,7 @@ import pytest
 
 from research.backtest.engine import VectorizedBacktest, Trade
 from research.backtest.metrics import compute_metrics, format_metrics_report
+from research.backtest._numba_ops import extract_trades_numba
 
 
 @pytest.fixture
@@ -100,6 +101,66 @@ class TestVectorizedBacktest:
         first_pos_idx = result.positions[result.positions != 0].index[0]
         assert first_pos_idx == signals.index[6]
 
+    # ------------------------------------------------------------------
+    # Continuous / Fractional position sizing
+    # ------------------------------------------------------------------
+
+    def test_continuous_scale_up_single_trade(self, bt):
+        """Continuous signal scaling up then to zero should produce 1 trade."""
+        signals = pd.Series(0, index=bt.data.index, dtype=float)
+        signals.iloc[10:30] = np.linspace(0.3, 1.0, 20)  # ramps up
+        # Drop back to 0
+        signals.iloc[30:40] = 0
+        result = bt.run(signals)
+        # One continuous long position: all positive values are same direction
+        assert len(result.trades) == 1
+        assert result.trades[0].side == 1
+
+    def test_continuous_scale_down_to_zero(self, bt):
+        """Continuous signal decreasing from 1.0 to 0 should produce exactly 1 trade."""
+        signals = pd.Series(0, index=bt.data.index, dtype=float)
+        signals.iloc[10:40] = 1.0
+        signals.iloc[40:50] = np.linspace(1.0, 0.0, 10)  # ramps down
+        signals.iloc[50:60] = 0.0
+        result = bt.run(signals)
+        # Still one position: all entries stay positive until hitting 0
+        assert len(result.trades) == 1
+
+    def test_continuous_alternating_fractional(self, bt):
+        """Alternating fractional long/short should produce trades with correct sides."""
+        n = len(bt.data)
+        arr = np.zeros(n)
+        arr[10:40] = 0.6    # fractional long
+        arr[50:80] = -0.4   # fractional short
+        arr[90:120] = 0.8   # fractional long
+        signals = pd.Series(arr, index=bt.data.index)
+        result = bt.run(signals)
+        assert len(result.trades) >= 2
+        assert result.trades[0].side == 1
+        assert result.trades[1].side == -1
+        if len(result.trades) > 2:
+            assert result.trades[2].side == 1
+
+    def test_continuous_subtle_signal_entry(self, bt):
+        """Tiny positive signal from flat should still open a trade."""
+        signals = pd.Series(0, index=bt.data.index, dtype=float)
+        signals.iloc[10:15] = 0.001   # barely positive
+        signals.iloc[15:20] = 0.0
+        result = bt.run(signals)
+        # Any positive value, no matter how small, is an open position
+        assert len(result.trades) == 1
+        assert result.trades[0].side == 1
+
+    def test_continuous_noise_within_same_sign(self, bt):
+        """Fluctuating within positive territory should not create extra trades."""
+        signals = pd.Series(0, index=bt.data.index, dtype=float)
+        # Fluctuating positive values — no direction change
+        signals.iloc[10:50] = [0.3, 0.5, 0.7, 0.4, 0.6][::-1] * 8
+        signals.iloc[50:60] = 0.0
+        result = bt.run(signals)
+        # All positive → same direction → single trade
+        assert len(result.trades) == 1
+
 
 class TestMetrics:
 
@@ -151,3 +212,109 @@ class TestMetrics:
         assert "Sharpe ratio" in report
         assert "Max drawdown" in report
         assert "Total trades" in report
+
+
+class TestExtractTradesNumba:
+    """Direct unit tests for extract_trades_numba with continuous/fractional positions."""
+
+    def test_fractional_long_open_close(self):
+        """0.0 → 0.5 → 0.0: entry at index 1, exit at index 2, side=1."""
+        pos = np.array([0.0, 0.5, 0.0], dtype=np.float64)
+        entries, exits, sides = extract_trades_numba(pos)
+        assert len(entries) == 1
+        assert entries[0] == 1
+        assert exits[0] == 2
+        assert sides[0] == 1
+
+    def test_fractional_short_open_close(self):
+        """0.0 → -0.3 → 0.0: entry at index 1, exit at index 2, side=-1."""
+        pos = np.array([0.0, -0.3, 0.0], dtype=np.float64)
+        entries, exits, sides = extract_trades_numba(pos)
+        assert len(entries) == 1
+        assert entries[0] == 1
+        assert exits[0] == 2
+        assert sides[0] == -1
+
+    def test_continuous_scaling_no_extra_trades(self):
+        """0.0 → 0.3 → 0.6 → 0.9 → 0.0: 1 trade (all same sign)."""
+        pos = np.array([0.0, 0.3, 0.6, 0.9, 0.0], dtype=np.float64)
+        entries, exits, sides = extract_trades_numba(pos)
+        assert len(entries) == 1
+        assert sides[0] == 1
+
+    def test_fractional_flip_long_to_short(self):
+        """0.0 → 0.5 → 0.0 → -0.3 → 0.0: 2 trades (long then short)."""
+        pos = np.array([0.0, 0.5, 0.0, -0.3, 0.0], dtype=np.float64)
+        entries, exits, sides = extract_trades_numba(pos)
+        assert len(entries) == 2
+        assert sides[0] == 1
+        assert sides[1] == -1
+        # First trade: entry at 1, exit at 2
+        assert entries[0] == 1
+        assert exits[0] == 2
+        # Second trade: entry at 3, exit at 4
+        assert entries[1] == 3
+        assert exits[1] == 4
+
+    def test_fractional_flip_short_to_long(self):
+        """0.0 → -0.3 → 0.0 → 0.5 → 0.0: 2 trades (short then long)."""
+        pos = np.array([0.0, -0.3, 0.0, 0.5, 0.0], dtype=np.float64)
+        entries, exits, sides = extract_trades_numba(pos)
+        assert len(entries) == 2
+        assert sides[0] == -1
+        assert sides[1] == 1
+
+    def test_subtle_positive_is_still_a_trade(self):
+        """0.0 → 0.001 → 0.0: 1 trade (any positive is a direction)."""
+        pos = np.array([0.0, 0.001, 0.0], dtype=np.float64)
+        entries, exits, sides = extract_trades_numba(pos)
+        assert len(entries) == 1
+        assert sides[0] == 1
+
+    def test_subtle_negative_is_still_short(self):
+        """0.0 → -0.001 → 0.0: 1 short trade."""
+        pos = np.array([0.0, -0.001, 0.0], dtype=np.float64)
+        entries, exits, sides = extract_trades_numba(pos)
+        assert len(entries) == 1
+        assert sides[0] == -1
+
+    def test_fractional_to_full_and_back(self):
+        """0.0 → 0.3 → 1.0 → 0.0: 1 trade (same direction throughout)."""
+        pos = np.array([0.0, 0.3, 1.0, 0.0], dtype=np.float64)
+        entries, exits, sides = extract_trades_numba(pos)
+        assert len(entries) == 1
+        assert sides[0] == 1
+
+    def test_no_noise_on_same_sign_fluctuations(self):
+        """0.0 → 0.5 → 0.8 → 0.3 → 0.0: 1 trade, not 3."""
+        pos = np.array([0.0, 0.5, 0.8, 0.3, 0.0], dtype=np.float64)
+        entries, exits, sides = extract_trades_numba(pos)
+        assert len(entries) == 1
+        assert sides[0] == 1
+
+    def test_direct_flip_no_zero(self):
+        """0.0 → 0.5 → -0.4 → 0.0: flip (no intermediate zero), 2 trades."""
+        pos = np.array([0.0, 0.5, -0.4, 0.0], dtype=np.float64)
+        entries, exits, sides = extract_trades_numba(pos)
+        assert len(entries) == 2
+        assert sides[0] == 1
+        assert sides[1] == -1
+        # First trade closes at flip index (2), second opens at same index
+        assert exits[0] == 2
+        assert entries[1] == 2
+
+    def test_flat_no_trades(self):
+        """All zeros: no trades."""
+        pos = np.zeros(10, dtype=np.float64)
+        entries, exits, sides = extract_trades_numba(pos)
+        assert len(entries) == 0
+        assert len(exits) == 0
+        assert len(sides) == 0
+
+    def test_continuous_never_exits(self):
+        """0.0 → 0.5 → 0.8: still in position at end, no closed trade."""
+        pos = np.array([0.0, 0.5, 0.8], dtype=np.float64)
+        entries, exits, sides = extract_trades_numba(pos)
+        # No closed trade because position never returns to 0
+        assert len(entries) == 0
+        assert len(exits) == 0

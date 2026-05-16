@@ -44,9 +44,9 @@ def _worker_combo(
     strat = create_strategy(strategy_name, params)
     signals = strat.generate_signals(data)
 
-    # Check if SL/TP is requested
-    sl_pct = params.pop("sl_pct", None) if "sl_pct" in params else None
-    tp_pct = params.pop("tp_pct", None) if "tp_pct" in params else None
+    # Check if SL/TP is requested (using get to avoid mutating original param grid)
+    sl_pct = params.get("sl_pct")
+    tp_pct = params.get("tp_pct")
 
     if sl_pct is not None and tp_pct is not None and sl_pct > 0 and tp_pct > 0:
         # Use SL/TP-aware backtest via numba
@@ -92,7 +92,7 @@ def parallel_monte_carlo(
     param_grid: list[dict[str, Any]],
     data: pd.DataFrame,
     capital: float = 10_000.0,
-    fee_rate: float = 0.0001,
+    fee_rate: float = 0.000011,
     n_jobs: int = 24,
     metric_sort: str = "sharpe",
 ) -> list[dict]:
@@ -166,7 +166,7 @@ def format_parallel_results(
     top_n: int = 10,
     strategy_name: str = "",
     capital: float = 10_000.0,
-    fee_rate: float = 0.0001,
+    fee_rate: float = 0.000011,
     command: str = "",
     asset: str = "BTCUSDT",
     data_range: str = "",
@@ -259,7 +259,7 @@ def save_parallel_results(
     strategy_name: str,
     output_dir: str | Path = "results/reports",
     capital: float = 10_000.0,
-    fee_rate: float = 0.0001,
+    fee_rate: float = 0.000011,
     command: str = "",
     asset: str = "BTCUSDT",
     data_range: str = "",

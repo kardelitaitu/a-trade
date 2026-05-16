@@ -21,8 +21,8 @@ logger = logging.getLogger(__name__)
 
 DEFAULT_CONFIG = {
     "initial_capital": 10_000.0,
-    "fee": 0.00075,
-    "slippage": 0.0001,
+    "fee": 0.00001,
+    "slippage": 0.000001,
     "position_size_pct": 1.0,
     "size_mode": "fixed",
 }
