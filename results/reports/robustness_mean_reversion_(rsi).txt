@@ -1,0 +1,45 @@
+======================================================================
+QUANTUMEDGE — ROBUSTNESS REPORT: Mean Reversion (RSI)
+======================================================================
+
+------------------------MONTE CARLO SIMULATION------------------------
+  Actual Sharpe -0.44 is at the 44th percentile of shuffled trades (p=0.560). Edge not statistically significant.
+  Simulations: 1000
+  Actual Sharpe: -0.4433
+  p-value: 0.5600
+  Significant: False
+
+---------------------------REGIME BREAKDOWN---------------------------
+  Regime        Periods   Trades   Sharpe       PF      DD%
+  --------------------------------------------------------
+  bull              442        1   -21.72     0.00   -11.39
+  bear              441        8   -34.17     0.18   -29.53
+  sideways      209,645       47    -0.40     0.67   -11.21
+
+-------------------------PARAMETER STABILITY--------------------------
+
+  baseline:
+             - → Sharpe= -0.08 PF= 0.83 DD=-11.24% ← baseline
+
+  rsi_period:
+            20 → Sharpe= -0.66 PF= 0.56 DD=-24.24%
+            22 → Sharpe= -0.72 PF= 0.59 DD=-22.26%
+            25 → Sharpe= -0.08 PF= 0.83 DD=-11.24%
+            27 → Sharpe= -0.23 PF= 0.76 DD= -7.70%
+            30 → Sharpe= -0.13 PF= 0.91 DD= -7.10%
+
+  rsi_oversold:
+            24 → Sharpe= -0.78 PF= 0.24 DD= -8.43%
+            27 → Sharpe= -0.44 PF= 0.46 DD=-10.55%
+            30 → Sharpe= -0.08 PF= 0.83 DD=-11.24%
+            33 → Sharpe= -0.88 PF= 0.54 DD=-31.33%
+            36 → Sharpe= -0.88 PF= 0.62 DD=-37.81%
+
+  rsi_overbought:
+            64 → Sharpe= -1.56 PF= 0.57 DD=-52.23%
+            72 → Sharpe= -0.98 PF= 0.55 DD=-25.03%
+            80 → Sharpe= -0.08 PF= 0.83 DD=-11.24%
+            88 → Sharpe=  0.31 PF= 1.12 DD= -6.45%
+            96 → Sharpe=  0.31 PF= 1.12 DD= -6.45%
+
+======================================================================
