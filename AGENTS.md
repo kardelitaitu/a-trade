@@ -1,84 +1,51 @@
 # AGENTS.md — QuantumEdge Trading System
 
-## Project Identity
-
-**QuantumEdge** — a data-driven 5-minute cryptocurrency trading system targeting Binance spot/futures markets. Python-first prototyping with professional architecture. See `whitepaper.md`, `roadmap.md`, `profitable-strategy.md` for full context.
+Binance 5-minute crypto trading system. Python-first prototyping → optional Rust/Go.
+Full context: `docs/whitepaper.md`, `docs/roadmap.md`, `docs/strategy-guidelines.md`, `docs/backtesting-standards.md`.
 
 ## Project Root
-
 `C:\My Script\aaa-trade\`
 
-## Base Conventions
+## Conventions
 
-- **Paths**: use forward-slash MSYS style (`/c/My Script/aaa-trade/`) in shell commands.
-- **Python**: 3.11+. Use `python` (not `python3`) on this Windows host.
-- **Venv**: use `.venv` at project root for the virtual environment. Activate: `source .venv/Scripts/activate` (git-bash on Windows).
-- **Git**: commits with conventional commits format (`feat:`, `fix:`, `chore:`, `docs:`, `test:`, `refactor:`). Branch strategy: feature branches off `main`.
+- **Shell:** git-bash (MSYS) — POSIX syntax, `/c/...` paths
+- **Python:** 3.11+, command is `python` (not `python3`)
+- **Venv:** `.venv` at root. Activate: `source .venv/Scripts/activate`
+- **Git:** `feat:|fix:|chore:|docs:|test:|refactor:` commits. Feature branches off `main`. Repo: `kardelitaitu/a-trade`
 
-## Project Structure
+## Mandatory Development Cycle
 
-Based on whitepaper.md — implement this layout as the project grows:
+Every task follows this loop — no skipping steps:
 
-```
-research/
-├── data/           # Fetchers, loaders, data cleaning
-├── features/       # Technical indicators, ML features
-├── strategies/     # Strategy classes (rule-based / ML / ensemble)
-├── backtest/       # Engine, metrics, visualization
-├── optimization/   # Walk-forward, hyperparameter tuning
-├── ml/             # Models, regime detection
-├── risk/           # Position sizing, stops, portfolio
-└── notebooks/      # Jupyter research notebooks
-execution/          # Future: Rust/Go live engine (optional)
-shared/             # Data models, enums, communication
-config/             # Configuration files (YAML/TOML)
-results/            # Backtest reports, equity curves, logs
-```
+1. **Plan** — present a clear plan with design options. Let user choose.
+2. **Write todo** — break chosen plan into checklist items in `todo.md`
+3. **Review todo** — show to user for confirmation before executing
+4. **Execute todo** — build one item at a time, commit, check off, push
 
-## How I Operate
+## Code Expectations
 
-### Development Cycle (Mandatory)
-Every task follows this loop:
-1. **Plan** — Present a clear plan with design options. Let the user choose.
-2. **Write todo** — Break the chosen plan into actionable items in `todo.md`.
-3. **Review todo** — Show the todo list to the user for confirmation before execution.
-4. **Execute todo** — Build one item at a time, commit, and check off as done.
+- Type hints + docstrings on all public functions
+- `pytest` + `pytest-cov` for every feature
+- Vectorized where possible (pandas/numpy/vectorbt)
+- Config via YAML/TOML, never hardcoded numbers
+- Walk-forward validation, overfitting checks, realistic costs per backtesting-standards.md
+- Before large computation: confirm with user first
 
-### Process
-1. **Incremental delivery** — build one module at a time. Commit working code before moving on.
-2. **Test coverage** — every feature comes with tests. Use `pytest` (with `pytest-cov` for coverage).
-3. **Stats rigor** — validate statistical significance, avoid overfitting. Walk-forward, OOS testing, Monte Carlo.
+## Skill Workflows
 
-### Communication
-- Present plans as structured lists or bullet points.
-- Flag risks, edge cases, and statistical pitfalls proactively.
-- Use data over opinion — show numbers, metrics, distributions.
-- Before heavy computation, confirm with user.
+Save reusable workflows (end-to-end backtest, data fetch, etc.) as skills. Do NOT log task progress to memory.
 
-### Code Quality
-- Type hints on all Python functions.
-- Docstrings for public API and non-trivial logic.
-- Keep functions small and single-purpose.
-- Prefer `pandas`, `numpy`, `vectorbt` / `backtesting.py` for vectorized work.
-- Configuration via YAML/TOML, not hardcoded magic numbers.
+## Phase Reference
 
-### Memory & Skills
-- Save durable project conventions, data quirks, tool versions, and preferred libraries to memory.
-- Save reusable workflows (e.g., "how to backtest a strategy end-to-end") as skills.
-- Do NOT log session task progress to memory.
+- **Phase 1 (current):** Data downloader, EDA, core backtest engine
+- **Phase 2:** Classical strategies (MA, mean reversion, volatility, regime)
+- **Phase 3:** ML models, feature importance, ensemble
+- **Phase 4:** Validation, paper trading, live, Rust/Go migration
 
-## Phase Order (from roadmap.md)
-
-1. **Foundation** — Data downloader & storage, EDA, core backtest engine
-2. **Classical Strategies** — MA/breakout, mean reversion, volatility, regime detection
-3. **Advanced Models** — ML models, feature importance, ensemble
-4. **Validation & Deployment** — Rigorous validation, paper trading, live, optional Rust/Go migration
-
-## Useful Commands
+## Quick Commands
 
 ```
-source .venv/Scripts/activate   # Activate venv (git-bash)
-python -m pytest -v             # Run tests
-python -m pytest --cov=research # Coverage report
-pip install -e .                # Editable install (when setup.py/pyproject.toml exists)
+source .venv/Scripts/activate
+python -m pytest -v
+python -m pytest --cov=research
 ```
