@@ -1,0 +1,53 @@
+
+MONTE CARLO OPTIMIZATION
+--------------------------------------------------------------------------------
+  Generated:    2026-05-16 09:57:28 UTC
+  Command:      Round 3: validation with SL/TP
+  Strategy:     round3_validation
+  Asset:        BTCUSDT
+  Data range:   2024-01-01 -> 2025-12-31
+  Initial capt: $ 10,000.00
+  Fee rate:     0.010%
+  Hardware:     32 threads · 96 GB RAM · NVMe SSD
+  Combinations:     25
+
+TOP 5 BY SHARPE
+--------------------------------------------------------------------------------
+    #   Sharpe     PF     DD%  Trades   Return  Parameters                                    
+  --------------------------------------------------------------------------------------------
+    1     1.70   1.55   22.53%     134  +233.97%  bb_period=40, bb_std=3.0, keltner_period=...  
+    2     1.70   1.51   22.53%     183  +233.97%  bb_period=40, bb_std=3.0, keltner_period=...  
+    3     1.70   1.31   22.53%     327  +233.97%  bb_period=40, bb_std=3.0, keltner_period=...  
+    4     1.70   1.38   22.53%     222  +233.97%  bb_period=40, bb_std=3.0, keltner_period=...  
+    5     1.70   4.54  -22.53%      15  +233.97%  bb_period=40, bb_std=3.0, keltner_period=...  
+
+TOP 5 BY DRAWDOWN
+--------------------------------------------------------------------------------
+    #   Sharpe     PF     DD%  Trades   Return  Parameters                                    
+  --------------------------------------------------------------------------------------------
+    1     0.89    inf  -35.76%       1  +69.61%  bb_period=30, bb_std=3.5, keltner_period=...  
+    2     1.65  13.32  -25.99%      12  +209.86%  bb_period=10, bb_std=2.5, keltner_period=...  
+    3     1.70   4.54  -22.53%      15  +233.97%  bb_period=40, bb_std=3.0, keltner_period=...  
+    4     0.20   0.00   -6.78%       0   +2.11%  bb_period=35, bb_std=3.0, keltner_period=...  
+    5     1.32  17.21   -3.45%       7  +13.20%  bb_period=15, bb_std=3.5, keltner_period=...  
+
+BEST PARAMETERS
+----------------------------------------
+  bb_period: 40
+  bb_std: 3.0
+  keltner_period: 30
+  keltner_atr_mult: 1.5
+  sl_pct: 3.0
+  tp_pct: 8.0
+  Sharpe:        1.7032
+  Profit Factor: 1.5466
+  Max DD:        22.53%
+  Total Return:  +233.97%
+  Trades:        134
+
+REPRODUCIBILITY
+--------------------------------------------------------------------------------
+  Round 3: validation with SL/TP
+
+
+Sensitivity analysis unavailable: 'sl_pct'

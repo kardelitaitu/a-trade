@@ -163,11 +163,13 @@ def single_backtest_sltp(
                     gross_loss += abs(net_pnl)
                 in_position = False
 
+            # Remember why we exited, then reset
+            was_forced = exit_forced
             exit_forced = False
             exit_price = 0.0
 
-            # Open new position if signal says so (and not exit-only from SL/TP)
-            if pos != 0 and not exit_forced:
+            # Open new position only on signal change, not after SL/TP exit
+            if pos != 0 and not was_forced:
                 in_position = True
                 entry_price = close[i]
                 entry_side = pos

@@ -64,7 +64,7 @@ def _worker_combo(
         metrics = {
             "sharpe_ratio": float(sh),
             "profit_factor": float(pf),
-            "max_drawdown_pct": float(dd),
+            "max_drawdown_pct": -abs(float(dd)),  # ensure negative
             "total_trades": int(tr),
             "final_equity": float(eq),
             "total_return_pct": float(total_return),

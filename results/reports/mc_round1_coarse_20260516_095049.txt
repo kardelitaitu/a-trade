@@ -1,0 +1,144 @@
+
+MONTE CARLO OPTIMIZATION
+--------------------------------------------------------------------------------
+  Generated:    2026-05-16 09:50:49 UTC
+  Command:      Round 1: coarse sweep 7x5x5x6=1050 combos
+  Strategy:     round1_coarse
+  Asset:        BTCUSDT
+  Data range:   2024-01-01 -> 2025-12-31
+  Initial capt: $ 10,000.00
+  Fee rate:     0.010%
+  Hardware:     32 threads · 96 GB RAM · NVMe SSD
+  Combinations:  1,050
+
+TOP 5 BY SHARPE
+--------------------------------------------------------------------------------
+    #   Sharpe     PF     DD%  Trades   Return  Parameters                                    
+  --------------------------------------------------------------------------------------------
+    1     1.70   4.54  -22.53%      15  +233.97%  bb_period=40, bb_std=3.0, keltner_period=...  
+    2     1.65  13.32  -25.99%      12  +209.86%  bb_period=10, bb_std=2.5, keltner_period=...  
+    3     1.41   2.77  -27.71%      30  +182.53%  bb_period=35, bb_std=2.5, keltner_period=...  
+    4     1.32  17.21   -3.45%       7  +13.20%  bb_period=15, bb_std=3.5, keltner_period=...  
+    5     1.26   3.04  -25.30%      25  +133.25%  bb_period=20, bb_std=3.0, keltner_period=...  
+
+TOP 5 BY DRAWDOWN
+--------------------------------------------------------------------------------
+    #   Sharpe     PF     DD%  Trades   Return  Parameters                                    
+  --------------------------------------------------------------------------------------------
+    1    -7.27   0.79  -99.72%   22773  -99.70%  bb_period=10, bb_std=1.5, keltner_period=...  
+    2    -6.56   0.78  -99.62%   21644  -99.59%  bb_period=10, bb_std=1.5, keltner_period=...  
+    3    -6.26   0.81  -99.57%   20298  -99.53%  bb_period=10, bb_std=1.5, keltner_period=...  
+    4    -5.49   0.78  -99.27%   19986  -99.20%  bb_period=10, bb_std=1.5, keltner_period=...  
+    5    -4.80   0.81  -98.83%   18457  -98.71%  bb_period=10, bb_std=1.5, keltner_period=...  
+
+BEST PARAMETERS
+----------------------------------------
+  bb_period: 40
+  bb_std: 3.0
+  keltner_period: 30
+  keltner_atr_mult: 1.5
+  Sharpe:        1.7032
+  Profit Factor: 4.5436
+  Max DD:        -22.53%
+  Total Return:  +233.97%
+  Trades:        15
+
+REPRODUCIBILITY
+--------------------------------------------------------------------------------
+  Round 1: coarse sweep 7x5x5x6=1050 combos
+
+
+Parameter Sensitivity Analysis
+============================================================
+Total combos tested: 1050
+
+How to read:
+  vs Sharpe:    Higher = better. Best value gives highest avg Sharpe.
+  vs Drawdown:  Lower (less negative) = better. Best value gives smallest loss.
+  vs Composite: Higher = better. Score = Sharpe / |DD|. Best balance between
+                maximizing return and minimizing drawdown.
+                Example: 0.020 > 0.009 means 2.2x better risk-adjusted return.
+
+bb_std:
+  vs Sharpe:
+    Per 1 unit:  Sharpe +0.7365
+    Best value:  3.5  (avg Sharpe -0.017)
+    Importance:  1.374  (spread)
+    Correlation: +0.493
+    Top values:  3.5 (Sharpe -0.02), 3.0 (Sharpe -0.08), 2.5 (Sharpe -0.52)
+  vs Drawdown:
+    Per 1 unit:  DD +33.3800
+    Best value:  1.5  (avg DD -72.69%)
+    Importance:  63.111  (spread)
+    Correlation: +0.667
+    Top values:  1.5 (DD -72.7%), 2.0 (DD -64.5%), 2.5 (DD -49.0%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score +0.0088
+    Best value:  3.5  (avg score 0.0013)
+    Top values:  3.5 (score 0.001), 3.0 (score -0.000), 2.5 (score -0.006)
+
+keltner_atr_mult:
+  vs Sharpe:
+    Per 1 unit:  Sharpe -0.8428
+    Best value:  0.5  (avg Sharpe -0.035)
+    Importance:  1.245  (spread)
+    Correlation: -0.387
+    Top values:  0.5 (Sharpe -0.03), 0.8 (Sharpe -0.27), 1.0 (Sharpe -0.47)
+  vs Drawdown:
+    Per 1 unit:  DD -30.8543
+    Best value:  2.0  (avg DD -62.06%)
+    Importance:  47.345  (spread)
+    Correlation: -0.423
+    Top values:  2.0 (DD -62.1%), 1.5 (DD -58.1%), 1.2 (DD -52.0%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score -0.0089
+    Best value:  0.5  (avg score 0.0009)
+    Top values:  0.5 (score 0.001), 0.8 (score -0.003), 1.5 (score -0.006)
+
+bb_period:
+  vs Sharpe:
+    Per 1 unit:  Sharpe +0.0343
+    Best value:  40  (avg Sharpe -0.214)
+    Importance:  0.963  (spread)
+    Correlation: +0.325
+    Top values:  40 (Sharpe -0.21), 35 (Sharpe -0.22), 30 (Sharpe -0.37)
+  vs Drawdown:
+    Per 1 unit:  DD +0.6325
+    Best value:  15  (avg DD -53.88%)
+    Importance:  21.168  (spread)
+    Correlation: +0.179
+    Top values:  15 (DD -53.9%), 20 (DD -51.7%), 25 (DD -47.8%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score +0.0004
+    Best value:  40  (avg score -0.0011)
+    Top values:  40 (score -0.001), 35 (score -0.001), 30 (score -0.003)
+
+keltner_period:
+  vs Sharpe:
+    Per 1 unit:  Sharpe +0.0003
+    Best value:  15  (avg Sharpe -0.570)
+    Importance:  0.057  (spread)
+    Correlation: +0.002
+    Top values:  15 (Sharpe -0.57), 30 (Sharpe -0.60), 20 (Sharpe -0.61)
+  vs Drawdown:
+    Per 1 unit:  DD -0.4729
+    Best value:  30  (avg DD -47.77%)
+    Importance:  8.362  (spread)
+    Correlation: -0.095
+    Top values:  30 (DD -47.8%), 25 (DD -47.7%), 20 (DD -43.8%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score +0.0001
+    Best value:  30  (avg score -0.0055)
+    Top values:  30 (score -0.005), 25 (score -0.006), 10 (score -0.007)
+
+BEST COMBO FOUND
+----------------------------------------
+  bb_period: 40
+  bb_std: 3.0
+  keltner_period: 30
+  keltner_atr_mult: 1.5
+  Sharpe:        1.7032
+  Profit Factor: 4.5436
+  Max DD:        -22.53%
+  Total Return:  +233.97%
+  Trades:        15
