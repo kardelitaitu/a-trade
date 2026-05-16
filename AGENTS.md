@@ -1,7 +1,7 @@
 # AGENTS.md — QuantumEdge Trading System
 
-Binance 5-minute crypto trading system. Python-first prototyping → optional Rust/Go.
-Full context: `docs/whitepaper.md`, `docs/roadmap.md`, `docs/strategy-guidelines.md`, `docs/backtesting-standards.md`.
+Binance 5-minute crypto trading system. Python-first prototyping.
+Full context: `docs/`, `todo.md`.
 
 ## Project Root
 `C:\My Script\aaa-trade\`
@@ -9,7 +9,7 @@ Full context: `docs/whitepaper.md`, `docs/roadmap.md`, `docs/strategy-guidelines
 ## Conventions
 
 - **Shell:** git-bash (MSYS) — POSIX syntax, `/c/...` paths
-- **Python:** 3.11+, command is `python` (not `python3`)
+- **Python:** 3.11+, command is `python`
 - **Venv:** `.venv` at root. Activate: `source .venv/Scripts/activate`
 - **Git:** `feat:|fix:|chore:|docs:|test:|refactor:` commits. Feature branches off `main`. Repo: `kardelitaitu/a-trade`
 
@@ -25,36 +25,42 @@ Every task follows this loop — no skipping steps:
 ## Code Expectations
 
 - Type hints + docstrings on all public functions
-- `pytest` + `pytest-cov` for every feature
+- `pytest` — 96 tests across all modules
 - Vectorized where possible (pandas/numpy/vectorbt)
-- Config via YAML/TOML, never hardcoded numbers
+- Config via dict, never hardcoded numbers
+- Numba `@jit` for state machine loops (backtest trade extraction, strategy signal generation)
 - Walk-forward validation, overfitting checks, realistic costs per backtesting-standards.md
 - Before large computation: confirm with user first
 
-## Skill Workflows
+## Hardware Optimization
 
-Save reusable workflows (end-to-end backtest, data fetch, etc.) as skills. Do NOT log task progress to memory.
+- **CPU:** 32 threads — numba `@jit` accelerates trade extraction and strategy state machines
+- **RAM:** 96 GB DDR5 — LightGBM training uses 32 threads
+- **Storage:** 7000 MB/s NVMe SSD — Parquet I/O for 876K-row dataset
+- Backtest throughput: **~0.3s per run on 876K rows**, **26ms per run on 100K rows**
 
-## Phase Reference
+## Project Architecture
 
-- **Phase 1 (current):** Data downloader, EDA, core backtest engine
-- **Phase 2:** Classical strategies (MA, mean reversion, volatility, regime)
-- **Phase 3:** ML models, feature importance, ensemble
-- **Phase 4:** Validation, paper trading, live, Rust/Go migration
+```
+research/
+├── data/              Loader, fetcher, cleaning → Parquet
+├── features/          Technical indicators + 35-feature ML matrix
+├── strategies/        5 classical strategies + regime + ensemble all numba-accelerated
+├── backtest/          Vectorized engine + 15+ metrics (numba trade extraction)
+├── ml/                LightGBM pipeline + feature importance
+├── optimization/      Random search, walk-forward, Monte Carlo, robustness
+└── execution/         Paper trading pipeline (cron-ready)
+```
+
+## Phase Status
+
+All 4 phases complete. Key finding: RSI Mean Reversion (period=25, oversold=30, overbought=88) achieves **Sharpe +0.31, PF 1.12, DD -6.45%** on 2024-2025 out-of-sample.
 
 ## Quick Commands
 
 ```
 source .venv/Scripts/activate
-python -m pytest -v
-python -m pytest --cov=research
+python -m pytest -v              # Run all 96 tests
+python -m pytest --cov=research  # Coverage report
+python research/execution/paper.py  # Run paper trading
 ```
-
-## Hardware Optimization
-
-- **CPU:** 32 threads
-- **RAM:** 96 GB DDR5
-- **Storage:** 7000 MB/s NVMe SSD
-- Code should be optimized to fully utilize this hardware. High CPU, RAM, and SSD usage is fine.
-- Prefer parallelized/vectorized operations (numba, multiprocessing, batch processing) over single-threaded loops.
-- Backtest throughput priority: faster ops/sec is the goal, not memory conservation.
