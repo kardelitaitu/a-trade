@@ -26,10 +26,10 @@
 
 ## Phase 3: Advanced Models
 
-- [ ] **P3-1:** ML Feature Engineering — feature matrix from OHLCV (price, tech, time features)
-- [ ] **P3-2:** ML Signal Model — LightGBM binary classifier, chrono split train/val/test
-- [ ] **P3-3:** Feature Importance Analysis — SHAP, ablation, report to results/reports/
-- [ ] **P3-4:** Ensemble System — rolling Sharpe-weighted combiner of P2 + P3 signals
+- [x] **P3-1:** ML Feature Engineering — feature matrix from OHLCV (price, tech, time features)
+- [x] **P3-2:** ML Signal Model — LightGBM binary classifier, chrono split train/val/test
+- [x] **P3-3:** Feature Importance Analysis — SHAP, ablation, report to results/reports/
+- [x] **P3-4:** Ensemble System — rolling Sharpe-weighted combiner of P2 + P3 signals
 
 ## Phase 4: Validation & Deployment
 
@@ -37,3 +37,10 @@
 - [ ] Paper trading
 - [ ] Live trading (Python)
 - [ ] Optional: Rust/Go migration
+
+## Optimization: Hardware Utilization
+
+- [ ] **O-1:** Numba-accelerate backtest trade extraction (50-100x speedup)
+- [ ] **O-2:** Numba-accelerate strategy state machines (breakout, mean reversion, vol)
+- [ ] **O-3:** Increase ML training to 32 threads
+- [ ] **O-4:** Full-system stress test — all strategies × parameter sweep on 876K rows

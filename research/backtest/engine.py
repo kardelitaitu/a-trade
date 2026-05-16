@@ -2,7 +2,8 @@
 Vectorized backtesting engine for QuantumEdge.
 
 Processes OHLCV data + signal series to produce equity curves
-and trade logs using pure vectorized operations (no loops over candles).
+and trade logs using pure vectorized operations.
+Trade extraction is numba-accelerated.
 """
 
 from __future__ import annotations
@@ -14,13 +15,15 @@ from typing import Optional
 import numpy as np
 import pandas as pd
 
+from research.backtest._numba_ops import extract_trades_numba
+
 logger = logging.getLogger(__name__)
 
 DEFAULT_CONFIG = {
-    "initial_capital": 10_000.0,  # USDT
-    "fee": 0.00075,               # 0.075% per trade (maker+taker average)
-    "slippage": 0.0001,           # 0.01% per trade (1 tick on BTC)
-    "position_size_pct": 1.0,     # 100% of capital per signal
+    "initial_capital": 10_000.0,
+    "fee": 0.00075,
+    "slippage": 0.0001,
+    "position_size_pct": 1.0,
     "size_mode": "fixed",
 }
 
@@ -92,7 +95,7 @@ class VectorizedBacktest:
         ----------
         signals : pd.Series
             Trading signals aligned with ``self.data.index``.
-            Values: -1 (short), 0 (neutral), +1 (long).
+            Values: -1, 0, +1 (or continuous float).
 
         Returns
         -------
@@ -100,44 +103,27 @@ class VectorizedBacktest:
         """
         self._result = None
 
-        # Align signals to data
         signals = signals.reindex(self.data.index, fill_value=0).astype(float)
-
         close = self.data["close"]
         capital = self._config["initial_capital"]
-        fee_rate = self._config["fee"]
-        slip_rate = self._config["slippage"]
-        total_cost_rate = fee_rate + slip_rate
+        total_cost_rate = self._config["fee"] + self._config["slippage"]
 
-        # ---------- Position (shift by 1 to avoid look-ahead) ----------
+        # Position (shift by 1 to avoid look-ahead)
         positions = signals.shift(1).fillna(0)
         position_changes = positions.diff().fillna(0)
 
-        # ---------- Price returns (gross) ----------
-        # close_return[t] = close[t] / close[t-1] - 1
-        close_return = close.pct_change().fillna(0)
-
-        # Strategy return = position * price return
+        # Strategy returns
+        close_return = close.pct_change(fill_method=None).fillna(0)
         strategy_return = positions * close_return
 
-        # ---------- Transaction costs ----------
-        # Cost per trade = abs(position_change) * cost_rate (no price multiplication,
-        # since we express cost as fraction of capital)
-        change_magnitude = position_changes.abs()
-
-        # Costs when position changes: entry + exit. Each change costs fee + slippage.
-        # 1 unit of position costs cost_rate to establish, another cost_rate to close.
-        # But position_changes already captures the delta. To avoid double-counting,
-        # cost = abs(delta) * cost_rate
-        cost_rate = change_magnitude * total_cost_rate
-
-        # Net return
+        # Transaction costs
+        cost_rate = position_changes.abs() * total_cost_rate
         net_return = strategy_return - cost_rate
 
-        # ---------- Equity curve ----------
+        # Equity curve
         equity = (1 + net_return).cumprod() * capital
 
-        # ---------- Trade log ----------
+        # Trade log (numba-accelerated)
         trades = self._extract_trades(signals, positions, close, equity)
 
         self._result = BacktestResult(
@@ -150,7 +136,7 @@ class VectorizedBacktest:
         return self._result
 
     # ------------------------------------------------------------------
-    # Trade log extraction
+    # Trade log extraction (numba accelerated)
     # ------------------------------------------------------------------
 
     def _extract_trades(
@@ -160,82 +146,44 @@ class VectorizedBacktest:
         close: pd.Series,
         equity: pd.Series,
     ) -> list[Trade]:
-        """Build trade list from position changes."""
-        trades: list[Trade] = []
+        """Build trade list from position changes using numba."""
+        pos_arr = positions.values.astype(np.float64)
+        close_arr = close.values.astype(np.float64)
+        equity_arr = equity.values.astype(np.float64)
+
         capital = self._config["initial_capital"]
         fee_rate = self._config["fee"] + self._config["slippage"]
+        size_pct = self._config["position_size_pct"]
 
-        entry_idx: Optional[int] = None
-        entry_side: int = 0
+        entry_idxs, exit_idxs, sides = extract_trades_numba(pos_arr)
 
-        prev_position = 0.0
-        for i in range(len(positions)):
-            curr_position = positions.iloc[i]
+        trades: list[Trade] = []
+        for k in range(len(entry_idxs)):
+            ei = entry_idxs[k]
+            xi = exit_idxs[k]
+            side = int(sides[k])
 
-            if curr_position == prev_position:
-                continue
+            entry_time = positions.index[ei]
+            exit_time = positions.index[xi]
+            entry_price = float(close_arr[ei])
+            exit_price = float(close_arr[xi])
 
-            # Position changed — determine what happened
-            went_to_zero = curr_position == 0
-            came_from_zero = prev_position == 0
+            cap_at_entry = equity_arr[ei - 1] if ei > 0 else capital
+            size_units = (cap_at_entry * size_pct) / entry_price
 
-            if came_from_zero and not went_to_zero:
-                # Opening a NEW position (0 → 1 or 0 → -1)
-                entry_idx = i
-                entry_side = int(curr_position)
+            price_move = (exit_price / entry_price) - 1
+            gross_return = -price_move if side == -1 else price_move
 
-            elif went_to_zero and not came_from_zero:
-                # Closing an existing position (1 → 0 or -1 → 0)
-                if entry_idx is not None:
-                    side = entry_side
-                    entry_time = positions.index[entry_idx]
-                    exit_time = positions.index[i]
-                    entry_price = float(close.iloc[entry_idx])
-                    exit_price = float(close.iloc[i])
-                    cap_at_entry = equity.iloc[entry_idx - 1] if entry_idx > 0 else capital
-                    size_units = (cap_at_entry * self._config["position_size_pct"]) / entry_price
-                    price_move = (exit_price / entry_price - 1)
-                    gross_return = -price_move if side == -1 else price_move
-                    fees = entry_price * size_units * fee_rate + exit_price * size_units * fee_rate
-                    pnl = (exit_price - entry_price) * size_units * side - fees
-                    pnl_pct = (pnl / cap_at_entry) * 100
-                    duration = str(exit_time - entry_time)
-                    trades.append(Trade(
-                        entry_time=entry_time, exit_time=exit_time, side=side,
-                        entry_price=entry_price, exit_price=exit_price,
-                        size=size_units, pnl=pnl, pnl_pct=pnl_pct,
-                        return_pct=gross_return * 100, fees=fees, duration=duration,
-                    ))
-                entry_idx = None
-                entry_side = 0
+            fees = entry_price * size_units * fee_rate + exit_price * size_units * fee_rate
+            pnl = (exit_price - entry_price) * size_units * side - fees
+            pnl_pct = (pnl / cap_at_entry) * 100
+            duration = str(exit_time - entry_time)
 
-            else:
-                # Position FLIP (1 → -1 or -1 → 1)
-                if entry_idx is not None:
-                    # Close the current position first
-                    side = entry_side
-                    entry_time = positions.index[entry_idx]
-                    exit_time = positions.index[i]
-                    entry_price = float(close.iloc[entry_idx])
-                    exit_price = float(close.iloc[i])
-                    cap_at_entry = equity.iloc[entry_idx - 1] if entry_idx > 0 else capital
-                    size_units = (cap_at_entry * self._config["position_size_pct"]) / entry_price
-                    price_move = (exit_price / entry_price - 1)
-                    gross_return = -price_move if side == -1 else price_move
-                    fees = entry_price * size_units * fee_rate + exit_price * size_units * fee_rate
-                    pnl = (exit_price - entry_price) * size_units * side - fees
-                    pnl_pct = (pnl / cap_at_entry) * 100
-                    duration = str(exit_time - entry_time)
-                    trades.append(Trade(
-                        entry_time=entry_time, exit_time=exit_time, side=side,
-                        entry_price=entry_price, exit_price=exit_price,
-                        size=size_units, pnl=pnl, pnl_pct=pnl_pct,
-                        return_pct=gross_return * 100, fees=fees, duration=duration,
-                    ))
-                # Then open the new flipped position
-                entry_idx = i
-                entry_side = int(curr_position)
-
-            prev_position = curr_position
+            trades.append(Trade(
+                entry_time=entry_time, exit_time=exit_time, side=side,
+                entry_price=entry_price, exit_price=exit_price,
+                size=size_units, pnl=pnl, pnl_pct=pnl_pct,
+                return_pct=gross_return * 100, fees=fees, duration=duration,
+            ))
 
         return trades
