@@ -11,6 +11,8 @@ from research.features.registry import (
     keltner, natr,
     obv, vwap, mfi, vol_delta, cmf,
     donchian, pivot_points,
+    close_z, vol_z, ret, log_ret,
+    hour_sin, hour_cos, dow_sin, dow_cos, is_weekend,
     bollinger_bands,
 )
 
@@ -251,3 +253,63 @@ class TestPivot:
         assert (s1 >= s2).all()
         assert (r1 >= p).all()
         assert (p >= s1).all()
+
+
+# ═══════════════════════════════════════════════════════════════════════
+# Statistical
+# ═══════════════════════════════════════════════════════════════════════
+
+class TestCloseZ:
+    def test_close_z_output(self, sample):
+        r = close_z(sample["close"], 20)
+        valid = r.dropna()
+        assert len(valid) > 0
+        assert valid.abs().max() < 10  # reasonable z-score range
+
+class TestVolZ:
+    def test_vol_z_output(self, sample):
+        r = vol_z(sample["volume"], 20)
+        valid = r.dropna()
+        assert len(valid) > 0
+
+class TestRet:
+    def test_ret_output(self, sample):
+        r = ret(sample["close"], 5)
+        assert r.notna().sum() > 0
+
+class TestLogRet:
+    def test_log_ret_output(self, sample):
+        r = log_ret(sample["close"], 5)
+        assert r.notna().sum() > 0
+
+
+# ═══════════════════════════════════════════════════════════════════════
+# Time
+# ═══════════════════════════════════════════════════════════════════════
+
+class TestTimeFeatures:
+    def test_hour_sin(self, sample):
+        r = hour_sin(sample["close"].index)
+        assert r is not None
+        assert len(r) == len(sample["close"])
+        assert (-1 <= r).all() and (r <= 1).all()
+
+    def test_hour_cos(self, sample):
+        r = hour_cos(sample["close"].index)
+        assert r is not None
+        assert (-1 <= r).all() and (r <= 1).all()
+
+    def test_dow_sin(self, sample):
+        r = dow_sin(sample["close"].index)
+        assert r is not None
+        assert (-1 <= r).all() and (r <= 1).all()
+
+    def test_dow_cos(self, sample):
+        r = dow_cos(sample["close"].index)
+        assert r is not None
+        assert (-1 <= r).all() and (r <= 1).all()
+
+    def test_is_weekend(self, sample):
+        r = is_weekend(sample["close"].index)
+        assert r is not None
+        assert set(r).issubset({0.0, 1.0})

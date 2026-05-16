@@ -54,5 +54,5 @@
 - [x] **I-4:** Implement + test **Volatility** indicators (keltner, natr)
 - [x] **I-5:** Implement + test **Volume** indicators (obv, vwap, mfi, vol_delta, cmf)
 - [x] **I-6:** Implement + test **Price Structure** indicators (donchian, pivot)
-- [ ] **I-7:** Update `research/strategies/factory.py` — generic strategy builder using registry
+- [x] **I-7:** Update `research/strategies/factory.py` — generic strategy builder using registry
 - [x] **I-8:** Run full 106+ test suite — verify nothing broke

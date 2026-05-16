@@ -177,6 +177,75 @@ def pivot_points(high, low, close):
     return p, r1, r2, s1, s2
 
 
+def close_z(close, period=30):
+    """Rolling Z-score of close price = (close - mean) / std."""
+    roll_mean = close.rolling(period).mean()
+    roll_std = close.rolling(period).std(ddof=0)
+    return (close - roll_mean) / roll_std.replace(0, float("nan"))
+
+
+def vol_z(volume, period=100):
+    """Rolling Z-score of volume."""
+    roll_mean = volume.rolling(period).mean()
+    roll_std = volume.rolling(period).std(ddof=0)
+    return (volume - roll_mean) / roll_std.replace(0, float("nan"))
+
+
+def ret(close, period=1):
+    """Return over N periods: (close / close[N]) - 1."""
+    return close.pct_change(period, fill_method=None)
+
+
+def log_ret(close, period=1):
+    """Log return over N periods: ln(close / close[N])."""
+    import numpy as np
+    return np.log(close / close.shift(period))
+
+
+def hour_sin(index):
+    """Hour of day as sine component (cyclical encoding)."""
+    import numpy as np
+    if hasattr(index, 'hour'):
+        hour_angle = 2 * np.pi * (index.hour + index.minute / 60) / 24
+        return np.sin(hour_angle)
+    return None
+
+
+def hour_cos(index):
+    """Hour of day as cosine component (cyclical encoding)."""
+    import numpy as np
+    if hasattr(index, 'hour'):
+        hour_angle = 2 * np.pi * (index.hour + index.minute / 60) / 24
+        return np.cos(hour_angle)
+    return None
+
+
+def dow_sin(index):
+    """Day of week as sine component (cyclical encoding)."""
+    import numpy as np
+    if hasattr(index, 'dayofweek'):
+        dow_angle = 2 * np.pi * index.dayofweek / 7
+        return np.sin(dow_angle)
+    return None
+
+
+def dow_cos(index):
+    """Day of week as cosine component (cyclical encoding)."""
+    import numpy as np
+    if hasattr(index, 'dayofweek'):
+        dow_angle = 2 * np.pi * index.dayofweek / 7
+        return np.cos(dow_angle)
+    return None
+
+
+def is_weekend(index):
+    """Weekend flag: 1.0 if Saturday or Sunday, 0.0 otherwise."""
+    import numpy as np
+    if hasattr(index, 'dayofweek'):
+        return np.where(index.dayofweek >= 5, 1.0, 0.0)
+    return None
+
+
 # ---------------------------------------------------------------------------
 # Registry
 # ---------------------------------------------------------------------------
@@ -228,6 +297,19 @@ INDICATORS: dict[str, dict[str, Any]] = {
                    "params": {"period": "int"}, "desc": "Price Location in Range", "category": "structure"},
     "donchian":   {"fn": donchian,  "params": {"period": "int"}, "desc": "Donchian Channel", "category": "structure"},
     "pivot":      {"fn": pivot_points, "params": {}, "desc": "Pivot Points", "category": "structure"},
+
+    # Statistical
+    "close_z":    {"fn": close_z,   "params": {"period": "int"}, "desc": "Z-score of Close (deviations from mean)", "category": "statistical"},
+    "vol_z":      {"fn": vol_z,     "params": {"period": "int"}, "desc": "Z-score of Volume", "category": "statistical"},
+    "ret":        {"fn": ret,       "params": {"period": "int"}, "desc": "Return over N periods", "category": "statistical"},
+    "log_ret":    {"fn": log_ret,   "params": {"period": "int"}, "desc": "Log Return over N periods", "category": "statistical"},
+
+    # Time
+    "hour_sin":   {"fn": hour_sin,  "params": {}, "desc": "Hour of day (sine)", "category": "time"},
+    "hour_cos":   {"fn": hour_cos,  "params": {}, "desc": "Hour of day (cosine)", "category": "time"},
+    "dow_sin":    {"fn": dow_sin,   "params": {}, "desc": "Day of week (sine)", "category": "time"},
+    "dow_cos":    {"fn": dow_cos,   "params": {}, "desc": "Day of week (cosine)", "category": "time"},
+    "is_weekend": {"fn": is_weekend,"params": {}, "desc": "Weekend flag (1=Sat/Sun)", "category": "time"},
 }
 
 
