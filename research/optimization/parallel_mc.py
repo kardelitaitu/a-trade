@@ -118,8 +118,6 @@ def parallel_monte_carlo(
     -------
     list of dict, sorted by metric_sort descending.
     """
-    from research.strategies.factory import list_strategies
-
     t0 = time.perf_counter()
     n_combos = len(param_grid)
     logger.info(f"Parallel MC: {strategy_name}, {n_combos} combos, {n_jobs} workers")

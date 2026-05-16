@@ -231,7 +231,8 @@ def save_mc_report(
 
     output_dir.mkdir(parents=True, exist_ok=True)
     safe_name = result.strategy.lower().replace(" ", "_").replace("/", "_").replace("+", "plus")
-    path = output_dir / f"mc_{safe_name}.txt"
+    now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%d_%H%M%S")
+    path = output_dir / f"mc_{safe_name}_{now}.txt"
 
     now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
     capital = result.initial_capital
@@ -303,7 +304,7 @@ def save_mc_report(
 
     # ── Top N Table ──
     lines.append(f"TOP {top_n} BY SHARPE")
-    header = f"  {'#':>3}  {'Parameters':<38}  {'Init $':>8}  {'Final $':>9}  {'Sharpe':>7}  {'PF':>5}  {'DD%':>6}  {'Trades':>7}"
+    header = f"  {'#':>3}  {'Sharpe':>7}  {'PF':>5}  {'DD%':>6}  {'Trades':>7}  {'Init $':>8}  {'Final $':>9}  {'Parameters':<36}"
     dash = "-" * (len(header) - 2)
     lines.append(f"  {dash}")
     lines.append(header)
@@ -315,8 +316,29 @@ def save_mc_report(
         m = result.metrics[ci]
         params_str = ", ".join(f"{k}={v}" for k, v in p.items())
         lines.append(
-            f"  {rank+1:>3}  {params_str:<38}  ${capital:>7,.0f}  ${m[0]:>8,.0f}  "
-            f"{m[2]:>7.2f}  {m[5]:>5.2f}  {m[1]:>6.2f}%  {int(m[3]):>7,}"
+            f"  {rank+1:>3}  {m[2]:>7.2f}  {m[5]:>5.2f}  {m[1]:>6.2f}%  {int(m[3]):>7,}  "
+            f"${capital:>7,.0f}  ${m[0]:>8,.0f}  {params_str:<36}"
+        )
+    lines.append("")
+
+    # ── Top N by Drawdown ──
+    lines.append(f"TOP {top_n} BY DRAWDOWN")
+    lines.append(f"  {dash}")
+    lines.append(header)
+    lines.append(f"  {dash}")
+    # Sort by DD (ascending = smallest loss first)
+    dd_indices = sorted(
+        range(result.n_combos),
+        key=lambda i: result.metrics[i][1],  # max_dd_pct at index 1
+    )
+    for rank in range(min(top_n, result.n_combos)):
+        ci = dd_indices[rank]
+        p = result.params_list[ci]
+        m = result.metrics[ci]
+        params_str = ", ".join(f"{k}={v}" for k, v in p.items())
+        lines.append(
+            f"  {rank+1:>3}  {m[2]:>7.2f}  {m[5]:>5.2f}  {m[1]:>6.2f}%  {int(m[3]):>7,}  "
+            f"${capital:>7,.0f}  ${m[0]:>8,.0f}  {params_str:<36}"
         )
     lines.append("")
 
@@ -337,14 +359,35 @@ def save_mc_report(
     lines.append(f"  Win Rate              {best.win_rate:>14.1f}%")
     lines.append("")
 
-    # ── Reproducibility ──
+    lines.append("")
     lines.append("REPRODUCIBILITY")
     lines.append(SEP)
     cmd = result.command or "python -c \"from research.data.loader import load_parquet; ...\""
     lines.append(f"  {cmd}")
     lines.append("")
 
-    path.write_text("\n".join(lines))
+    # ── Sensitivity Analysis ──
+    from research.optimization.sensitivity import analyze_sensitivity
+
+    # Convert MCResult to list-of-dicts format
+    analysis_results = [
+        {
+            "params": result.params_list[i],
+            "sharpe": result.metrics[i, 2],  # column 2 = sharpe
+            "max_dd": result.metrics[i, 1],  # column 1 = max_dd
+            "profit_factor": result.metrics[i, 5],  # column 5 = pf
+            "total_return": (result.metrics[i, 0] / result.initial_capital - 1) * 100,
+            "trades": int(result.metrics[i, 3]),  # column 3 = trades
+        }
+        for i in range(result.n_combos)
+    ]
+    try:
+        analysis = analyze_sensitivity(analysis_results)
+        content = "\n".join(lines) + "\n\n" + analysis["recommendations"]
+    except Exception as e:
+        content = "\n".join(lines) + f"\n\nSensitivity analysis unavailable: {e}"
+
+    path.write_text(content)
     return path
 
 
