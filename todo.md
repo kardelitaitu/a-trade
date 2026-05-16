@@ -45,3 +45,14 @@
 - [x] **O-2:** Numba-accelerate strategy state machines (breakout, mean reversion, vol)
 - [x] **O-3:** Increase ML training to 32 threads
 - [x] **O-4:** Full-system stress test — all strategies × parameter sweep on 876K rows
+
+## Feature: Indicator Registry + Tests
+
+- [ ] **I-1:** Create `research/features/registry.py` — central catalog with `get_indicator()`, `list_indicators()`
+- [ ] **I-2:** Implement + test **Price Trend** indicators (wma, hma, macd variants)
+- [ ] **I-3:** Implement + test **Momentum** indicators (stoch, williams_r, cci, roc, momentum)
+- [ ] **I-4:** Implement + test **Volatility** indicators (keltner, natr)
+- [ ] **I-5:** Implement + test **Volume** indicators (obv, vwap, mfi, vol_delta, cmf)
+- [ ] **I-6:** Implement + test **Price Structure** indicators (donchian, pivot)
+- [ ] **I-7:** Update `research/strategies/factory.py` — generic strategy builder using registry
+- [ ] **I-8:** Run full 106+ test suite — verify nothing broke
