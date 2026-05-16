@@ -48,11 +48,11 @@
 
 ## Feature: Indicator Registry + Tests
 
-- [ ] **I-1:** Create `research/features/registry.py` — central catalog with `get_indicator()`, `list_indicators()`
-- [ ] **I-2:** Implement + test **Price Trend** indicators (wma, hma, macd variants)
-- [ ] **I-3:** Implement + test **Momentum** indicators (stoch, williams_r, cci, roc, momentum)
-- [ ] **I-4:** Implement + test **Volatility** indicators (keltner, natr)
-- [ ] **I-5:** Implement + test **Volume** indicators (obv, vwap, mfi, vol_delta, cmf)
-- [ ] **I-6:** Implement + test **Price Structure** indicators (donchian, pivot)
+- [x] **I-1:** Create `research/features/registry.py` — central catalog with `get_indicator()`, `list_indicators()`
+- [x] **I-2:** Implement + test **Price Trend** indicators (wma, hma, macd variants)
+- [x] **I-3:** Implement + test **Momentum** indicators (stoch, williams_r, cci, roc, momentum)
+- [x] **I-4:** Implement + test **Volatility** indicators (keltner, natr)
+- [x] **I-5:** Implement + test **Volume** indicators (obv, vwap, mfi, vol_delta, cmf)
+- [x] **I-6:** Implement + test **Price Structure** indicators (donchian, pivot)
 - [ ] **I-7:** Update `research/strategies/factory.py` — generic strategy builder using registry
-- [ ] **I-8:** Run full 106+ test suite — verify nothing broke
+- [x] **I-8:** Run full 106+ test suite — verify nothing broke
