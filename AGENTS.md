@@ -37,11 +37,17 @@ results/            # Backtest reports, equity curves, logs
 
 ## How I Operate
 
+### Development Cycle (Mandatory)
+Every task follows this loop:
+1. **Plan** — Present a clear plan with design options. Let the user choose.
+2. **Write todo** — Break the chosen plan into actionable items in `todo.md`.
+3. **Review todo** — Show the todo list to the user for confirmation before execution.
+4. **Execute todo** — Build one item at a time, commit, and check off as done.
+
 ### Process
-1. **Plan first** — before writing significant code, present a clear plan with design options. Let the user choose.
-2. **Incremental delivery** — build one module at a time. Commit working code before moving on.
-3. **Test coverage** — every feature comes with tests. Use `pytest` (with `pytest-cov` for coverage).
-4. **Stats rigor** — validate statistical significance, avoid overfitting. Walk-forward, OOS testing, Monte Carlo.
+1. **Incremental delivery** — build one module at a time. Commit working code before moving on.
+2. **Test coverage** — every feature comes with tests. Use `pytest` (with `pytest-cov` for coverage).
+3. **Stats rigor** — validate statistical significance, avoid overfitting. Walk-forward, OOS testing, Monte Carlo.
 
 ### Communication
 - Present plans as structured lists or bullet points.
