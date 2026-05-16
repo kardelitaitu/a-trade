@@ -52,6 +52,10 @@ def create_strategy(
         from research.strategies.volatility_breakout import VolatilityBreakout
         return VolatilityBreakout(config)
 
+    elif strategy_type == "volatility_squeeze":
+        from research.strategies.volatility_squeeze import VolatilitySqueeze
+        return VolatilitySqueeze(config)
+
     else:
         available = ["ma_crossover", "donchian_breakout", "mean_reversion", "volatility_breakout"]
         raise ValueError(f"Unknown strategy '{strategy_type}'. Available: {available}")
@@ -116,6 +120,15 @@ def list_strategies() -> str:
             "params": {
                 "atr_period": "int", "atr_multiplier": "float",
                 "atr_lookback": "int", "min_hold": "int",
+                "filter_volume_pct": "float (optional)",
+            },
+        },
+        "volatility_squeeze": {
+            "desc": "Volatility Squeeze (BB/Keltner squeeze)",
+            "params": {
+                "bb_period": "int", "bb_std": "float",
+                "keltner_period": "int", "keltner_atr_mult": "float",
+                "squeeze_lookback": "int", "min_hold": "int",
                 "filter_volume_pct": "float (optional)",
             },
         },
