@@ -1,0 +1,50 @@
+# C dependencies
+node_modules/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Data files (raw data is large and should not be committed)
+*.parquet
+*.csv
+*.feather
+*.h5
+*.hdf5
+
+# Logs & results
+*.log
+results/
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Config with secrets
+config/credentials*.yaml
+config/credentials*.toml
+config/.env
+*.env
