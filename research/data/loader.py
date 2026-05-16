@@ -151,3 +151,64 @@ def load_parquet(name: str = "btcusdt_5m.parquet") -> pd.DataFrame:
     if not path.exists():
         raise FileNotFoundError(f"No processed file at {path}. Run load_all() first.")
     return pd.read_parquet(path)
+
+
+def fetch_binance_klines(
+    symbol: str = "BTCUSDT",
+    interval: str = "5m",
+    start_str: str = "2017-01-01",
+    end_str: Optional[str] = None,
+    save: bool = True,
+) -> pd.DataFrame:
+    """
+    Fetch historical klines from Binance API and save as Parquet.
+
+    Parameters
+    ----------
+    symbol : str
+        Trading pair (e.g. 'BTCUSDT', 'ETHUSDT').
+    interval : str
+        Kline interval ('1m', '5m', '15m', '1h', etc.).
+    start_str : str
+        Start date.
+    end_str : str, optional
+        End date. Defaults to today.
+    save : bool
+        Save to data/processed/ as parquet.
+
+    Returns
+    -------
+    pd.DataFrame with OHLCV columns.
+    """
+    try:
+        from binance.client import Client as BinanceClient
+    except ImportError:
+        raise ImportError("python-binance not installed. Run: pip install python-binance")
+
+    import datetime
+
+    client = BinanceClient()
+    end_str = end_str or datetime.datetime.now().strftime("%Y-%m-%d")
+
+    klines = client.get_historical_klines(symbol, interval, start_str, end_str)
+
+    df = pd.DataFrame(klines, columns=[
+        "timestamp", "open", "high", "low", "close", "volume",
+        "close_time", "quote_asset_volume", "number_of_trades",
+        "taker_buy_base", "taker_buy_quote", "ignore",
+    ])
+
+    df["timestamp"] = pd.to_datetime(df["timestamp"], unit="ms")
+    df = df.set_index("timestamp").sort_index()
+
+    # Keep only OHLCV
+    df = df[["open", "high", "low", "close", "volume"]].astype(float)
+
+    if save:
+        safe_name = symbol.lower().replace("usdt", "_usdt")
+        path = DATA_DIR / "processed" / f"{safe_name}_{interval}.parquet"
+        PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
+        df.to_parquet(path, index=True)
+        logger.info(f"Saved {len(df):,} rows to {path}")
+
+    return df
