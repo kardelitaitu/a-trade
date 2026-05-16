@@ -1,11 +1,11 @@
 
 MONTE CARLO OPTIMIZATION
 --------------------------------------------------------------------------------
-  Generated:    2026-05-16 06:00:21 UTC
+  Generated:    2026-05-16 06:03:07 UTC
   Command:      monte_carlo_ma(close, (5, 20), (30, 60))
   Strategy:     MA Crossover
   Asset:        BTCUSDT
-  Data range:   2017-09-01 -> 2025-12-31
+  Data range:   
   Initial capt: $ 10,000.00
   Fee rate:     0.085%
   Hardware:     32 threads · 96 GB RAM · NVMe SSD
@@ -22,7 +22,7 @@ PARAMETER SWEEP ANALYSIS
                         Best value: 60            Sharpe avg:  -6.04  (±1.11)
 
 TOP 20 BY SHARPE
---------------------------------------------------------------------------------
+  -------------------------------------------------------------------------------------------------
     #  Parameters                                Init $    Final $   Sharpe     PF     DD%   Trades
   -------------------------------------------------------------------------------------------------
     1  fast=20, slow=59                        $ 10,000  $       0    -5.01   0.78  100.00%   18,471

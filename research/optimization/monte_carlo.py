@@ -303,10 +303,11 @@ def save_mc_report(
 
     # ── Top N Table ──
     lines.append(f"TOP {top_n} BY SHARPE")
-    lines.append(SEP)
     header = f"  {'#':>3}  {'Parameters':<38}  {'Init $':>8}  {'Final $':>9}  {'Sharpe':>7}  {'PF':>5}  {'DD%':>6}  {'Trades':>7}"
+    dash = "-" * (len(header) - 2)
+    lines.append(f"  {dash}")
     lines.append(header)
-    lines.append("  " + "-" * (len(header) - 2))
+    lines.append(f"  {dash}")
 
     for rank in range(min(top_n, result.n_combos)):
         ci = int(result.sorted_indices[rank])
