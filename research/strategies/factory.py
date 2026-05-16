@@ -56,6 +56,10 @@ def create_strategy(
         from research.strategies.volatility_squeeze import VolatilitySqueeze
         return VolatilitySqueeze(config)
 
+    elif strategy_type == "range_breakout":
+        from research.strategies.range_breakout import RangeBreakout
+        return RangeBreakout(config)
+
     else:
         available = ["ma_crossover", "donchian_breakout", "mean_reversion", "volatility_breakout"]
         raise ValueError(f"Unknown strategy '{strategy_type}'. Available: {available}")

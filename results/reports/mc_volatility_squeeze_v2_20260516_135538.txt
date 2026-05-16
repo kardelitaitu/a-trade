@@ -1,0 +1,174 @@
+
+MONTE CARLO OPTIMIZATION
+--------------------------------------------------------------------------------
+  Generated:    2026-05-16 13:55:38 UTC
+  Command:      
+  Strategy:     volatility_squeeze_v2
+  Asset:        BTCUSDT
+  Data range:   
+  Initial capt: $ 10,000.00
+  Fee rate:     0.010%
+  Hardware:     32 threads · 96 GB RAM · NVMe SSD
+  Combinations:    378
+
+TOP 20 BY SHARPE
+--------------------------------------------------------------------------------
+    #   Sharpe     PF     DD%  Trades   Return  Parameters                                    
+  --------------------------------------------------------------------------------------------
+    1     1.30    inf  -33.30%       2  +180.12%  bb_period=20, bb_std=2.7, keltner_period=...  
+    2     1.27    inf  -32.99%       1  +165.00%  bb_period=20, bb_std=2.7, keltner_period=...  
+    3     1.27    inf  -32.99%       1  +165.00%  bb_period=20, bb_std=2.8, keltner_period=...  
+    4     1.26    inf  -33.30%       2  +163.76%  bb_period=20, bb_std=2.6, keltner_period=...  
+    5     1.26    inf  -33.30%       2  +163.76%  bb_period=20, bb_std=2.8, keltner_period=...  
+    6     1.25   2.39  -44.74%      15  +169.16%  bb_period=30, bb_std=2.3, keltner_period=...  
+    7     1.12   4.08  -33.30%       3  +137.45%  bb_period=20, bb_std=2.4, keltner_period=...  
+    8     1.11   1.61  -35.19%      71  +135.70%  bb_period=20, bb_std=2.2, keltner_period=...  
+    9     1.09   1.74  -28.90%      80  +126.04%  bb_period=20, bb_std=2.7, keltner_period=...  
+   10     1.07   1.68  -38.54%      58  +117.64%  bb_period=20, bb_std=2.8, keltner_period=...  
+   11     1.01   1.52  -44.82%      29  +108.90%  bb_period=30, bb_std=2.2, keltner_period=...  
+   12     0.97    inf  -35.75%       1  +105.21%  bb_period=20, bb_std=2.4, keltner_period=...  
+   13     0.97    inf  -35.75%       1  +105.21%  bb_period=20, bb_std=2.5, keltner_period=...  
+   14     0.97    inf  -35.75%       1  +105.21%  bb_period=20, bb_std=2.5, keltner_period=...  
+   15     0.97   0.00  -35.76%       0  +105.16%  bb_period=20, bb_std=2.2, keltner_period=...  
+   16     0.97   0.00  -35.76%       0  +105.16%  bb_period=20, bb_std=2.3, keltner_period=...  
+   17     0.97   0.00  -35.76%       0  +105.16%  bb_period=20, bb_std=2.2, keltner_period=...  
+   18     0.97   0.00  -35.76%       0  +105.16%  bb_period=20, bb_std=2.3, keltner_period=...  
+   19     0.97   0.00  -35.76%       0  +105.16%  bb_period=20, bb_std=2.2, keltner_period=...  
+   20     0.97   0.00  -35.76%       0  +105.16%  bb_period=20, bb_std=2.2, keltner_period=...  
+
+TOP 20 BY DRAWDOWN
+--------------------------------------------------------------------------------
+    #   Sharpe     PF     DD%  Trades   Return  Parameters                                    
+  --------------------------------------------------------------------------------------------
+    1    -1.85   0.63  -87.60%     258  -87.27%  bb_period=20, bb_std=2.3, keltner_period=...  
+    2    -1.61   0.66  -86.31%     353  -84.19%  bb_period=20, bb_std=2.2, keltner_period=...  
+    3    -1.26   0.11  -84.25%       3  -77.85%  bb_period=20, bb_std=2.3, keltner_period=...  
+    4    -1.26   0.11  -84.21%       3  -77.79%  bb_period=20, bb_std=2.2, keltner_period=...  
+    5    -1.11   0.11  -81.66%       4  -74.25%  bb_period=20, bb_std=2.3, keltner_period=...  
+    6    -1.23   0.70  -80.14%     190  -76.24%  bb_period=20, bb_std=2.4, keltner_period=...  
+    7    -0.90    inf  -79.76%       1  -67.48%  bb_period=30, bb_std=2.7, keltner_period=...  
+    8    -0.90    inf  -79.71%       1  -67.45%  bb_period=25, bb_std=2.2, keltner_period=...  
+    9    -0.90    inf  -79.71%       2  -67.72%  bb_period=25, bb_std=2.5, keltner_period=...  
+   10    -0.89   0.00  -79.71%       0  -67.40%  bb_period=20, bb_std=2.7, keltner_period=...  
+   11    -0.89   0.00  -79.71%       0  -67.40%  bb_period=20, bb_std=2.8, keltner_period=...  
+   12    -0.89   0.00  -79.71%       0  -67.40%  bb_period=25, bb_std=2.3, keltner_period=...  
+   13    -0.89   0.00  -79.71%       0  -67.40%  bb_period=25, bb_std=2.6, keltner_period=...  
+   14    -0.89   0.00  -79.71%       0  -67.40%  bb_period=25, bb_std=2.7, keltner_period=...  
+   15    -0.89   0.00  -79.71%       0  -67.40%  bb_period=30, bb_std=2.5, keltner_period=...  
+   16    -0.89   0.00  -79.71%       0  -67.40%  bb_period=30, bb_std=2.7, keltner_period=...  
+   17    -0.89   0.00  -79.71%       0  -67.40%  bb_period=30, bb_std=2.8, keltner_period=...  
+   18    -0.89   0.00  -79.71%       0  -67.40%  bb_period=30, bb_std=2.8, keltner_period=...  
+   19    -0.89   0.00  -79.71%       0  -67.33%  bb_period=20, bb_std=2.2, keltner_period=...  
+   20    -0.89   0.00  -79.71%       0  -67.33%  bb_period=20, bb_std=2.3, keltner_period=...  
+
+BEST PARAMETERS
+----------------------------------------
+  bb_period: 20
+  bb_std: 2.7
+  keltner_period: 15
+  keltner_atr_mult: 0.8
+  Sharpe:        1.2995
+  Profit Factor: inf
+  Max DD:        -33.30%
+  Total Return:  +180.12%
+  Trades:        2
+
+REPRODUCIBILITY
+--------------------------------------------------------------------------------
+  parallel_monte_carlo(...)
+
+
+Parameter Sensitivity Analysis
+============================================================
+Total combos tested: 378
+
+How to read:
+  vs Sharpe:    Higher = better. Best value gives highest avg Sharpe.
+  vs Drawdown:  Lower (less negative) = better. Best value gives smallest loss.
+  vs Composite: Higher = better. Score = Sharpe / |DD|. Best balance between
+                maximizing return and minimizing drawdown.
+                Example: 0.020 > 0.009 means 2.2x better risk-adjusted return.
+
+bb_period:
+  vs Sharpe:
+    Per 1 unit:  Sharpe -0.0394
+    Best value:  20  (avg Sharpe +0.350)
+    Importance:  0.394  (spread)
+    Correlation: -0.324
+    Top values:  20 (Sharpe +0.35), 25 (Sharpe -0.02), 30 (Sharpe -0.04)
+  vs Drawdown:
+    Per 1 unit:  DD +3.2946
+    Best value:  20  (avg DD -45.24%)
+    Importance:  32.946  (spread)
+    Correlation: +0.460
+    Top values:  20 (DD -45.2%), 25 (DD -17.2%), 30 (DD -12.3%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score -0.0012
+    Best value:  20  (avg score 0.0115)
+    Top values:  20 (score 0.011), 25 (score -0.000), 30 (score -0.000)
+
+keltner_period:
+  vs Sharpe:
+    Per 1 unit:  Sharpe -0.0363
+    Best value:  15  (avg Sharpe +0.243)
+    Importance:  0.363  (spread)
+    Correlation: -0.299
+    Top values:  15 (Sharpe +0.24), 20 (Sharpe +0.16), 25 (Sharpe -0.12)
+  vs Drawdown:
+    Per 1 unit:  DD -0.9458
+    Best value:  25  (avg DD -29.58%)
+    Importance:  9.458  (spread)
+    Correlation: -0.132
+    Top values:  25 (DD -29.6%), 20 (DD -25.0%), 15 (DD -20.1%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score -0.0008
+    Best value:  15  (avg score 0.0070)
+    Top values:  15 (score 0.007), 20 (score 0.005), 25 (score -0.001)
+
+keltner_atr_mult:
+  vs Sharpe:
+    Per 1 unit:  Sharpe -0.3668
+    Best value:  0.4  (avg Sharpe +0.215)
+    Importance:  0.217  (spread)
+    Correlation: -0.146
+    Top values:  0.4 (Sharpe +0.22), 0.5 (Sharpe +0.19), 0.6 (Sharpe +0.06)
+  vs Drawdown:
+    Per 1 unit:  DD -80.1582
+    Best value:  1.0  (avg DD -54.95%)
+    Importance:  47.002  (spread)
+    Correlation: -0.541
+    Top values:  1.0 (DD -54.9%), 0.8 (DD -35.5%), 0.7 (DD -22.2%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score -0.0070
+    Best value:  0.4  (avg score 0.0060)
+    Top values:  0.4 (score 0.006), 0.5 (score 0.006), 0.6 (score 0.003)
+
+bb_std:
+  vs Sharpe:
+    Per 1 unit:  Sharpe +0.2928
+    Best value:  2.8  (avg Sharpe +0.155)
+    Importance:  0.174  (spread)
+    Correlation: +0.118
+    Top values:  2.8 (Sharpe +0.16), 2.6 (Sharpe +0.15), 2.7 (Sharpe +0.15)
+  vs Drawdown:
+    Per 1 unit:  DD +22.8071
+    Best value:  2.2  (avg DD -33.33%)
+    Importance:  13.807  (spread)
+    Correlation: +0.156
+    Top values:  2.2 (DD -33.3%), 2.3 (DD -29.7%), 2.4 (DD -25.5%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score +0.0058
+    Best value:  2.7  (avg score 0.0051)
+    Top values:  2.7 (score 0.005), 2.8 (score 0.005), 2.6 (score 0.004)
+
+BEST COMBO FOUND
+----------------------------------------
+  bb_period: 20
+  bb_std: 2.7
+  keltner_period: 15
+  keltner_atr_mult: 0.8
+  Sharpe:        1.2995
+  Profit Factor: inf
+  Max DD:        -33.30%
+  Total Return:  +180.12%
+  Trades:        2

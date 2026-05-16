@@ -1,0 +1,30 @@
+
+MONTE CARLO OPTIMIZATION
+--------------------------------------------------------------------------------
+  Generated:    2026-05-16 13:35:50 UTC
+  Command:      v2 sweep: bb_period 20/25/30, bb_std 2.2-2.8, keltner_period 15/20/25, keltner_mult 0.4-1.0
+  Strategy:     volatility_squeeze_v2
+  Asset:        BTCUSDT
+  Data range:   
+  Initial capt: $ 10,000.00
+  Fee rate:     0.010%
+  Hardware:     32 threads · 96 GB RAM · NVMe SSD
+  Combinations:      0
+
+TOP 20 BY SHARPE
+--------------------------------------------------------------------------------
+    #   Sharpe     PF     DD%  Trades   Return  Parameters                                    
+  --------------------------------------------------------------------------------------------
+
+TOP 20 BY DRAWDOWN
+--------------------------------------------------------------------------------
+    #   Sharpe     PF     DD%  Trades   Return  Parameters                                    
+  --------------------------------------------------------------------------------------------
+
+
+REPRODUCIBILITY
+--------------------------------------------------------------------------------
+  v2 sweep: bb_period 20/25/30, bb_std 2.2-2.8, keltner_period 15/20/25, keltner_mult 0.4-1.0
+
+
+No results.
