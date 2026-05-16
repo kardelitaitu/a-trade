@@ -15,10 +15,12 @@ from __future__ import annotations
 
 from typing import Any
 
+import numpy as np
 import pandas as pd
 
 from research.strategies.base import BaseStrategy
 from research.features.indicators import atr
+from research.strategies._numba_ops import donchian_breakout_numba
 
 
 class DonchianBreakout(BaseStrategy):
@@ -76,40 +78,17 @@ class DonchianBreakout(BaseStrategy):
         long_exit = close < exit_lower.shift(1)
         short_exit = close > exit_upper.shift(1)
 
-        # Build position using state machine
-        position = pd.Series(0, index=data.index, dtype=float)
-        in_long = False
-        in_short = False
+        # Build position using numba-accelerated state machine
+        close_arr = close.values.astype(np.float64)
+        upper_arr = upper.shift(1).fillna(0).values.astype(np.float64)
+        lower_arr = lower.shift(1).fillna(0).values.astype(np.float64)
+        exit_upper_arr = exit_upper.shift(1).fillna(0).values.astype(np.float64)
+        exit_lower_arr = exit_lower.shift(1).fillna(0).values.astype(np.float64)
 
-        # Convert to numpy for speed
-        close_arr = close.values
-        upper_arr = upper.shift(1).values
-        lower_arr = lower.shift(1).values
-        exit_upper_arr = exit_upper.shift(1).values
-        exit_lower_arr = exit_lower.shift(1).values
-
-        for i in range(len(data)):
-            if in_long:
-                if close_arr[i] < exit_lower_arr[i]:
-                    in_long = False
-                else:
-                    position.iloc[i] = 1
-            elif in_short:
-                if close_arr[i] > exit_upper_arr[i]:
-                    in_short = False
-                else:
-                    position.iloc[i] = -1
-
-            # Check entries (only if no position)
-            if not (in_long or in_short):
-                if close_arr[i] > upper_arr[i] and not pd.isna(upper_arr[i]):
-                    in_long = True
-                    position.iloc[i] = 1
-                elif close_arr[i] < lower_arr[i] and not pd.isna(lower_arr[i]):
-                    in_short = True
-                    position.iloc[i] = -1
-
-        signals = position
+        position_arr = donchian_breakout_numba(
+            close_arr, upper_arr, lower_arr, exit_upper_arr, exit_lower_arr,
+        )
+        signals = pd.Series(position_arr, index=data.index)
 
         # Apply volume filter
         vol_pct = self.config.get("filter_volume_pct")

@@ -14,10 +14,15 @@ from __future__ import annotations
 
 from typing import Any
 
+import numpy as np
 import pandas as pd
 
 from research.strategies.base import BaseStrategy
 from research.features.indicators import rsi, bollinger_bands
+from research.strategies._numba_ops import (
+    mean_reversion_rsi_numba,
+    mean_reversion_bollinger_numba,
+)
 
 
 class MeanReversion(BaseStrategy):
@@ -81,78 +86,26 @@ class MeanReversion(BaseStrategy):
         return signals
 
     def _rsi_signals(self, close: pd.Series) -> pd.Series:
-        rsi_period = self.config["rsi_period"]
         oversold = self.config["rsi_oversold"]
         overbought = self.config["rsi_overbought"]
+        rsi_val = rsi(close, self.config["rsi_period"])
 
-        rsi_val = rsi(close, rsi_period)
-
-        signals = pd.Series(0, index=close.index, dtype=float)
-        in_long = False
-        in_short = False
-
-        for i in range(len(close)):
-            r = rsi_val.iloc[i]
-            if pd.isna(r):
-                continue
-
-            if in_long:
-                if r >= 50:
-                    in_long = False
-                else:
-                    signals.iloc[i] = 1
-            elif in_short:
-                if r <= 50:
-                    in_short = False
-                else:
-                    signals.iloc[i] = -1
-
-            if not (in_long or in_short):
-                if r < oversold:
-                    in_long = True
-                    signals.iloc[i] = 1
-                elif r > overbought:
-                    in_short = True
-                    signals.iloc[i] = -1
-
-        return signals
+        arr = mean_reversion_rsi_numba(
+            rsi_val.values.astype(np.float64),
+            float(oversold),
+            float(overbought),
+        )
+        return pd.Series(arr, index=close.index)
 
     def _bollinger_signals(self, close: pd.Series) -> pd.Series:
         period = self.config["bb_period"]
         std = self.config["bb_std"]
-
         mid, upper, lower = bollinger_bands(close, period, std)
 
-        signals = pd.Series(0, index=close.index, dtype=float)
-        in_long = False
-        in_short = False
-
-        for i in range(len(close)):
-            c = close.iloc[i]
-            u = upper.iloc[i]
-            l = lower.iloc[i]
-            m = mid.iloc[i]
-
-            if pd.isna(m):
-                continue
-
-            if in_long:
-                if c >= m:
-                    in_long = False
-                else:
-                    signals.iloc[i] = 1
-            elif in_short:
-                if c <= m:
-                    in_short = False
-                else:
-                    signals.iloc[i] = -1
-
-            if not (in_long or in_short):
-                if c < l:
-                    in_long = True
-                    signals.iloc[i] = 1
-                elif c > u:
-                    in_short = True
-                    signals.iloc[i] = -1
-
-        return signals
+        arr = mean_reversion_bollinger_numba(
+            close.values.astype(np.float64),
+            upper.values.astype(np.float64),
+            lower.values.astype(np.float64),
+            mid.values.astype(np.float64),
+        )
+        return pd.Series(arr, index=close.index)

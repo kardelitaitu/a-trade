@@ -13,10 +13,12 @@ from __future__ import annotations
 
 from typing import Any
 
+import numpy as np
 import pandas as pd
 
 from research.strategies.base import BaseStrategy
 from research.features.indicators import atr
+from research.strategies._numba_ops import volatility_breakout_numba
 
 
 class VolatilityBreakout(BaseStrategy):
@@ -63,42 +65,14 @@ class VolatilityBreakout(BaseStrategy):
         atr_val = atr(data["high"], data["low"], close, atr_period)
         atr_mean = atr_val.rolling(lookback, min_periods=lookback // 2).mean()
 
-        # Volatility expansion signal
-        vol_expansion = atr_val > mult * atr_mean
-
-        # Direction of price move
-        price_change = close.diff()
-        direction = price_change.apply(lambda x: 1 if x > 0 else (-1 if x < 0 else 0))
-
-        signals = pd.Series(0, index=data.index, dtype=float)
-        position = 0
-        hold_count = 0
-
-        for i in range(len(data)):
-            if pd.isna(atr_val.iloc[i]) or pd.isna(atr_mean.iloc[i]):
-                continue
-
-            if position != 0:
-                hold_count += 1
-
-                # Exit when volatility normalizes (ATR back below mean)
-                # or minimum hold reached and volatility contracting
-                if not vol_expansion.iloc[i] and hold_count >= min_hold:
-                    position = 0
-                    hold_count = 0
-                else:
-                    signals.iloc[i] = position
-
-            # Entry: volatility expansion + directional move
-            if position == 0 and vol_expansion.iloc[i] and not pd.isna(price_change.iloc[i]):
-                if price_change.iloc[i] > 0:
-                    position = 1
-                elif price_change.iloc[i] < 0:
-                    position = -1
-                hold_count = 0
-                signals.iloc[i] = position
-
-        # Volume filter
+        position_arr = volatility_breakout_numba(
+            close.values.astype(np.float64),
+            atr_val.values.astype(np.float64),
+            atr_mean.values.astype(np.float64),
+            float(mult),
+            int(min_hold),
+        )
+        signals = pd.Series(position_arr, index=data.index)
         vol_pct = self.config.get("filter_volume_pct")
         if vol_pct is not None:
             vol_threshold = data["volume"].quantile(vol_pct)
