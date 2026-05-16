@@ -204,7 +204,7 @@ def save_parallel_results(
     strategy_name: str,
     output_dir: str | Path = "results/reports",
 ) -> Path:
-    """Save full parallel MC results to a report file."""
+    """Save full parallel MC results to a report file with sensitivity analysis."""
     import datetime
     from pathlib import Path
 
@@ -215,5 +215,14 @@ def save_parallel_results(
     path = output_dir / f"mc_{safe}_{now}.txt"
 
     content = format_parallel_results(results, top_n=len(results))
+
+    # Append sensitivity analysis
+    from research.optimization.sensitivity import analyze_sensitivity
+    try:
+        analysis = analyze_sensitivity(results)
+        content += "\n\n" + analysis["recommendations"]
+    except Exception as e:
+        content += f"\n\nSensitivity analysis unavailable: {e}"
+
     path.write_text(content)
     return path
