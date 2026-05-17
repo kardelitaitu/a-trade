@@ -1,0 +1,148 @@
+
+MONTE CARLO OPTIMIZATION
+--------------------------------------------------------------------------------
+  Generated:    2026-05-17 05:40:37 UTC
+  Command:      monte_carlo_ma(close, (5, 50), (20, 100), step=1)
+  Strategy:     MA Crossover
+  Asset:        BTCUSDT
+  Data range:   periods 5-50 x 20-100
+  Initial capt: $ 10,000.00
+  Fee rate:     0.011%
+  Hardware:     32 threads · 96 GB RAM · NVMe SSD
+  Combinations:  3,230 in 13.6s (238 ± combo/s)
+
+PARAMETER SWEEP ANALYSIS
+--------------------------------------------------------------------------------
+  fast                  5 - 50  (step 1)
+                        Mean: 25.6      Std Dev: 12.9    
+                        Best value: 50            Sharpe avg:  -0.95  (±0.38)
+
+  slow                  20 - 100  (step 1)
+                        Mean: 64.6      Std Dev: 21.5    
+                        Best value: 100           Sharpe avg:  -0.45  (±0.14)
+
+TOP 20 BY SHARPE
+  -----------------------------------------------------------------------------------------------
+    #   Sharpe     PF     DD%   Trades    Init $    Final $  Parameters                          
+  -----------------------------------------------------------------------------------------------
+    1    -0.24   0.98   99.26%   12,141  $ 10,000  $     166  fast=24, slow=99                    
+    2    -0.25   0.97   99.35%   12,515  $ 10,000  $     152  fast=22, slow=99                    
+    3    -0.27   0.96   99.22%   12,831  $ 10,000  $     141  fast=21, slow=98                    
+    4    -0.27   0.96   99.46%   11,935  $ 10,000  $     139  fast=25, slow=100                   
+    5    -0.28   0.92   99.09%   13,575  $ 10,000  $     131  fast=22, slow=88                    
+    6    -0.28   0.97   99.38%   12,653  $ 10,000  $     128  fast=22, slow=97                    
+    7    -0.28   0.96   99.48%   12,900  $ 10,000  $     127  fast=20, slow=100                   
+    8    -0.28   0.97   99.42%   12,389  $ 10,000  $     126  fast=23, slow=98                    
+    9    -0.28   0.97   99.38%   12,579  $ 10,000  $     126  fast=22, slow=98                    
+   10    -0.28   0.96   99.43%   12,311  $ 10,000  $     124  fast=23, slow=99                    
+   11    -0.29   0.96   99.44%   12,115  $ 10,000  $     123  fast=24, slow=100                   
+   12    -0.29   0.96   99.39%   13,009  $ 10,000  $     120  fast=20, slow=99                    
+   13    -0.29   0.96   99.44%   12,497  $ 10,000  $     118  fast=23, slow=97                    
+   14    -0.30   0.96   99.54%   12,713  $ 10,000  $     116  fast=23, slow=95                    
+   15    -0.30   0.96   99.48%   12,573  $ 10,000  $     115  fast=23, slow=96                    
+   16    -0.30   0.95   99.34%   13,242  $ 10,000  $     115  fast=19, slow=98                    
+   17    -0.30   0.96   99.47%   12,199  $ 10,000  $     110  fast=24, slow=98                    
+   18    -0.30   0.91   99.33%   13,227  $ 10,000  $     109  fast=24, slow=88                    
+   19    -0.31   0.96   99.49%   12,681  $ 10,000  $     108  fast=21, slow=100                   
+   20    -0.31   0.96   99.46%   12,245  $ 10,000  $     107  fast=23, slow=100                   
+
+TOP 20 BY DRAWDOWN
+  -----------------------------------------------------------------------------------------------
+    #   Sharpe     PF     DD%   Trades    Init $    Final $  Parameters                          
+  -----------------------------------------------------------------------------------------------
+    1    -0.28   0.92   99.09%   13,575  $ 10,000  $     131  fast=22, slow=88                    
+    2    -0.27   0.96   99.22%   12,831  $ 10,000  $     141  fast=21, slow=98                    
+    3    -0.31   0.90   99.25%   13,687  $ 10,000  $     105  fast=22, slow=87                    
+    4    -0.24   0.98   99.26%   12,141  $ 10,000  $     166  fast=24, slow=99                    
+    5    -0.30   0.91   99.33%   13,227  $ 10,000  $     109  fast=24, slow=88                    
+    6    -0.33   0.91   99.34%   14,059  $ 10,000  $      92  fast=21, slow=85                    
+    7    -0.30   0.95   99.34%   13,242  $ 10,000  $     115  fast=19, slow=98                    
+    8    -0.25   0.97   99.35%   12,515  $ 10,000  $     152  fast=22, slow=99                    
+    9    -0.28   0.97   99.38%   12,653  $ 10,000  $     128  fast=22, slow=97                    
+   10    -0.28   0.97   99.38%   12,579  $ 10,000  $     126  fast=22, slow=98                    
+   11    -0.29   0.96   99.39%   13,009  $ 10,000  $     120  fast=20, slow=99                    
+   12    -0.33   0.91   99.39%   13,111  $ 10,000  $      94  fast=24, slow=89                    
+   13    -0.34   0.90   99.40%   13,369  $ 10,000  $      86  fast=24, slow=87                    
+   14    -0.33   0.92   99.40%   13,417  $ 10,000  $      92  fast=22, slow=89                    
+   15    -0.28   0.97   99.42%   12,389  $ 10,000  $     126  fast=23, slow=98                    
+   16    -0.36   0.91   99.42%   17,490  $ 10,000  $      76  fast=14, slow=76                    
+   17    -0.31   0.96   99.43%   12,937  $ 10,000  $     105  fast=21, slow=97                    
+   18    -0.28   0.96   99.43%   12,311  $ 10,000  $     124  fast=23, slow=99                    
+   19    -0.32   0.94   99.43%   13,134  $ 10,000  $     100  fast=19, slow=100                   
+   20    -0.31   0.94   99.43%   13,361  $ 10,000  $     103  fast=19, slow=97                    
+
+BEST PARAMETERS (Rank 1)
+--------------------------------------------------------------------------------
+  fast                  24
+  slow                  99
+  ----------------------------------------
+  Initial Equity        $   10,000.00
+  Final Equity          $      166.47
+  Total Return               -98.34%
+  Sharpe Ratio                  -0.2400
+  Profit Factor                  0.9751
+  Max Drawdown                  99.26%
+  Total Trades                 12,141.0
+  Win Rate                        31.5%
+
+REPRODUCIBILITY
+--------------------------------------------------------------------------------
+  monte_carlo_ma(close, (5, 50), (20, 100), step=1)
+
+
+Parameter Sensitivity Analysis
+============================================================
+Total combos tested: 3230
+
+How to read:
+  vs Sharpe:    Higher = better. Best value gives highest avg Sharpe.
+  vs Drawdown:  Lower (less negative) = better. Best value gives smallest loss.
+  vs Composite: Higher = better. Score = Sharpe / |DD|. Best balance between
+                maximizing return and minimizing drawdown.
+                Example: 0.020 > 0.009 means 2.2x better risk-adjusted return.
+
+slow:
+  vs Sharpe:
+    Per 1 unit:  Sharpe +0.0255
+    Best value:  100  (avg Sharpe -0.455)
+    Importance:  2.513  (spread)
+    Correlation: +0.797
+    Top values:  100 (Sharpe -0.45), 99 (Sharpe -0.47), 98 (Sharpe -0.50)
+  vs Drawdown:
+    Per 1 unit:  DD -0.0028
+    Best value:  100  (avg DD 99.74%)
+    Importance:  0.257  (spread)
+    Correlation: -0.573
+    Top values:  100 (DD 99.7%), 99 (DD 99.8%), 98 (DD 99.8%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score +0.0003
+    Best value:  100  (avg score -0.0046)
+    Top values:  100 (score -0.005), 99 (score -0.005), 98 (score -0.005)
+
+fast:
+  vs Sharpe:
+    Per 1 unit:  Sharpe +0.0028
+    Best value:  50  (avg Sharpe -0.951)
+    Importance:  0.445  (spread)
+    Correlation: +0.053
+    Top values:  50 (Sharpe -0.95), 49 (Sharpe -0.96), 46 (Sharpe -0.97)
+  vs Drawdown:
+    Per 1 unit:  DD +0.0009
+    Best value:  24  (avg DD 99.86%)
+    Importance:  0.140  (spread)
+    Correlation: +0.114
+    Top values:  24 (DD 99.9%), 22 (DD 99.9%), 21 (DD 99.9%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score +0.0000
+    Best value:  50  (avg score -0.0095)
+    Top values:  50 (score -0.010), 49 (score -0.010), 46 (score -0.010)
+
+BEST COMBO FOUND
+----------------------------------------
+  fast: 5
+  slow: 20
+  Sharpe:        -2.4013
+  Profit Factor: 0.9561
+  Max DD:        100.00%
+  Total Return:  -100.00%
+  Trades:        59093

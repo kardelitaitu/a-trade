@@ -1,0 +1,196 @@
+
+MONTE CARLO OPTIMIZATION
+--------------------------------------------------------------------------------
+  Generated:    2026-05-17 05:40:54 UTC
+  Command:      monte_carlo_ma_sltp(close, fast=(5, 30), slow=(20, 60), sl=(0.01, 0.05, 0.01), tp=(0.02, 0.1, 0.02))
+  Strategy:     MA Crossover + SL/TP
+  Asset:        BTCUSDT
+  Data range:   fast 5-30, slow 20-60, sl/tp sweep
+  Initial capt: $ 10,000.00
+  Fee rate:     0.011%
+  Hardware:     32 threads · 96 GB RAM · NVMe SSD
+  Combinations:  7,000 in 14.4s (485 ± combo/s)
+
+PARAMETER SWEEP ANALYSIS
+--------------------------------------------------------------------------------
+  fast                  5 - 30  (step 1)
+                        Mean: 16.9      Std Dev: 7.3     
+                        Best value: 10            Sharpe avg:  -1.57  (±0.70)
+
+  slow                  20 - 60  (step 1)
+                        Mean: 41.1      Std Dev: 11.4    
+                        Best value: 60            Sharpe avg:  -0.88  (±0.46)
+
+  sl_pct                1.0 - 5.0  (step 4.0)
+                        Mean: 1.6       Std Dev: 1.4     
+                        Best value: 5.0           Sharpe avg:  -1.25  (±0.92)
+
+  tp_pct                2.0 - 10.0  (step 8.0)
+                        Mean: 5.4       Std Dev: 4.0     
+                        Best value: 10.0          Sharpe avg:  -1.40  (±0.95)
+
+TOP 20 BY SHARPE
+  -----------------------------------------------------------------------------------------------
+    #   Sharpe     PF     DD%   Trades    Init $    Final $  Parameters                          
+  -----------------------------------------------------------------------------------------------
+    1    -0.14   0.97   98.28%   20,912  $ 10,000  $     502  fast=15, slow=55, sl_pct=5.0, tp_pct=10.0
+    2    -0.15   0.99   96.00%   17,441  $ 10,000  $   1,011  fast=24, slow=60, sl_pct=1.0, tp_pct=10.0
+    3    -0.15   0.99   96.00%   17,441  $ 10,000  $   1,011  fast=24, slow=60, sl_pct=1.0, tp_pct=10.0
+    4    -0.16   0.98   96.68%   17,302  $ 10,000  $     944  fast=25, slow=60, sl_pct=1.0, tp_pct=10.0
+    5    -0.16   0.98   96.68%   17,302  $ 10,000  $     944  fast=25, slow=60, sl_pct=1.0, tp_pct=10.0
+    6    -0.18   0.96   98.44%   20,233  $ 10,000  $     397  fast=15, slow=58, sl_pct=5.0, tp_pct=10.0
+    7    -0.21   0.96   98.56%   21,291  $ 10,000  $     343  fast=12, slow=60, sl_pct=5.0, tp_pct=10.0
+    8    -0.21   0.96   98.71%   20,674  $ 10,000  $     335  fast=15, slow=56, sl_pct=5.0, tp_pct=10.0
+    9    -0.21   0.96   98.64%   17,623  $ 10,000  $     347  fast=24, slow=60, sl_pct=5.0, tp_pct=10.0
+   10    -0.22   0.95   98.40%   23,093  $ 10,000  $     310  fast=12, slow=53, sl_pct=5.0, tp_pct=10.0
+   11    -0.22   0.99   97.59%   17,573  $ 10,000  $     716  fast=25, slow=59, sl_pct=1.0, tp_pct=10.0
+   12    -0.22   0.99   97.59%   17,573  $ 10,000  $     716  fast=25, slow=59, sl_pct=1.0, tp_pct=10.0
+   13    -0.22   0.98   97.73%   17,494  $ 10,000  $     715  fast=26, slow=59, sl_pct=1.0, tp_pct=10.0
+   14    -0.22   0.98   97.73%   17,494  $ 10,000  $     715  fast=26, slow=59, sl_pct=1.0, tp_pct=10.0
+   15    -0.22   0.96   98.54%   20,151  $ 10,000  $     316  fast=16, slow=57, sl_pct=5.0, tp_pct=10.0
+   16    -0.23   0.96   98.66%   20,655  $ 10,000  $     303  fast=16, slow=55, sl_pct=5.0, tp_pct=10.0
+   17    -0.23   0.95   98.64%   20,324  $ 10,000  $     307  fast=16, slow=56, sl_pct=5.0, tp_pct=10.0
+   18    -0.23   0.96   98.74%   20,479  $ 10,000  $     296  fast=15, slow=57, sl_pct=5.0, tp_pct=10.0
+   19    -0.23   0.95   98.66%   22,809  $ 10,000  $     290  fast=12, slow=54, sl_pct=5.0, tp_pct=10.0
+   20    -0.23   0.97   96.02%   20,766  $ 10,000  $     582  fast=13, slow=58, sl_pct=1.0, tp_pct=10.0
+
+TOP 20 BY DRAWDOWN
+  -----------------------------------------------------------------------------------------------
+    #   Sharpe     PF     DD%   Trades    Init $    Final $  Parameters                          
+  -----------------------------------------------------------------------------------------------
+    1    -0.15   0.99   96.00%   17,441  $ 10,000  $   1,011  fast=24, slow=60, sl_pct=1.0, tp_pct=10.0
+    2    -0.15   0.99   96.00%   17,441  $ 10,000  $   1,011  fast=24, slow=60, sl_pct=1.0, tp_pct=10.0
+    3    -0.23   0.97   96.02%   20,766  $ 10,000  $     582  fast=13, slow=58, sl_pct=1.0, tp_pct=10.0
+    4    -0.23   0.97   96.02%   20,766  $ 10,000  $     582  fast=13, slow=58, sl_pct=1.0, tp_pct=10.0
+    5    -0.16   0.98   96.68%   17,302  $ 10,000  $     944  fast=25, slow=60, sl_pct=1.0, tp_pct=10.0
+    6    -0.16   0.98   96.68%   17,302  $ 10,000  $     944  fast=25, slow=60, sl_pct=1.0, tp_pct=10.0
+    7    -0.30   0.95   96.86%   20,394  $ 10,000  $     412  fast=13, slow=60, sl_pct=1.0, tp_pct=10.0
+    8    -0.30   0.95   96.86%   20,394  $ 10,000  $     412  fast=13, slow=60, sl_pct=1.0, tp_pct=10.0
+    9    -0.27   0.97   96.90%   19,856  $ 10,000  $     489  fast=14, slow=60, sl_pct=1.0, tp_pct=10.0
+   10    -0.27   0.97   96.90%   19,856  $ 10,000  $     489  fast=14, slow=60, sl_pct=1.0, tp_pct=10.0
+   11    -0.32   0.95   96.98%   20,551  $ 10,000  $     375  fast=13, slow=59, sl_pct=1.0, tp_pct=10.0
+   12    -0.32   0.95   96.98%   20,551  $ 10,000  $     375  fast=13, slow=59, sl_pct=1.0, tp_pct=10.0
+   13    -0.28   0.97   97.05%   18,080  $ 10,000  $     527  fast=26, slow=57, sl_pct=1.0, tp_pct=10.0
+   14    -0.28   0.97   97.05%   18,080  $ 10,000  $     527  fast=26, slow=57, sl_pct=1.0, tp_pct=10.0
+   15    -0.28   0.98   97.29%   17,061  $ 10,000  $     516  fast=28, slow=60, sl_pct=1.0, tp_pct=10.0
+   16    -0.28   0.98   97.29%   17,061  $ 10,000  $     516  fast=28, slow=60, sl_pct=1.0, tp_pct=10.0
+   17    -0.24   0.99   97.35%   17,655  $ 10,000  $     616  fast=24, slow=59, sl_pct=1.0, tp_pct=10.0
+   18    -0.24   0.99   97.35%   17,655  $ 10,000  $     616  fast=24, slow=59, sl_pct=1.0, tp_pct=10.0
+   19    -0.28   0.98   97.46%   18,096  $ 10,000  $     495  fast=25, slow=57, sl_pct=1.0, tp_pct=10.0
+   20    -0.28   0.98   97.46%   18,096  $ 10,000  $     495  fast=25, slow=57, sl_pct=1.0, tp_pct=10.0
+
+BEST PARAMETERS (Rank 1)
+--------------------------------------------------------------------------------
+  fast                  15
+  slow                  55
+  sl_pct                5.0
+  tp_pct                10.0
+  ----------------------------------------
+  Initial Equity        $   10,000.00
+  Final Equity          $      502.26
+  Total Return               -94.98%
+  Sharpe Ratio                  -0.1384
+  Profit Factor                  0.9662
+  Max Drawdown                  98.28%
+  Total Trades                 20,912.0
+  Win Rate                        32.7%
+
+REPRODUCIBILITY
+--------------------------------------------------------------------------------
+  monte_carlo_ma_sltp(close, fast=(5, 30), slow=(20, 60), sl=(0.01, 0.05, 0.01), tp=(0.02, 0.1, 0.02))
+
+
+Parameter Sensitivity Analysis
+============================================================
+Total combos tested: 7000
+
+How to read:
+  vs Sharpe:    Higher = better. Best value gives highest avg Sharpe.
+  vs Drawdown:  Lower (less negative) = better. Best value gives smallest loss.
+  vs Composite: Higher = better. Score = Sharpe / |DD|. Best balance between
+                maximizing return and minimizing drawdown.
+                Example: 0.020 > 0.009 means 2.2x better risk-adjusted return.
+
+slow:
+  vs Sharpe:
+    Per 1 unit:  Sharpe +0.0721
+    Best value:  60  (avg Sharpe -0.877)
+    Importance:  2.593  (spread)
+    Correlation: +0.785
+    Top values:  60 (Sharpe -0.88), 57 (Sharpe -0.92), 59 (Sharpe -0.92)
+  vs Drawdown:
+    Per 1 unit:  DD -0.0190
+    Best value:  60  (avg DD 99.15%)
+    Importance:  0.848  (spread)
+    Correlation: -0.599
+    Top values:  60 (DD 99.2%), 59 (DD 99.3%), 57 (DD 99.3%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score +0.0007
+    Best value:  60  (avg score -0.0088)
+    Top values:  60 (score -0.009), 57 (score -0.009), 59 (score -0.009)
+
+tp_pct:
+  vs Sharpe:
+    Per 1 unit:  Sharpe +0.0909
+    Best value:  10.0  (avg Sharpe -1.403)
+    Importance:  0.728  (spread)
+    Correlation: +0.345
+    Top values:  10.0 (Sharpe -1.40), 2.0 (Sharpe -2.13)
+  vs Drawdown:
+    Per 1 unit:  DD -0.0187
+    Best value:  10.0  (avg DD 99.73%)
+    Importance:  0.150  (spread)
+    Correlation: -0.205
+    Top values:  10.0 (DD 99.7%), 2.0 (DD 99.9%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score +0.0009
+    Best value:  10.0  (avg score -0.0140)
+    Top values:  10.0 (score -0.014), 2.0 (score -0.021)
+
+sl_pct:
+  vs Sharpe:
+    Per 1 unit:  Sharpe +0.1657
+    Best value:  5.0  (avg Sharpe -1.250)
+    Importance:  0.663  (spread)
+    Correlation: +0.222
+    Top values:  5.0 (Sharpe -1.25), 1.0 (Sharpe -1.91)
+  vs Drawdown:
+    Per 1 unit:  DD -0.0150
+    Best value:  5.0  (avg DD 99.76%)
+    Importance:  0.060  (spread)
+    Correlation: -0.058
+    Top values:  5.0 (DD 99.8%), 1.0 (DD 99.8%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score +0.0017
+    Best value:  5.0  (avg score -0.0125)
+    Top values:  5.0 (score -0.013), 1.0 (score -0.019)
+
+fast:
+  vs Sharpe:
+    Per 1 unit:  Sharpe -0.0093
+    Best value:  10  (avg Sharpe -1.568)
+    Importance:  0.531  (spread)
+    Correlation: -0.065
+    Top values:  10 (Sharpe -1.57), 9 (Sharpe -1.58), 11 (Sharpe -1.61)
+  vs Drawdown:
+    Per 1 unit:  DD -0.0057
+    Best value:  13  (avg DD 99.70%)
+    Importance:  0.285  (spread)
+    Correlation: -0.115
+    Top values:  13 (DD 99.7%), 25 (DD 99.7%), 24 (DD 99.7%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score -0.0001
+    Best value:  10  (avg score -0.0157)
+    Top values:  10 (score -0.016), 9 (score -0.016), 11 (score -0.016)
+
+BEST COMBO FOUND
+----------------------------------------
+  fast: 5
+  slow: 20
+  sl_pct: 1.0
+  tp_pct: 2.0
+  Sharpe:        -3.0597
+  Profit Factor: 0.9813
+  Max DD:        100.00%
+  Total Return:  -100.00%
+  Trades:        58215

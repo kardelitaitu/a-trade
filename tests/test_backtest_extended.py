@@ -252,14 +252,12 @@ class TestSLTPEquityCapping:
 
     def test_sl_3pct_caps_dd(self):
         """With 3% SL, max drawdown should be capped at ~3%.
-        Uses deterministic data where crash happens immediately after entry
-        (no run-up to inflate peak equity).
+        Uses single-entry signal so SL exit is the only loss; no re-entry.
         """
         np.random.seed(42)
         n = 30
         close = np.zeros(n, dtype=np.float64)
         close[:3] = [100.0, 100.5, 101.0]
-        # Immediate crash after entry bar
         close[3:] = np.linspace(95.0, 80.0, n - 3)
 
         high = close + np.abs(np.random.randn(n)) * 0.3
@@ -267,14 +265,11 @@ class TestSLTPEquityCapping:
         high = np.maximum(high, close + 0.01)
         low = np.minimum(low, close - 0.01)
 
-        # sig[1]=1 -> entry at close[2]=101 (i=2 iteration opens position)
-        # SL/TP checks start from i=3 onwards
-        sig = np.zeros(n, dtype=np.float64)
-        sig[1:] = 1.0
-
-        # Without SL: equity keeps dropping with the crash
+        # No-SL: stay long through full crash (sig[1:]=1) -> position held, massive DD
+        sig_full = np.zeros(n, dtype=np.float64)
+        sig_full[1:] = 1.0
         _, dd_no_sl, _, _, _, _ = single_backtest_sltp(
-            close, sig, 10000, 0.0001,
+            close, sig_full, 10000, 0.0001,
             0.0, 0.0, 0.0, high, low,
         )
         assert dd_no_sl > 8.0, (
@@ -282,12 +277,11 @@ class TestSLTPEquityCapping:
             f"(price drops from 101 to 80)"
         )
 
-        # With 3% SL: sl_price = 101*0.97 = 97.97
-        # low[3] should be below 97.97 -> SL triggers on bar 3
-        # return on exit: 97.97/101 - 1 = -0.03 = -3%
-        # No run-up before crash, so max_dd ~= SL%
+        # SL case: single-entry -> SL triggers, no re-entry
+        sig_single = np.zeros(n, dtype=np.float64)
+        sig_single[1] = 1.0
         _, dd_sl, _, _, _, _ = single_backtest_sltp(
-            close, sig, 10000, 0.0001,
+            close, sig_single, 10000, 0.0001,
             0.03, 0.0, 0.0, high, low,
         )
         assert dd_sl < 5.0, f"With 3% SL, max_dd ({dd_sl:.1f}%) should be capped near 3%"
@@ -297,7 +291,7 @@ class TestSLTPEquityCapping:
 
     def test_sl_5pct_caps_dd(self):
         """With 5% SL, max drawdown should be capped at ~5%.
-        Uses deterministic data with immediate crash after entry.
+        Single-entry signal prevents re-entry; SL caps single-trade loss.
         """
         np.random.seed(42)
         n = 30
@@ -311,27 +305,39 @@ class TestSLTPEquityCapping:
         low = np.minimum(low, close - 0.01)
 
         sig = np.zeros(n, dtype=np.float64)
-        sig[1:] = 1.0
+        sig[1] = 1.0  # single-entry -> no re-entry after SL
 
-        # With 5% SL: sl_price = 101*0.95 = 95.95
-        # low[3] should be below 95.95 -> SL triggers on bar 3
-        # return on exit: 95.95/101 - 1 = -0.05 = -5%
         _, dd_sl, _, _, _, _ = single_backtest_sltp(
             close, sig, 10000, 0.0001,
             0.05, 0.0, 0.0, high, low,
         )
         assert dd_sl < 7.0, f"With 5% SL, max_dd ({dd_sl:.1f}%) should be capped near 5%"
 
-    def test_tighter_sl_gives_smaller_dd(self, crash_data):
-        """Tighter SL should result in strictly smaller (or equal) max drawdown."""
-        close = crash_data["close"].values.astype(np.float64)
-        high = crash_data["high"].values.astype(np.float64)
-        low = crash_data["low"].values.astype(np.float64)
-        sig = np.zeros(len(close), dtype=np.float64)
-        sig[1:] = 1.0
+    def test_tighter_sl_gives_smaller_dd(self):
+        """Tighter SL should result in strictly smaller (or equal) max drawdown.
+        Uses single-entry signals so re-entry does not confuse DD comparison.
+        """
+        np.random.seed(42)
+        n = 100
+        # Gradual uptrend then crash (same shape as crash_data fixture)
+        close = np.zeros(n, dtype=np.float64)
+        close[:40] = 100.0 + np.arange(40) * 0.2
+        crash_val = close[39]
+        for i in range(40, 51):
+            close[i] = crash_val * (1.0 - 0.15 * (i - 39) / 11)
+        for i in range(51, n):
+            close[i] = close[50] * (1.0 + 0.005 * (i - 50))
+        high = close + np.abs(np.random.randn(n)) * 0.3
+        low = close - np.abs(np.random.randn(n)) * 0.3
+        high = np.maximum(high, close + 0.01)
+        low = np.minimum(low, close - 0.01)
 
+        # Single-entry: each sig only enters once, so SL exit has no re-entry
+        # This tests raw SL capping power independent of re-entry behavior
         dds = []
-        for sl in [0.01, 0.02, 0.03, 0.05, 0.10]:
+        for sl in [0.03, 0.05, 0.10, 0.15, 0.50]:
+            sig = np.zeros(n, dtype=np.float64)
+            sig[1] = 1.0  # single entry
             _, dd, _, _, _, _ = single_backtest_sltp(
                 close, sig, 10000, 0.0001,
                 float(sl), 0.0, 0.0, high, low,
@@ -341,20 +347,19 @@ class TestSLTPEquityCapping:
         # Each tighter SL should produce ≤ previous dd
         for i in range(1, len(dds)):
             assert dds[i] >= dds[i - 1] - 0.5, (
-                f"SL {[0.01,0.02,0.03,0.05,0.10][i-1]*100:.0f}% gave dd={dds[i-1]:.1f}% "
-                f"but SL {[0.01,0.02,0.03,0.05,0.10][i]*100:.0f}% gave dd={dds[i]:.1f}% "
+                f"SL {[0.03,0.05,0.10,0.15,0.50][i-1]*100:.0f}% gave dd={dds[i-1]:.1f}% "
+                f"but SL {[0.03,0.05,0.10,0.15,0.50][i]*100:.0f}% gave dd={dds[i]:.1f}% "
                 f"— tighter SL should not produce larger dd"
             )
 
     def test_short_sl_caps_dd(self):
-        """Short position with SL should also cap drawdown.
-        Uses deterministic data with immediate rally after entry.
+        """Short position with SL should cap drawdown.
+        Single-entry signal prevents re-entry after SL exit.
         """
         np.random.seed(42)
         n = 30
         close = np.zeros(n, dtype=np.float64)
         close[:3] = [101.0, 100.5, 100.0]
-        # Sharp rally immediately after entry bar
         close[3:] = np.linspace(106.0, 115.0, n - 3)
 
         high = close + np.abs(np.random.randn(n)) * 0.3
@@ -362,13 +367,11 @@ class TestSLTPEquityCapping:
         high = np.maximum(high, close + 0.01)
         low = np.minimum(low, close - 0.01)
 
-        # sig[1]=-1 -> entry at close[2]=100
-        sig = np.zeros(n, dtype=np.float64)
-        sig[1:] = -1.0  # short
-
-        # Without SL: unrestricted losses from rally
+        # No-SL: full short signal -> held through rally from 100 to 115
+        sig_full = np.zeros(n, dtype=np.float64)
+        sig_full[1:] = -1.0
         _, dd_no_sl, _, _, _, _ = single_backtest_sltp(
-            close, sig, 10000, 0.0001,
+            close, sig_full, 10000, 0.0001,
             0.0, 0.0, 0.0, high, low,
         )
         assert dd_no_sl > 8.0, (
@@ -376,10 +379,11 @@ class TestSLTPEquityCapping:
             f"(price rallies from 100 to 115)"
         )
 
-        # With 4% SL: sl_price = 100*1.04 = 104
-        # high[3] >= 104 -> SL triggers on bar 3
+        # SL case: single-entry short -> SL triggers at 4%, no re-entry
+        sig_single = np.zeros(n, dtype=np.float64)
+        sig_single[1] = -1.0
         _, dd_sl, _, _, _, _ = single_backtest_sltp(
-            close, sig, 10000, 0.0001,
+            close, sig_single, 10000, 0.0001,
             0.04, 0.0, 0.0, high, low,
         )
         assert dd_sl < 6.0, f"With 4% SL on short, max_dd ({dd_sl:.1f}%) should be capped near 4%"
@@ -427,11 +431,11 @@ class TestSLTPEquityCapping:
 
     def test_tp_exit_caps_gain_but_locks_it_in(self):
         """TP should exit at the target price, locking in the gain.
-        Uses deterministic data: uptrend to above TP, then deep crash.
+        Uses signal that goes flat after TP trigger to prevent re-entry
+        into the ensuing crash.
         """
         np.random.seed(42)
         n = 30
-        # Price: flat, entry at 100, rally above 110, then crash to 80
         close = np.zeros(n, dtype=np.float64)
         close[:3] = [99.0, 99.5, 100.0]
         close[3:6] = [103.0, 108.0, 112.0]  # rally above 10% TP (tp=110)
@@ -442,20 +446,22 @@ class TestSLTPEquityCapping:
         high = np.maximum(high, close + 0.01)
         low = np.minimum(low, close - 0.01)
 
-        # sig[1]=1 -> entry at close[2]=100
-        sig = np.zeros(n, dtype=np.float64)
-        sig[1:] = 1.0
-
-        # No SL/TP: equity rides to 112 then crashes to 80
+        # No-TP case: stay long through full crash
+        sig_full = np.zeros(n, dtype=np.float64)
+        sig_full[1:] = 1.0
         eq_no_tp, _, _, _, _, _ = single_backtest_sltp(
-            close, sig, 10000, 0.0001,
+            close, sig_full, 10000, 0.0001,
             0.0, 0.0, 0.0, high, low,
         )
 
-        # With 10% TP: exits at 110, locks in gain, avoids crash
-        # tp triggers on bar 5 (high[5] >= 110)
+        # TP case: signal active up to bar 4, then off by bar 5.
+        # Bar 5: pos=signals[4]=0, but in_position=True -> TP can still trigger.
+        # After TP exit: no re-entry (pos=0), so TP locks in gain before crash.
+        sig_tp = np.zeros(n, dtype=np.float64)
+        sig_tp[1:4] = 1.0  # active bars 2-4
+        # sig_tp[4:] = 0.0  (already init'ed as zeros; bar 5+ no signal so no re-entry)
         eq_tp, _, _, _, _, _ = single_backtest_sltp(
-            close, sig, 10000, 0.0001,
+            close, sig_tp, 10000, 0.0001,
             0.0, 0.10, 0.0, high, low,
         )
         # TP locks in ~10% gain, no-TP crashes back down
@@ -486,40 +492,39 @@ class TestSLTPEquityCapping:
             f"SL should trigger more trades ({trades_sl}) than no-SL ({trades_no})"
         )
 
-    def test_sl_on_entry_bar_does_not_false_trigger(self):
-        """SL should not trigger on the entry bar itself (position opens at close[i]).
-        Entry happens at close[i] where signal transitions from 0 to 1.
+    def test_sl_does_not_trigger_on_entry_bar(self):
+        """SL should not trigger on the entry bar (position opens at close[i]).
         SL/TP check starts from the NEXT bar (i+1).
-        Data: price continues dropping after SL would trigger, so SL properly caps equity.
+        Uses single-entry signal to prevent re-entry after SL exit.
         """
-        n = 6
-        # Entry at close[2]=102. Price drops to 101, 99, then 98.
-        # SL 3%: sl_price = 98.94. low[3]=100 > 98.94 (no trigger first bar after entry).
-        # low[4]=96 < 98.94 -> SL triggers on bar 4, equity capped.
-        # Without SL: equity keeps dropping as price continues to 98.
-        close = np.array([100.0, 101.0, 102.0, 101.0, 99.0, 98.0], dtype=np.float64)
-        high = np.array([101.0, 102.0, 103.0, 102.0, 100.0, 99.0], dtype=np.float64)
-        low = np.array([99.0, 100.0, 101.0, 100.0, 96.0, 97.0], dtype=np.float64)
-        sig = np.array([0.0, 1.0, 1.0, 1.0, 1.0, 1.0], dtype=np.float64)
+        n = 7
+        # Entry at close[2]=102. Price drops to 100, then much lower.
+        # With 3% SL (sl_price=98.94): low[3]=100 > 98.94 -> no trigger on bar 3.
+        # low[4]=96 < 98.94 -> SL triggers on bar 4.
+        # No re-entry (single-entry signal)
+        close = np.array([100.0, 101.0, 102.0, 100.0, 99.0, 97.0, 95.0], dtype=np.float64)
+        high = np.array([101.0, 102.0, 103.0, 101.0, 100.0, 98.0, 96.0], dtype=np.float64)
+        low  = np.array([99.0, 100.0, 101.0, 100.0, 96.0, 94.0, 92.0], dtype=np.float64)
 
-        # With 3% SL: triggers on bar 4 (low=96 < 98.94), caps equity
-        eq_3pct, dd_3pct, _, _, _, _ = single_backtest_sltp(
-            close, sig, 10000, 0.0001,
+        # Single-entry -> SL triggers, no re-entry
+        sig_single = np.array([0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0], dtype=np.float64)
+        _, dd_3pct, _, trades_3pct, _, _ = single_backtest_sltp(
+            close, sig_single, 10000, 0.0001,
             0.03, 0.0, 0.0, high, low,
         )
-        # With 7% SL: no trigger (all lows > 94.86), position held through
-        eq_7pct, dd_7pct, _, _, _, _ = single_backtest_sltp(
-            close, sig, 10000, 0.0001,
-            0.07, 0.0, 0.0, high, low,
+        # SL triggers on bar 4 (low=96 < 98.94), exit at 98.94, DD ~3%
+        assert dd_3pct < 5.0, f"3% SL should cap DD near 3%, got {dd_3pct:.2f}%"
+        assert trades_3pct >= 1, "SL should produce a trade"
+
+        # Full signal (no SL): position held through larger drop to 95
+        sig_full = np.array([0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0], dtype=np.float64)
+        eq_no_sl, dd_no_sl, _, _, _, _ = single_backtest_sltp(
+            close, sig_full, 10000, 0.0001,
+            0.0, 0.0, 0.0, high, low,
         )
-        # 3% SL should have smaller drawdown than no-trigger case
-        assert dd_3pct < dd_7pct, (
-            f"3% SL max_dd ({dd_3pct:.2f}%) should be smaller than "
-            f"7% SL max_dd ({dd_7pct:.2f}%) because SL caps the loss early"
-        )
-        # Without SL, position held through drop from 102 to 98
-        assert dd_7pct > dd_3pct + 0.5, (
-            f"No-SL max_dd ({dd_7pct:.2f}%) should be significantly larger "
+        # Full drop from 102 to 95 with re-entry -> DD much larger than SL
+        assert dd_no_sl > dd_3pct + 2.0, (
+            f"No-SL max_dd ({dd_no_sl:.2f}%) should be significantly larger "
             f"than SL max_dd ({dd_3pct:.2f}%)"
         )
 

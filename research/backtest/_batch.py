@@ -82,6 +82,7 @@ def single_backtest_sltp(
     last_valid_pos = 0.0
     exit_forced = False
     exit_price = 0.0
+    re_entry_pending = False  # True when SL/TP closed a position; re-enter on next bar if signal still active
 
     for i in range(1, n):
         if np.isnan(close[i]) or np.isnan(close[i - 1]):
@@ -148,6 +149,7 @@ def single_backtest_sltp(
             else:
                 gross_loss += abs(net_pnl)
             in_position = False
+            re_entry_pending = True  # re-enter on next bar if signal still active
 
         # ── Equity computation using ACTUAL position state ──
         if exit_forced:
@@ -161,8 +163,15 @@ def single_backtest_sltp(
         else:
             effective_pos = entry_side if in_position else 0.0
             price_ret = close[i] / close[i - 1] - 1.0
-            pos_change = abs(effective_pos - last_valid_pos)
-            was_forced = False
+            # Use signal-based pos_change to capture all signal transitions
+            # (effective_pos lags by 1 bar since position is updated in signal
+            #  handling AFTER equity computation)
+            if was_forced:
+                # Fee already charged by forced-exit branch (SL/TP)
+                pos_change = 0
+                was_forced = False
+            else:
+                pos_change = abs(pos - last_valid_pos)
 
         fee_pct = pos_change * fee_rate
         period_return = effective_pos * price_ret - fee_pct
@@ -205,6 +214,24 @@ def single_backtest_sltp(
                 if trail_pct > 0.0:
                     trail_extreme = close[i]
                     trail_stop = close[i] * (1.0 - trail_pct) if pos > 0 else close[i] * (1.0 + trail_pct)
+
+        # Re-enter after SL/TP if signal is still active (one bar later)
+        if not in_position and pos != 0 and re_entry_pending:
+            in_position = True
+            entry_price = close[i]
+            entry_side = pos
+            re_entry_pending = False
+            # Charge entry fee before recording entry_equity so PnL scaling
+            # matches post-fee equity (same as normal signal-change entry).
+            entry_fee_pct = abs(pos) * fee_rate
+            equity *= (1.0 - entry_fee_pct)
+            entry_equity = equity
+            if trail_pct > 0.0:
+                trail_extreme = close[i]
+                trail_stop = close[i] * (1.0 - trail_pct) if pos > 0 else close[i] * (1.0 + trail_pct)
+        elif re_entry_pending and in_position:
+            # Position was already opened by normal signal change handler — clear flag
+            re_entry_pending = False
 
         last_valid_pos = pos
 

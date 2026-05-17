@@ -80,14 +80,23 @@ See `FRAMEWORK.md` for detailed module documentation.
 
 ## Phase Status
 
-All 4 phases complete. Key finding: **Range Breakout Limit** on 1h data achieves
-**Sharpe +3.23, PF 1.19, DD -21%, +37% return over 2 years** — first genuinely
-profitable strategy found across the entire project.
+All 4 phases complete. Key finding: **Range Breakout Limit (Long Only)** on 1h data
+achieves **Sharpe +6.21, PF 1.59, DD -15%, +57% return over 2024-2025** —
+first genuinely profitable strategy found across the entire project.
 
 Best parameters:
-- range_period=32, exit_period=6, filter_volume=False
-- limit_pct=0.008 (0.8% pullback from peak)
+- range_period=34, exit_period=6, filter_volume=False
+- limit_pct=0.009 (0.9% pullback from peak)
 - limit_max_bars=3 (cancel if not filled in 3 hours)
+- long_only=True
+
+Period performance:
+| Period   | Sharpe | PF   | DD   | Return |
+|----------|--------|------|------|--------|
+| 2021-2022| -4.64  | 0.67 | -47% | -41%   |
+| 2022-2023| +1.40  | 1.13 | -24% | +10%   |
+| 2023-2024| +8.42  | 1.92 | -11% | +103%  |
+| 2024-2025| +6.21  | 1.59 | -15% | +57%   |
 
 ## Quick Start
 
