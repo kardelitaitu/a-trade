@@ -51,7 +51,8 @@ class TestBaseStrategy:
 
     def test_set_params_unknown_raises(self):
         s = DummyStrategy()
-        assert s.config["period"] == 20
+        with pytest.raises(KeyError, match="Unknown parameter"):
+            s.set_params(nonexistent=42)
 
     def test_generate_signals_output(self):
         idx = pd.date_range("2024-01-01", periods=10, freq="5min")

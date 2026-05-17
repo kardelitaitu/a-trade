@@ -25,6 +25,7 @@ def _worker_combo(
     data_json: str,
     capital: float,
     fee_rate: float,
+    slippage: float = 0.0,
 ) -> dict:
     """Run a single combo in a worker process.
 
@@ -48,6 +49,9 @@ def _worker_combo(
     sl_pct = params.get("sl_pct")
     tp_pct = params.get("tp_pct")
 
+    # Copy to avoid mutating the original param_grid
+    params_copy = params.copy()
+
     if sl_pct is not None and tp_pct is not None and sl_pct > 0 and tp_pct > 0:
         # Use SL/TP-aware backtest via numba
         from research.backtest._batch import single_backtest_sltp
@@ -69,15 +73,15 @@ def _worker_combo(
             "final_equity": float(eq),
             "total_return_pct": float(total_return),
         }
-        params["sl_pct"] = sl_pct * 100  # store as % for display
-        params["tp_pct"] = tp_pct * 100
+        params_copy["sl_pct"] = sl_pct * 100  # store as % for display
+        params_copy["tp_pct"] = tp_pct * 100
     else:
-        bt = VectorizedBacktest(data, {"initial_capital": capital, "fee": fee_rate, "slippage": 0.0})
+        bt = VectorizedBacktest(data, {"initial_capital": capital, "fee": fee_rate, "slippage": slippage})
         result = bt.run(signals)
         metrics = compute_metrics(result.equity_curve, result.trades)
 
     return {
-        "params": params,
+        "params": params_copy,
         "sharpe": metrics["sharpe_ratio"],
         "profit_factor": metrics["profit_factor"],
         "max_dd": metrics["max_drawdown_pct"],
@@ -93,6 +97,7 @@ def parallel_monte_carlo(
     data: pd.DataFrame,
     capital: float = 10_000.0,
     fee_rate: float = 0.00011,
+    slippage: float = 0.00001,
     n_jobs: int = 24,
     metric_sort: str = "sharpe",
 ) -> list[dict]:
@@ -110,7 +115,7 @@ def parallel_monte_carlo(
     capital : float
     fee_rate : float
     n_jobs : int
-        Number of parallel workers (default 32).
+        Number of parallel workers (default 24).
     metric_sort : str
         Metric to sort results by ('sharpe', 'profit_factor', etc).
 
@@ -132,7 +137,7 @@ def parallel_monte_carlo(
 
     with ProcessPoolExecutor(max_workers=n_jobs) as executor:
         futures = {
-            executor.submit(_worker_combo, strategy_name, p, data_json, capital, fee_rate): p
+            executor.submit(_worker_combo, strategy_name, p, data_json, capital, fee_rate, slippage): p
             for p in param_grid
         }
 

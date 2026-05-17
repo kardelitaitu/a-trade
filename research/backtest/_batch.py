@@ -48,6 +48,9 @@ def single_backtest_sltp(
     - Whichever triggers first wins.
     - Trailing: tracks extreme price since entry, exits on retracement.
 
+    Equity computation uses ACTUAL position state (not raw signals),
+    so SL/TP exits properly cap the equity curve.
+
     Returns: final_equity, max_dd_pct, sharpe, n_trades, win_rate, profit_factor
     """
     n = len(close)
@@ -130,13 +133,37 @@ def single_backtest_sltp(
                 exit_forced = True
                 exit_price = trail_stop
 
-        pos_changed = pos != last_valid_pos
-        price_ret = close[i] / close[i - 1] - 1.0
-        pos_change = abs(pos - last_valid_pos) if pos_changed else 0.0
+        # ── Record SL/TP trade BEFORE clearing in_position ──
+        if exit_forced and in_position:
+            ep = exit_price
+            pnl = (ep - entry_price) * entry_side
+            roundtrip_fee = (entry_price + ep) * fee_rate
+            net_pnl = pnl - roundtrip_fee
+            n_trades += 1
+            if net_pnl > 0:
+                n_wins += 1
+                gross_profit += net_pnl
+            else:
+                gross_loss += abs(net_pnl)
+            in_position = False
 
-        # Fee as fraction of equity: |pos_change| * equity * fee_rate / equity = |pos_change| * fee_rate
+        # ── Equity computation using ACTUAL position state ──
+        if exit_forced:
+            # SL/TP exit: use exit_price for this bar's return, then go flat
+            effective_pos = entry_side
+            price_ret = exit_price / close[i - 1] - 1.0
+            pos_change = abs(entry_side)  # exit fee (entry fee was paid when position opened)
+            was_forced = True
+            exit_forced = False
+            exit_price = 0.0
+        else:
+            effective_pos = entry_side if in_position else 0.0
+            price_ret = close[i] / close[i - 1] - 1.0
+            pos_change = abs(effective_pos - last_valid_pos)
+            was_forced = False
+
         fee_pct = pos_change * fee_rate
-        period_return = pos * price_ret - fee_pct
+        period_return = effective_pos * price_ret - fee_pct
         equity *= (1.0 + period_return)
 
         total_ret_sum += period_return
@@ -149,12 +176,13 @@ def single_backtest_sltp(
         if dd > max_dd:
             max_dd = dd
 
-        # ── Close position (signal change or SL/TP) ──
-        if pos_changed or exit_forced:
+        # ── Signal change handling (not SL/TP) ──
+        pos_changed = pos != last_valid_pos
+        if pos_changed and not was_forced:
+            # Close on signal change
             if in_position:
-                ep = exit_price if exit_forced else close[i]
+                ep = close[i]
                 pnl = (ep - entry_price) * entry_side
-                # Round-trip fee per unit: (entry_price + exit_price) * fee_rate (notional on 1 unit)
                 roundtrip_fee = (entry_price + ep) * fee_rate
                 net_pnl = pnl - roundtrip_fee
                 n_trades += 1
@@ -165,13 +193,8 @@ def single_backtest_sltp(
                     gross_loss += abs(net_pnl)
                 in_position = False
 
-            # Remember why we exited, then reset
-            was_forced = exit_forced
-            exit_forced = False
-            exit_price = 0.0
-
-            # Open new position only on signal change, not after SL/TP exit
-            if pos != 0 and not was_forced:
+            # Open new position on signal change
+            if pos != 0:
                 in_position = True
                 entry_price = close[i]
                 entry_side = pos

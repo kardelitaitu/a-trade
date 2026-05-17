@@ -100,8 +100,8 @@ class VolatilitySqueeze(BaseStrategy):
 
             if in_long:
                 hold_count += 1
-                # Exit: BB contracts back inside Keltner (squeeze returns)
-                # or strong opposite signal
+                # Exit: squeeze re-forms (BB contracts back inside Keltner)
+                # → breakout momentum has faded
                 if squeeze.iloc[i] and hold_count >= min_hold:
                     in_long = False
                     hold_count = 0

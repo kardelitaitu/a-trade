@@ -49,15 +49,13 @@ class TestMACrossover:
 
     # --- ADDITIONAL TESTS ---
 
-    def test_ma_type_wma(self, trend_data):
-        s = MACrossover({"ma_type": "wma"})
-        sig = s.generate_signals(trend_data)
-        assert not sig.isna().any()
+    def test_ma_type_wma_raises(self, trend_data):
+        with pytest.raises(ValueError, match="ma_type"):
+            MACrossover({"ma_type": "wma"}).generate_signals(trend_data)
 
-    def test_ma_type_hma(self, trend_data):
-        s = MACrossover({"ma_type": "hma"})
-        sig = s.generate_signals(trend_data)
-        assert not sig.isna().any()
+    def test_ma_type_hma_raises(self, trend_data):
+        with pytest.raises(ValueError, match="ma_type"):
+            MACrossover({"ma_type": "hma"}).generate_signals(trend_data)
 
     def test_fast_equals_slow_produces_zeros(self, trend_data):
         s = MACrossover({"fast_period": 30, "slow_period": 30})
@@ -99,7 +97,7 @@ class TestMACrossover:
         assert not (sma == ema).all()
 
     def test_all_ma_types(self, trend_data):
-        for t in ["sma", "ema", "wma", "hma"]:
+        for t in ["sma", "ema"]:
             sig = MACrossover({"ma_type": t, "fast_period": 10, "slow_period": 30}).generate_signals(trend_data)
             assert set(sig.unique()).issubset({-1, 0, 1})
 
@@ -117,12 +115,7 @@ class TestMACrossover:
             sig = MACrossover({"ma_type": "sma", "fast_period": f, "slow_period": s_}).generate_signals(trend_data)
             assert not sig.isna().any()
 
-    def test_wma_alternate(self, trend_data):
-        for f, s_ in [(5, 20), (12, 26)]:
-            sig = MACrossover({"ma_type": "wma", "fast_period": f, "slow_period": s_}).generate_signals(trend_data)
-            assert not sig.isna().any()
-
-    def test_hma_alternate(self, trend_data):
-        for f, s_ in [(5, 20), (12, 26)]:
-            sig = MACrossover({"ma_type": "hma", "fast_period": f, "slow_period": s_}).generate_signals(trend_data)
-            assert not sig.isna().any()
+    def test_ma_unsupported_types_raise(self):
+        for t in ["wma", "hma"]:
+            with pytest.raises(ValueError, match="ma_type"):
+                MACrossover({"ma_type": t, "fast_period": 5, "slow_period": 20}).generate_signals(pd.DataFrame())

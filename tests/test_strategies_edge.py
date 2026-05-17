@@ -32,11 +32,16 @@ class TestStrategiesEdgeCases:
             sig = MACrossover({"fast_period": fast, "slow_period": slow}).generate_signals(sdata)
             assert set(sig.unique()).issubset({-1, 0, 1})
 
-    def test_ma_same_type(self, sdata):
-        """SMA and WMA should produce different outputs."""
+    def test_ma_sma_ema_different(self, sdata):
+        """SMA and EMA should produce different outputs."""
         sma_sig = MACrossover({"ma_type": "sma", "fast_period": 10, "slow_period": 30}).generate_signals(sdata)
-        wma_sig = MACrossover({"ma_type": "wma", "fast_period": 10, "slow_period": 30}).generate_signals(sdata)
-        assert not (sma_sig == wma_sig).all()
+        ema_sig = MACrossover({"ma_type": "ema", "fast_period": 10, "slow_period": 30}).generate_signals(sdata)
+        assert not (sma_sig == ema_sig).all()
+
+    def test_ma_unsupported_type_raises(self, sdata):
+        """Unsupported ma_type should raise ValueError."""
+        with pytest.raises(ValueError, match="ma_type"):
+            MACrossover({"ma_type": "wma"}).generate_signals(sdata)
 
     def test_donchian_entry_exit_equal(self, sdata):
         """Equal entry/exit periods should produce signals."""

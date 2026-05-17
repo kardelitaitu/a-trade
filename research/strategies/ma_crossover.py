@@ -60,6 +60,10 @@ class MACrossover(BaseStrategy):
         slow_p = self.config["slow_period"]
         ma_type = self.config["ma_type"]
 
+        # Validate ma_type before any data access
+        if ma_type not in ("sma", "ema"):
+            raise ValueError(f"Unsupported ma_type '{ma_type}'. Use 'sma' or 'ema'.")
+
         close = data["close"]
 
         # Compute fast and slow MAs

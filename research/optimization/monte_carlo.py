@@ -52,7 +52,7 @@ class MCResult:
     command: str = ""
     asset: str = "BTCUSDT"
     data_range: str = ""
-    fee_rate: float = 0.000011
+    fee_rate: float = 0.00011
 
     def best_metrics(self) -> MCMetrics:
         return MCMetrics(*self.metrics[self.best_idx])
@@ -73,7 +73,7 @@ def monte_carlo_ma(
     fast_range: tuple[int, int],
     slow_range: tuple[int, int],
     capital: float = 10_000.0,
-    fee_rate: float = 0.000011,
+    fee_rate: float = 0.00011,
     step: int = 1,
 ) -> MCResult:
     """
@@ -164,7 +164,7 @@ def monte_carlo_rsi(
     oversold_values: list[int],
     overbought_values: list[int],
     capital: float = 10_000.0,
-    fee_rate: float = 0.000011,
+    fee_rate: float = 0.00011,
 ) -> MCResult:
     """
     Monte Carlo optimization for RSI Mean Reversion.
@@ -243,7 +243,7 @@ def save_mc_report(
     now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%d_%H%M%S")
     path = output_dir / f"mc_{safe_name}_{now}.txt"
 
-    now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+    generated_at = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
     capital = result.initial_capital
     fee_pct = result.fee_rate * 100
     sub = "-" * 40
@@ -251,7 +251,7 @@ def save_mc_report(
     lines = []
     lines.append("")
     lines.append("MONTE CARLO OPTIMIZATION")
-    lines.append(f"  Generated:    {now}")
+    lines.append(f"  Generated:    {generated_at}")
     lines.append(f"  Command:      {result.command}")
     lines.append(f"  Strategy:     {result.strategy}")
     lines.append(f"  Asset:        {result.asset}")
@@ -408,7 +408,7 @@ def monte_carlo_ma_sltp(
     sl_values: list[float],
     tp_values: list[float],
     capital: float = 10_000.0,
-    fee_rate: float = 0.000011,
+    fee_rate: float = 0.00011,
     step: int = 1,
 ) -> MCResult:
     """Monte Carlo for MA Crossover with SL/TP."""

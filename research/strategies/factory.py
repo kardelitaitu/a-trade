@@ -60,8 +60,16 @@ def create_strategy(
         from research.strategies.range_breakout import RangeBreakout
         return RangeBreakout(config)
 
+    elif strategy_type == "range_breakout_limit":
+        from research.strategies.range_breakout_limit import RangeBreakoutLimit
+        return RangeBreakoutLimit(config)
+
+    elif strategy_type == "range_breakout_enhanced":
+        from research.strategies.range_breakout_enhanced import RangeBreakoutEnhanced
+        return RangeBreakoutEnhanced(config)
+
     else:
-        available = ["ma_crossover", "donchian_breakout", "mean_reversion", "volatility_breakout"]
+        available = ["ma_crossover", "donchian_breakout", "mean_reversion", "volatility_breakout", "volatility_squeeze", "range_breakout", "range_breakout_limit"]
         raise ValueError(f"Unknown strategy '{strategy_type}'. Available: {available}")
 
 
@@ -134,6 +142,24 @@ def list_strategies() -> str:
                 "keltner_period": "int", "keltner_atr_mult": "float",
                 "squeeze_lookback": "int", "min_hold": "int",
                 "filter_volume_pct": "float (optional)",
+            },
+        },
+        "range_breakout": {
+            "desc": "Range Breakout with optional Pullback",
+            "params": {
+                "range_period": "int", "exit_period": "int",
+                "filter_volume": "bool", "filter_vol_mult": "float",
+                "min_hold": "int",
+                "pullback_pct": "float (0=off)", "pullback_max_bars": "int",
+            },
+        },
+        "range_breakout_limit": {
+            "desc": "Range Breakout with Limit Retracement Entry",
+            "params": {
+                "range_period": "int", "exit_period": "int",
+                "filter_volume": "bool", "filter_vol_mult": "float",
+                "min_hold": "int",
+                "limit_pct": "float", "limit_max_bars": "int",
             },
         },
     }

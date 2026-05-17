@@ -1,0 +1,254 @@
+
+MONTE CARLO OPTIMIZATION
+--------------------------------------------------------------------------------
+  Generated:    2026-05-16 18:06:53 UTC
+  Command:      
+  Strategy:     range_breakout_pb_fine_1h
+  Asset:        BTCUSDT
+  Data range:   
+  Initial capt: $ 10,000.00
+  Fee rate:     0.010%
+  Hardware:     32 threads · 96 GB RAM · NVMe SSD
+  Combinations:    250
+
+TOP 20 BY SHARPE
+--------------------------------------------------------------------------------
+    #   Sharpe     PF     DD%  Trades   Return  Parameters                                    
+  --------------------------------------------------------------------------------------------
+    1     2.33   1.10  -23.07%     470  +36.41%  range_period=28, exit_period=12, filter_v...  
+    2     2.25   1.10  -23.17%     446  +33.60%  range_period=32, exit_period=12, filter_v...  
+    3     1.86   1.07  -23.79%     517  +23.80%  range_period=28, exit_period=8, filter_vo...  
+    4     1.86   1.07  -28.34%     513  +26.46%  range_period=24, exit_period=12, filter_v...  
+    5     1.77   1.07  -25.48%     472  +22.75%  range_period=32, exit_period=10, filter_v...  
+    6     1.77   1.07  -24.00%     488  +21.61%  range_period=32, exit_period=8, filter_vo...  
+    7     1.77   1.07  -21.42%     430  +23.16%  range_period=36, exit_period=12, filter_v...  
+    8     1.46   1.05  -30.87%     499  +17.14%  range_period=28, exit_period=10, filter_v...  
+    9     1.30   1.04  -27.87%     454  +14.69%  range_period=28, exit_period=14, filter_v...  
+   10     1.29   1.04  -25.54%     456  +13.62%  range_period=36, exit_period=10, filter_v...  
+   11     1.21   1.04  -23.50%     470  +11.94%  range_period=36, exit_period=8, filter_vo...  
+   12     1.15   1.04  -24.76%     414  +11.32%  range_period=40, exit_period=12, filter_v...  
+   13     1.12   1.03  -26.16%     431  +11.02%  range_period=32, exit_period=14, filter_v...  
+   14     0.97   1.02  -30.27%     565   +8.15%  range_period=24, exit_period=8, filter_vo...  
+   15     0.96   1.02  -31.56%     496   +7.77%  range_period=24, exit_period=14, filter_v...  
+   16     0.92   1.02  -36.15%     544   +7.23%  range_period=24, exit_period=10, filter_v...  
+   17     0.89   1.02  -25.57%     451   +6.89%  range_period=40, exit_period=8, filter_vo...  
+   18     0.87   1.02  -25.55%     415   +6.41%  range_period=36, exit_period=14, filter_v...  
+   19     0.85   1.02  -30.70%     424   +5.90%  range_period=32, exit_period=16, filter_v...  
+   20     0.82   1.01  -33.98%     546   +5.30%  range_period=28, exit_period=12, filter_v...  
+
+TOP 20 BY DRAWDOWN
+--------------------------------------------------------------------------------
+    #   Sharpe     PF     DD%  Trades   Return  Parameters                                    
+  --------------------------------------------------------------------------------------------
+    1    -1.41   0.91  -49.19%     577  -32.32%  range_period=24, exit_period=16, filter_v...  
+    2    -0.73   0.95  -48.10%     652  -19.81%  range_period=24, exit_period=10, filter_v...  
+    3    -1.00   0.93  -43.88%     589  -25.84%  range_period=24, exit_period=14, filter_v...  
+    4    -0.62   0.94  -43.10%     512  -20.06%  range_period=28, exit_period=16, filter_v...  
+    5    -1.16   0.92  -43.00%     439  -25.77%  range_period=40, exit_period=16, filter_v...  
+    6    -0.88   0.94  -42.41%     690  -20.24%  range_period=24, exit_period=8, filter_vo...  
+    7    -0.01   0.98  -41.74%     582   -8.26%  range_period=28, exit_period=10, filter_v...  
+    8    -0.71   0.94  -41.42%     458  -20.08%  range_period=36, exit_period=16, filter_v...  
+    9     0.14   0.98  -40.37%     613   -7.20%  range_period=24, exit_period=12, filter_v...  
+   10    -0.32   0.96  -40.09%     481  -14.60%  range_period=32, exit_period=16, filter_v...  
+   11    -1.12   0.92  -40.07%     450  -24.58%  range_period=40, exit_period=14, filter_v...  
+   12    -0.31   0.96  -39.63%     524  -14.59%  range_period=28, exit_period=14, filter_v...  
+   13     0.27   0.99  -38.37%     488   -5.34%  range_period=24, exit_period=16, filter_v...  
+   14    -0.46   0.96  -38.37%     498  -13.74%  range_period=40, exit_period=10, filter_v...  
+   15    -0.77   0.94  -38.16%     470  -20.17%  range_period=36, exit_period=14, filter_v...  
+   16    -0.19   0.97  -38.12%     521  -10.19%  range_period=36, exit_period=10, filter_v...  
+   17    -0.37   0.96  -37.50%     493  -14.80%  range_period=32, exit_period=14, filter_v...  
+   18     0.37   0.99  -36.33%     546   -1.94%  range_period=32, exit_period=10, filter_v...  
+   19     0.92   1.02  -36.15%     544   +7.23%  range_period=24, exit_period=10, filter_v...  
+   20    -0.45   0.96  -36.11%     523  -12.54%  range_period=40, exit_period=8, filter_vo...  
+
+BEST PARAMETERS
+----------------------------------------
+  range_period: 28
+  exit_period: 12
+  filter_volume: True
+  filter_vol_sma_period: 12
+  filter_vol_mult: 1.5
+  min_hold: 2
+  pullback_pct: 0.0
+  pullback_max_bars: 6
+  Sharpe:        2.3342
+  Profit Factor: 1.1007
+  Max DD:        -23.07%
+  Total Return:  +36.41%
+  Trades:        470
+
+REPRODUCIBILITY
+--------------------------------------------------------------------------------
+  parallel_monte_carlo(...)
+
+
+Parameter Sensitivity Analysis
+============================================================
+Total combos tested: 250
+
+How to read:
+  vs Sharpe:    Higher = better. Best value gives highest avg Sharpe.
+  vs Drawdown:  Lower (less negative) = better. Best value gives smallest loss.
+  vs Composite: Higher = better. Score = Sharpe / |DD|. Best balance between
+                maximizing return and minimizing drawdown.
+                Example: 0.020 > 0.009 means 2.2x better risk-adjusted return.
+
+pullback_pct:
+  vs Sharpe:
+    Per 1 unit:  Sharpe -116.5874
+    Best value:  0.0  (avg Sharpe +0.438)
+    Importance:  2.938  (spread)
+    Correlation: -0.278
+    Top values:  0.0 (Sharpe +0.44), 0.008 (Sharpe -1.23), 0.01 (Sharpe -1.54)
+  vs Drawdown:
+    Per 1 unit:  DD +2392.3583
+    Best value:  0.0  (avg DD -33.33%)
+    Importance:  25.360  (spread)
+    Correlation: +0.824
+    Top values:  0.0 (DD -33.3%), 0.003 (DD -17.0%), 0.005 (DD -12.6%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score -16.0335
+    Best value:  0.0  (avg score 0.0194)
+    Top values:  0.0 (score 0.019), 0.008 (score -0.127), 0.003 (score -0.145)
+
+filter_volume:
+  vs Sharpe:
+    Per 1 unit:  Sharpe +1.4051
+    Best value:  True  (avg Sharpe -0.742)
+    Importance:  1.405  (spread)
+    Correlation: +0.473
+    Top values:  True (Sharpe -0.74), False (Sharpe -2.15)
+  vs Drawdown:
+    Per 1 unit:  DD +5.5836
+    Best value:  False  (avg DD -18.75%)
+    Importance:  5.584  (spread)
+    Correlation: +0.271
+    Top values:  False (DD -18.8%), True (DD -13.2%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score +0.0786
+    Best value:  True  (avg score -0.0863)
+    Top values:  True (score -0.086), False (score -0.165)
+
+filter_vol_mult:
+  vs Sharpe:
+    Per 1 unit:  Sharpe +2.8102
+    Best value:  1.5  (avg Sharpe -0.742)
+    Importance:  1.405  (spread)
+    Correlation: +0.473
+    Top values:  1.5 (Sharpe -0.74), 1.0 (Sharpe -2.15)
+  vs Drawdown:
+    Per 1 unit:  DD +11.1672
+    Best value:  1.0  (avg DD -18.75%)
+    Importance:  5.584  (spread)
+    Correlation: +0.271
+    Top values:  1.0 (DD -18.8%), 1.5 (DD -13.2%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score +0.1572
+    Best value:  1.5  (avg score -0.0863)
+    Top values:  1.5 (score -0.086), 1.0 (score -0.165)
+
+exit_period:
+  vs Sharpe:
+    Per 1 unit:  Sharpe -0.1208
+    Best value:  8  (avg Sharpe -0.924)
+    Importance:  1.008  (spread)
+    Correlation: -0.230
+    Top values:  8 (Sharpe -0.92), 12 (Sharpe -1.27), 10 (Sharpe -1.35)
+  vs Drawdown:
+    Per 1 unit:  DD -0.5987
+    Best value:  16  (avg DD -18.86%)
+    Importance:  5.228  (spread)
+    Correlation: -0.165
+    Top values:  16 (DD -18.9%), 14 (DD -17.0%), 10 (DD -15.5%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score -0.0045
+    Best value:  8  (avg score -0.0935)
+    Top values:  8 (score -0.094), 12 (score -0.125), 10 (score -0.134)
+
+range_period:
+  vs Sharpe:
+    Per 1 unit:  Sharpe +0.0201
+    Best value:  40  (avg Sharpe -1.182)
+    Importance:  0.463  (spread)
+    Correlation: +0.077
+    Top values:  40 (Sharpe -1.18), 36 (Sharpe -1.38), 24 (Sharpe -1.45)
+  vs Drawdown:
+    Per 1 unit:  DD +0.1925
+    Best value:  24  (avg DD -17.98%)
+    Importance:  3.162  (spread)
+    Correlation: +0.106
+    Top values:  24 (DD -18.0%), 28 (DD -16.4%), 32 (DD -15.6%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score +0.0002
+    Best value:  24  (avg score -0.1132)
+    Top values:  24 (score -0.113), 40 (score -0.115), 36 (score -0.125)
+
+filter_vol_sma_period:
+  vs Sharpe:
+    Per 1 unit:  Sharpe N/A
+    Best value:  12  (avg Sharpe -1.445)
+    Importance:  0.000  (spread)
+    Correlation: +nan
+    Top values:  12 (Sharpe -1.44)
+  vs Drawdown:
+    Per 1 unit:  DD N/A
+    Best value:  12  (avg DD -15.96%)
+    Importance:  0.000  (spread)
+    Correlation: +nan
+    Top values:  12 (DD -16.0%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score N/A
+    Best value:  12  (avg score -0.1256)
+    Top values:  12 (score -0.126)
+
+min_hold:
+  vs Sharpe:
+    Per 1 unit:  Sharpe N/A
+    Best value:  2  (avg Sharpe -1.445)
+    Importance:  0.000  (spread)
+    Correlation: +nan
+    Top values:  2 (Sharpe -1.44)
+  vs Drawdown:
+    Per 1 unit:  DD N/A
+    Best value:  2  (avg DD -15.96%)
+    Importance:  0.000  (spread)
+    Correlation: +nan
+    Top values:  2 (DD -16.0%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score N/A
+    Best value:  2  (avg score -0.1256)
+    Top values:  2 (score -0.126)
+
+pullback_max_bars:
+  vs Sharpe:
+    Per 1 unit:  Sharpe N/A
+    Best value:  6  (avg Sharpe -1.445)
+    Importance:  0.000  (spread)
+    Correlation: +nan
+    Top values:  6 (Sharpe -1.44)
+  vs Drawdown:
+    Per 1 unit:  DD N/A
+    Best value:  6  (avg DD -15.96%)
+    Importance:  0.000  (spread)
+    Correlation: +nan
+    Top values:  6 (DD -16.0%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score N/A
+    Best value:  6  (avg score -0.1256)
+    Top values:  6 (score -0.126)
+
+BEST COMBO FOUND
+----------------------------------------
+  range_period: 28
+  exit_period: 12
+  filter_volume: True
+  filter_vol_sma_period: 12
+  filter_vol_mult: 1.5
+  min_hold: 2
+  pullback_pct: 0.0
+  pullback_max_bars: 6
+  Sharpe:        2.3342
+  Profit Factor: 1.1007
+  Max DD:        -23.07%
+  Total Return:  +36.41%
+  Trades:        470
