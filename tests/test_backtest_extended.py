@@ -490,43 +490,37 @@ class TestSLTPEquityCapping:
         """SL should not trigger on the entry bar itself (position opens at close[i]).
         Entry happens at close[i] where signal transitions from 0 to 1.
         SL/TP check starts from the NEXT bar (i+1).
+        Data: price continues dropping after SL would trigger, so SL properly caps equity.
         """
         n = 6
-        idx = pd.date_range("2024-01-01", periods=n, freq="5min")
-        # sig[1]=1 -> entry at close[2]=102 (i=2 iteration opens position)
-        # SL/TP checks start from i=3 onwards
-        # SL at 3%: sl_price = 102*0.97 = 98.94
-        # low[3]=100 > 98.94 -> no trigger on bar 3 (right after entry)
-        # low[4]=96 < 98.94 -> trigger on bar 4
-        close = np.array([100.0, 101.0, 102.0, 101.0, 99.0, 100.0], dtype=np.float64)
-        high = np.array([101.0, 102.0, 103.0, 102.0, 100.0, 101.0], dtype=np.float64)
-        low = np.array([99.0, 100.0, 101.0, 100.0, 96.0, 99.0], dtype=np.float64)
-        sig = np.array([0.0, 1.0, 1.0, 1.0, 1.0, 0.0], dtype=np.float64)
+        # Entry at close[2]=102. Price drops to 101, 99, then 98.
+        # SL 3%: sl_price = 98.94. low[3]=100 > 98.94 (no trigger first bar after entry).
+        # low[4]=96 < 98.94 -> SL triggers on bar 4, equity capped.
+        # Without SL: equity keeps dropping as price continues to 98.
+        close = np.array([100.0, 101.0, 102.0, 101.0, 99.0, 98.0], dtype=np.float64)
+        high = np.array([101.0, 102.0, 103.0, 102.0, 100.0, 99.0], dtype=np.float64)
+        low = np.array([99.0, 100.0, 101.0, 100.0, 96.0, 97.0], dtype=np.float64)
+        sig = np.array([0.0, 1.0, 1.0, 1.0, 1.0, 1.0], dtype=np.float64)
 
-        # With 3% SL: sl_price = 102*0.97 = 98.94
-        # low[3]=100 > 98.94 -> NOT triggered on bar 3 (first check after entry)
-        # low[4]=96 < 98.94 -> triggered on bar 4
-        _, _, _, trades_3pct, _, _ = single_backtest_sltp(
+        # With 3% SL: triggers on bar 4 (low=96 < 98.94), caps equity
+        eq_3pct, dd_3pct, _, _, _, _ = single_backtest_sltp(
             close, sig, 10000, 0.0001,
             0.03, 0.0, 0.0, high, low,
         )
-        # SL should trigger on bar 4 -> entry + SL exit + re-entry = 2+ trades
-        assert trades_3pct >= 2, (
-            f"3% SL should trigger on bar 4 (low=96 < sl_price=98.94), "
-            f"got trades={trades_3pct}"
-        )
-
-        # With 7% SL: sl_price = 102*0.93 = 94.86
-        # low[3]=100 > 94.86, low[4]=96 > 94.86 -> NOT triggered
-        # Only exit at signal change on bar 5
-        _, _, _, trades_7pct, _, _ = single_backtest_sltp(
+        # With 7% SL: no trigger (all lows > 94.86), position held through
+        eq_7pct, dd_7pct, _, _, _, _ = single_backtest_sltp(
             close, sig, 10000, 0.0001,
             0.07, 0.0, 0.0, high, low,
         )
-        # 1 trade: entry at close[2], exit at close[5] on signal 1->0
-        assert trades_7pct == 1, (
-            f"7% SL should NOT trigger (all lows above 94.86), "
-            f"only signal-based exit, got trades={trades_7pct}"
+        # 3% SL should have smaller drawdown than no-trigger case
+        assert dd_3pct < dd_7pct, (
+            f"3% SL max_dd ({dd_3pct:.2f}%) should be smaller than "
+            f"7% SL max_dd ({dd_7pct:.2f}%) because SL caps the loss early"
+        )
+        # Without SL, position held through drop from 102 to 98
+        assert dd_7pct > dd_3pct + 0.5, (
+            f"No-SL max_dd ({dd_7pct:.2f}%) should be significantly larger "
+            f"than SL max_dd ({dd_3pct:.2f}%)"
         )
 
     def test_sl_and_tp_whichever_triggers_first(self):

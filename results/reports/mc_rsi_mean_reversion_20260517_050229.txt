@@ -1,0 +1,172 @@
+
+MONTE CARLO OPTIMIZATION
+--------------------------------------------------------------------------------
+  Generated:    2026-05-17 05:02:29 UTC
+  Command:      monte_carlo_rsi(close, period_range=(7, 28), oversold=[20, 25, 30, 35, 40], overbought=[60, 65, 70, 75, 80])
+  Strategy:     RSI Mean Reversion
+  Asset:        BTCUSDT
+  Data range:   period 7-28, os=[20, 25, 30, 35, 40], ob=[60, 65, 70, 75, 80]
+  Initial capt: $ 10,000.00
+  Fee rate:     0.011%
+  Hardware:     32 threads · 96 GB RAM · NVMe SSD
+  Combinations:    550 in 2.2s (248 ± combo/s)
+
+PARAMETER SWEEP ANALYSIS
+--------------------------------------------------------------------------------
+  period                7 - 28  (step 1)
+                        Mean: 17.5      Std Dev: 6.3     
+                        Best value: 7             Sharpe avg:  +0.89  (±0.21)
+
+  oversold              20 - 40  (step 5)
+                        Mean: 30.0      Std Dev: 7.1     
+                        Best value: 40            Sharpe avg:  +0.64  (±0.24)
+
+  overbought            60 - 80  (step 5)
+                        Mean: 70.0      Std Dev: 7.1     
+                        Best value: 60            Sharpe avg:  +0.44  (±0.41)
+
+TOP 20 BY SHARPE
+  -----------------------------------------------------------------------------------------------
+    #   Sharpe     PF     DD%   Trades    Init $    Final $  Parameters                          
+  -----------------------------------------------------------------------------------------------
+    1     1.20   0.93   67.06%   60,303  $ 10,000  $1,082,626  period=7, oversold=30, overbought=60
+    2     1.20   0.96   53.63%   31,604  $ 10,000  $ 761,947  period=8, oversold=30, overbought=70
+    3     1.19   0.96   47.31%   39,792  $ 10,000  $ 942,674  period=9, oversold=35, overbought=65
+    4     1.18   0.94   54.82%   39,531  $ 10,000  $ 753,828  period=7, oversold=30, overbought=70
+    5     1.17   0.97   46.48%   32,702  $ 10,000  $ 747,853  period=9, oversold=30, overbought=65
+    6     1.16   0.97   49.85%   32,670  $ 10,000  $ 716,363  period=9, oversold=35, overbought=70
+    7     1.15   0.98   52.85%   25,580  $ 10,000  $ 568,313  period=9, oversold=30, overbought=70
+    8     1.14   0.95   55.46%   39,435  $ 10,000  $ 677,410  period=8, oversold=35, overbought=70
+    9     1.13   0.95   52.35%   39,466  $ 10,000  $ 642,092  period=8, oversold=30, overbought=65
+   10     1.13   0.94   55.18%   50,463  $ 10,000  $ 721,128  period=8, oversold=30, overbought=60
+   11     1.12   0.92   76.55%   69,077  $ 10,000  $ 802,810  period=7, oversold=35, overbought=60
+   12     1.12   0.99   54.17%   25,465  $ 10,000  $ 616,819  period=12, oversold=35, overbought=65
+   13     1.10   0.94   62.36%   49,681  $ 10,000  $ 660,454  period=9, oversold=40, overbought=65
+   14     1.09   0.93   68.23%   48,305  $ 10,000  $ 558,993  period=7, oversold=35, overbought=70
+   15     1.09   0.94   61.41%   58,294  $ 10,000  $ 641,120  period=8, oversold=35, overbought=60
+   16     1.09   0.94   54.93%   47,297  $ 10,000  $ 570,853  period=8, oversold=35, overbought=65
+   17     1.08   0.93   60.83%   50,186  $ 10,000  $ 555,296  period=8, oversold=40, overbought=70
+   18     1.06   0.94   52.25%   32,470  $ 10,000  $ 381,013  period=7, oversold=30, overbought=75
+   19     1.06   0.95   59.88%   42,559  $ 10,000  $ 501,896  period=9, oversold=40, overbought=70
+   20     1.05   0.90   81.58%   80,741  $ 10,000  $ 569,678  period=7, oversold=40, overbought=60
+
+TOP 20 BY DRAWDOWN
+  -----------------------------------------------------------------------------------------------
+    #   Sharpe     PF     DD%   Trades    Init $    Final $  Parameters                          
+  -----------------------------------------------------------------------------------------------
+    1     1.17   0.97   46.48%   32,702  $ 10,000  $ 747,853  period=9, oversold=30, overbought=65
+    2     1.19   0.96   47.31%   39,792  $ 10,000  $ 942,674  period=9, oversold=35, overbought=65
+    3     1.16   0.97   49.85%   32,670  $ 10,000  $ 716,363  period=9, oversold=35, overbought=70
+    4     0.75   0.95   50.26%   15,280  $ 10,000  $  86,014  period=14, oversold=30, overbought=65
+    5     1.06   0.94   52.25%   32,470  $ 10,000  $ 381,013  period=7, oversold=30, overbought=75
+    6     0.90   0.97   52.33%   33,321  $ 10,000  $ 220,685  period=12, oversold=35, overbought=60
+    7     1.13   0.95   52.35%   39,466  $ 10,000  $ 642,092  period=8, oversold=30, overbought=65
+    8     1.15   0.98   52.85%   25,580  $ 10,000  $ 568,313  period=9, oversold=30, overbought=70
+    9     0.83   0.96   53.24%   27,107  $ 10,000  $ 117,627  period=7, oversold=20, overbought=70
+   10     1.20   0.96   53.63%   31,604  $ 10,000  $ 761,947  period=8, oversold=30, overbought=70
+   11     0.71   0.99   53.86%    9,785  $ 10,000  $  66,111  period=15, oversold=35, overbought=80
+   12     1.00   0.96   53.93%   33,869  $ 10,000  $ 353,732  period=10, oversold=35, overbought=65
+   13     1.12   0.99   54.17%   25,465  $ 10,000  $ 616,819  period=12, oversold=35, overbought=65
+   14     0.45   0.95   54.38%   12,651  $ 10,000  $  23,071  period=13, oversold=20, overbought=65
+   15     0.54   0.95   54.38%   10,887  $ 10,000  $  33,545  period=14, oversold=30, overbought=70
+   16     0.63   1.00   54.42%    5,116  $ 10,000  $  44,743  period=16, oversold=30, overbought=80
+   17     0.96   0.98   54.76%   22,292  $ 10,000  $ 267,846  period=13, oversold=35, overbought=65
+   18     1.18   0.94   54.82%   39,531  $ 10,000  $ 753,828  period=7, oversold=30, overbought=70
+   19     1.09   0.94   54.93%   47,297  $ 10,000  $ 570,853  period=8, oversold=35, overbought=65
+   20     0.91   0.97   54.95%   21,064  $ 10,000  $ 183,673  period=10, oversold=30, overbought=70
+
+BEST PARAMETERS (Rank 1)
+--------------------------------------------------------------------------------
+  period                7
+  oversold              30
+  overbought            60
+  ----------------------------------------
+  Initial Equity        $   10,000.00
+  Final Equity          $1,082,626.03
+  Total Return            +10726.26%
+  Sharpe Ratio                   1.2005
+  Profit Factor                  0.9265
+  Max Drawdown                  67.06%
+  Total Trades                 60,303.0
+  Win Rate                        60.5%
+
+REPRODUCIBILITY
+--------------------------------------------------------------------------------
+  monte_carlo_rsi(close, period_range=(7, 28), oversold=[20, 25, 30, 35, 40], overbought=[60, 65, 70, 75, 80])
+
+
+Parameter Sensitivity Analysis
+============================================================
+Total combos tested: 550
+
+How to read:
+  vs Sharpe:    Higher = better. Best value gives highest avg Sharpe.
+  vs Drawdown:  Lower (less negative) = better. Best value gives smallest loss.
+  vs Composite: Higher = better. Score = Sharpe / |DD|. Best balance between
+                maximizing return and minimizing drawdown.
+                Example: 0.020 > 0.009 means 2.2x better risk-adjusted return.
+
+period:
+  vs Sharpe:
+    Per 1 unit:  Sharpe -0.0503
+    Best value:  7  (avg Sharpe +0.891)
+    Importance:  1.034  (spread)
+    Correlation: -0.623
+    Top values:  7 (Sharpe +0.89), 8 (Sharpe +0.86), 9 (Sharpe +0.75)
+  vs Drawdown:
+    Per 1 unit:  DD +1.1957
+    Best value:  8  (avg DD 62.20%)
+    Importance:  21.875  (spread)
+    Correlation: +0.607
+    Top values:  8 (DD 62.2%), 14 (DD 63.0%), 9 (DD 63.4%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score -0.0008
+    Best value:  8  (avg score 0.0142)
+    Top values:  8 (score 0.014), 7 (score 0.014), 9 (score 0.013)
+
+oversold:
+  vs Sharpe:
+    Per 1 unit:  Sharpe +0.0463
+    Best value:  40  (avg Sharpe +0.643)
+    Importance:  0.893  (spread)
+    Correlation: +0.639
+    Top values:  40 (Sharpe +0.64), 35 (Sharpe +0.56), 30 (Sharpe +0.41)
+  vs Drawdown:
+    Per 1 unit:  DD -0.6363
+    Best value:  35  (avg DD 68.43%)
+    Importance:  12.691  (spread)
+    Correlation: -0.360
+    Top values:  35 (DD 68.4%), 40 (DD 69.9%), 30 (DD 70.4%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score +0.0006
+    Best value:  40  (avg score 0.0094)
+    Top values:  40 (score 0.009), 35 (score 0.009), 30 (score 0.007)
+
+overbought:
+  vs Sharpe:
+    Per 1 unit:  Sharpe -0.0103
+    Best value:  60  (avg Sharpe +0.436)
+    Importance:  0.292  (spread)
+    Correlation: -0.142
+    Top values:  60 (Sharpe +0.44), 65 (Sharpe +0.34), 80 (Sharpe +0.28)
+  vs Drawdown:
+    Per 1 unit:  DD -0.0956
+    Best value:  80  (avg DD 69.53%)
+    Importance:  6.594  (spread)
+    Correlation: -0.054
+    Top values:  80 (DD 69.5%), 60 (DD 72.9%), 65 (DD 73.6%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score -0.0002
+    Best value:  60  (avg score 0.0068)
+    Top values:  60 (score 0.007), 65 (score 0.006), 80 (score 0.004)
+
+BEST COMBO FOUND
+----------------------------------------
+  period: 7
+  oversold: 20
+  overbought: 60
+  Sharpe:        0.8772
+  Profit Factor: 0.9325
+  Max DD:        70.36%
+  Total Return:  +1589.33%
+  Trades:        47879

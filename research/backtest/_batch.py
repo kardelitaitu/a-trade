@@ -73,6 +73,7 @@ def single_backtest_sltp(
     in_position = False
     entry_price = 0.0
     entry_side = 0
+    entry_equity = 0.0
 
     # Trailing stop tracking
     trail_extreme = 0.0   # highest high (long) or lowest low (short) since entry
@@ -136,8 +137,9 @@ def single_backtest_sltp(
         # ── Record SL/TP trade BEFORE clearing in_position ──
         if exit_forced and in_position:
             ep = exit_price
-            pnl = (ep - entry_price) * entry_side
-            roundtrip_fee = (entry_price + ep) * fee_rate
+            pos_size = entry_equity / entry_price  # units = capital at entry / entry price
+            pnl = (ep - entry_price) * entry_side * pos_size
+            roundtrip_fee = (entry_price + ep) * fee_rate * pos_size
             net_pnl = pnl - roundtrip_fee
             n_trades += 1
             if net_pnl > 0:
@@ -182,8 +184,9 @@ def single_backtest_sltp(
             # Close on signal change
             if in_position:
                 ep = close[i]
-                pnl = (ep - entry_price) * entry_side
-                roundtrip_fee = (entry_price + ep) * fee_rate
+                pos_size = entry_equity / entry_price
+                pnl = (ep - entry_price) * entry_side * pos_size
+                roundtrip_fee = (entry_price + ep) * fee_rate * pos_size
                 net_pnl = pnl - roundtrip_fee
                 n_trades += 1
                 if net_pnl > 0:
@@ -198,6 +201,7 @@ def single_backtest_sltp(
                 in_position = True
                 entry_price = close[i]
                 entry_side = pos
+                entry_equity = equity
                 if trail_pct > 0.0:
                     trail_extreme = close[i]
                     trail_stop = close[i] * (1.0 - trail_pct) if pos > 0 else close[i] * (1.0 + trail_pct)
