@@ -68,6 +68,18 @@ def create_strategy(
         from research.strategies.range_breakout_enhanced import RangeBreakoutEnhanced
         return RangeBreakoutEnhanced(config)
 
+    elif strategy_type == "ema_pullback":
+        from research.strategies.ema_pullback import EMAPullback
+        return EMAPullback(config)
+
+    elif strategy_type == "vol_expansion":
+        from research.strategies.vol_expansion import VolatilityExpansion
+        return VolatilityExpansion(config)
+
+    elif strategy_type == "rsi_confluence":
+        from research.strategies.rsi_confluence import RSIConfluence
+        return RSIConfluence(config)
+
     else:
         available = ["ma_crossover", "donchian_breakout", "mean_reversion", "volatility_breakout", "volatility_squeeze", "range_breakout", "range_breakout_limit"]
         raise ValueError(f"Unknown strategy '{strategy_type}'. Available: {available}")

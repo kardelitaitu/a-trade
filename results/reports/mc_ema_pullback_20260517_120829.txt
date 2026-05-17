@@ -1,0 +1,194 @@
+
+MONTE CARLO OPTIMIZATION
+--------------------------------------------------------------------------------
+  Generated:    2026-05-17 12:08:29 UTC
+  Command:      
+  Strategy:     ema_pullback
+  Asset:        BTCUSDT
+  Data range:   
+  Initial capt: $ 10,000.00
+  Fee rate:     0.010%
+  Hardware:     32 threads · 96 GB RAM · NVMe SSD
+  Combinations:     36
+
+TOP 20 BY SHARPE
+--------------------------------------------------------------------------------
+    #   Sharpe     PF     DD%  Trades   Return  Parameters                                    
+  --------------------------------------------------------------------------------------------
+    1    -0.23   0.96  -28.57%     503   -6.66%  exit_period=10, min_hold=2, trend_fast=50...  
+    2    -0.52   0.94  -34.06%     492   -9.58%  exit_period=10, min_hold=2, trend_fast=30...  
+    3    -0.73   0.93  -37.82%     492  -12.13%  exit_period=12, min_hold=2, trend_fast=30...  
+    4    -1.02   0.92  -35.32%     503  -15.44%  exit_period=12, min_hold=2, trend_fast=50...  
+    5    -1.43   0.89  -28.14%     517  -17.91%  exit_period=8, min_hold=2, trend_fast=50,...  
+    6    -1.57   0.89  -32.60%     539  -18.36%  exit_period=6, min_hold=2, trend_fast=50,...  
+    7    -1.68   0.87  -33.34%     505  -19.77%  exit_period=8, min_hold=2, trend_fast=30,...  
+    8    -1.72   0.88  -32.46%     471  -20.69%  exit_period=10, min_hold=2, trend_fast=50...  
+    9    -1.80   0.87  -36.45%     502  -22.09%  exit_period=10, min_hold=2, trend_fast=10...  
+   10    -1.93   0.86  -32.80%     460  -22.61%  exit_period=10, min_hold=2, trend_fast=30...  
+   11    -1.95   0.87  -35.71%     474  -23.50%  exit_period=12, min_hold=2, trend_fast=50...  
+   12    -2.17   0.85  -37.28%     462  -25.34%  exit_period=12, min_hold=2, trend_fast=30...  
+   13    -2.17   0.85  -41.13%     503  -26.05%  exit_period=12, min_hold=2, trend_fast=10...  
+   14    -2.41   0.84  -39.18%     526  -24.80%  exit_period=6, min_hold=2, trend_fast=30,...  
+   15    -2.58   0.83  -36.58%     518  -27.78%  exit_period=8, min_hold=2, trend_fast=100...  
+   16    -2.79   0.83  -34.99%     493  -26.30%  exit_period=6, min_hold=2, trend_fast=50,...  
+   17    -3.04   0.81  -35.77%     479  -29.45%  exit_period=8, min_hold=2, trend_fast=50,...  
+   18    -3.08   0.80  -41.56%     467  -32.47%  exit_period=12, min_hold=2, trend_fast=10...  
+   19    -3.17   0.79  -34.24%     467  -30.48%  exit_period=8, min_hold=2, trend_fast=30,...  
+   20    -3.38   0.79  -44.10%     540  -32.53%  exit_period=6, min_hold=2, trend_fast=100...  
+
+TOP 20 BY DRAWDOWN
+--------------------------------------------------------------------------------
+    #   Sharpe     PF     DD%  Trades   Return  Parameters                                    
+  --------------------------------------------------------------------------------------------
+    1    -5.20   0.71  -46.43%     445  -40.50%  exit_period=6, min_hold=2, trend_fast=100...  
+    2    -5.01   0.72  -45.69%     489  -40.31%  exit_period=6, min_hold=2, trend_fast=100...  
+    3    -3.38   0.79  -44.10%     540  -32.53%  exit_period=6, min_hold=2, trend_fast=100...  
+    4    -3.64   0.77  -43.20%     435  -34.82%  exit_period=12, min_hold=2, trend_fast=50...  
+    5    -3.65   0.76  -41.61%     424  -34.34%  exit_period=12, min_hold=2, trend_fast=10...  
+    6    -3.08   0.80  -41.56%     467  -32.47%  exit_period=12, min_hold=2, trend_fast=10...  
+    7    -3.98   0.74  -41.20%     424  -36.10%  exit_period=10, min_hold=2, trend_fast=10...  
+    8    -2.17   0.85  -41.13%     503  -26.05%  exit_period=12, min_hold=2, trend_fast=10...  
+    9    -4.35   0.74  -40.96%     474  -38.33%  exit_period=8, min_hold=2, trend_fast=100...  
+   10    -3.46   0.76  -40.85%     423  -32.90%  exit_period=12, min_hold=2, trend_fast=30...  
+   11    -4.15   0.76  -40.74%     452  -34.67%  exit_period=6, min_hold=2, trend_fast=50,...  
+   12    -3.59   0.77  -40.70%     434  -33.73%  exit_period=10, min_hold=2, trend_fast=50...  
+   13    -3.39   0.78  -40.53%     463  -33.93%  exit_period=10, min_hold=2, trend_fast=10...  
+   14    -4.27   0.74  -40.09%     437  -34.64%  exit_period=6, min_hold=2, trend_fast=30,...  
+   15    -2.41   0.84  -39.18%     526  -24.80%  exit_period=6, min_hold=2, trend_fast=30,...  
+   16    -3.59   0.78  -38.95%     479  -31.79%  exit_period=6, min_hold=2, trend_fast=30,...  
+   17    -3.42   0.76  -38.65%     422  -32.10%  exit_period=10, min_hold=2, trend_fast=30...  
+   18    -3.91   0.76  -37.87%     441  -34.50%  exit_period=8, min_hold=2, trend_fast=50,...  
+   19    -0.73   0.93  -37.82%     492  -12.13%  exit_period=12, min_hold=2, trend_fast=30...  
+   20    -3.83   0.76  -37.55%     434  -33.93%  exit_period=8, min_hold=2, trend_fast=100...  
+
+BEST PARAMETERS
+----------------------------------------
+  exit_period: 10
+  min_hold: 2
+  trend_fast: 50
+  trend_slow: 200
+  pullback_ema: 15
+  Sharpe:        -0.2344
+  Profit Factor: 0.9638
+  Max DD:        -28.57%
+  Total Return:  -6.66%
+  Trades:        503
+
+REPRODUCIBILITY
+--------------------------------------------------------------------------------
+  parallel_monte_carlo(...)
+
+
+Parameter Sensitivity Analysis
+============================================================
+Total combos tested: 36
+
+How to read:
+  vs Sharpe:    Higher = better. Best value gives highest avg Sharpe.
+  vs Drawdown:  Lower (less negative) = better. Best value gives smallest loss.
+  vs Composite: Higher = better. Score = Sharpe / |DD|. Best balance between
+                maximizing return and minimizing drawdown.
+                Example: 0.020 > 0.009 means 2.2x better risk-adjusted return.
+
+pullback_ema:
+  vs Sharpe:
+    Per 1 unit:  Sharpe -0.2271
+    Best value:  15  (avg Sharpe -1.628)
+    Importance:  2.271  (spread)
+    Correlation: -0.754
+    Top values:  15 (Sharpe -1.63), 20 (Sharpe -3.02), 25 (Sharpe -3.90)
+  vs Drawdown:
+    Per 1 unit:  DD -0.4773
+    Best value:  25  (avg DD -40.38%)
+    Importance:  4.773  (spread)
+    Correlation: -0.460
+    Top values:  25 (DD -40.4%), 20 (DD -37.6%), 15 (DD -35.6%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score -0.0052
+    Best value:  15  (avg score -0.0443)
+    Top values:  15 (score -0.044), 20 (score -0.079), 25 (score -0.097)
+
+exit_period:
+  vs Sharpe:
+    Per 1 unit:  Sharpe +0.2141
+    Best value:  10  (avg Sharpe -2.289)
+    Importance:  1.307  (spread)
+    Correlation: +0.390
+    Top values:  10 (Sharpe -2.29), 12 (Sharpe -2.43), 8 (Sharpe -3.07)
+  vs Drawdown:
+    Per 1 unit:  DD +0.1087
+    Best value:  6  (avg DD -40.31%)
+    Importance:  4.739  (spread)
+    Correlation: +0.057
+    Top values:  6 (DD -40.3%), 12 (DD -39.4%), 10 (DD -36.2%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score +0.0053
+    Best value:  10  (avg score -0.0602)
+    Top values:  10 (score -0.060), 12 (score -0.061), 8 (score -0.085)
+
+trend_fast:
+  vs Sharpe:
+    Per 1 unit:  Sharpe -0.0153
+    Best value:  50  (avg Sharpe -2.420)
+    Importance:  1.116  (spread)
+    Correlation: -0.365
+    Top values:  50 (Sharpe -2.42), 30 (Sharpe -2.59), 100 (Sharpe -3.54)
+  vs Drawdown:
+    Per 1 unit:  DD -0.0706
+    Best value:  100  (avg DD -41.15%)
+    Importance:  5.642  (spread)
+    Correlation: -0.491
+    Top values:  100 (DD -41.1%), 30 (DD -36.9%), 50 (DD -35.5%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score -0.0003
+    Best value:  50  (avg score -0.0655)
+    Top values:  50 (score -0.065), 30 (score -0.069), 100 (score -0.085)
+
+min_hold:
+  vs Sharpe:
+    Per 1 unit:  Sharpe N/A
+    Best value:  2  (avg Sharpe -2.848)
+    Importance:  0.000  (spread)
+    Correlation: +nan
+    Top values:  2 (Sharpe -2.85)
+  vs Drawdown:
+    Per 1 unit:  DD N/A
+    Best value:  2  (avg DD -37.86%)
+    Importance:  0.000  (spread)
+    Correlation: +nan
+    Top values:  2 (DD -37.9%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score N/A
+    Best value:  2  (avg score -0.0733)
+    Top values:  2 (score -0.073)
+
+trend_slow:
+  vs Sharpe:
+    Per 1 unit:  Sharpe N/A
+    Best value:  200  (avg Sharpe -2.848)
+    Importance:  0.000  (spread)
+    Correlation: +nan
+    Top values:  200 (Sharpe -2.85)
+  vs Drawdown:
+    Per 1 unit:  DD N/A
+    Best value:  200  (avg DD -37.86%)
+    Importance:  0.000  (spread)
+    Correlation: +nan
+    Top values:  200 (DD -37.9%)
+  vs Composite (Sharpe/|DD|):
+    Per 1 unit:  Score N/A
+    Best value:  200  (avg score -0.0733)
+    Top values:  200 (score -0.073)
+
+BEST COMBO FOUND
+----------------------------------------
+  exit_period: 10
+  min_hold: 2
+  trend_fast: 50
+  trend_slow: 200
+  pullback_ema: 15
+  Sharpe:        -0.2344
+  Profit Factor: 0.9638
+  Max DD:        -28.57%
+  Total Return:  -6.66%
+  Trades:        503
