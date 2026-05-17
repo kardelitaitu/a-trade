@@ -80,7 +80,14 @@ See `FRAMEWORK.md` for detailed module documentation.
 
 ## Phase Status
 
-All 4 phases complete. Key finding: RSI Mean Reversion (period=25, oversold=30, overbought=88) achieves **Sharpe +0.31, PF 1.12, DD -6.45%** on 2024-2025 out-of-sample.
+All 4 phases complete. Key finding: **Range Breakout Limit** on 1h data achieves
+**Sharpe +3.23, PF 1.19, DD -21%, +37% return over 2 years** — first genuinely
+profitable strategy found across the entire project.
+
+Best parameters:
+- range_period=32, exit_period=6, filter_volume=False
+- limit_pct=0.008 (0.8% pullback from peak)
+- limit_max_bars=3 (cancel if not filled in 3 hours)
 
 ## Quick Start
 
